@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Traçage bimanuel — 15 niveaux</title>
+<style>
+:root{
+  --bg:#07100b;--panel:#101a14;--text:#f7fff9;--muted:#9bad9f;
+  --accent:#b8f20d;--good:#38dc79;--bad:#ff5d73;--blue:#55a8ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+button,select{font:inherit}
+#app{
+  position:fixed;inset:0;display:grid;
+  grid-template-rows:auto auto minmax(0,1fr) auto;
+  gap:8px;padding:max(8px,env(safe-area-inset-top)) 9px max(8px,env(safe-area-inset-bottom));
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,rgba(47,113,65,.23),transparent 48%),var(--bg);
+}
+header{display:grid;grid-template-columns:1fr 112px;gap:10px;align-items:center}
+h1{margin:0;font-size:clamp(22px,5.7vw,36px);line-height:1}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.level-box{padding:8px 10px;border:1px solid rgba(255,255,255,.14);border-radius:13px;background:rgba(10,19,13,.84)}
+.level-box small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}
+select{width:100%;margin-top:4px;padding:7px;border:1px solid rgba(255,255,255,.16);border-radius:8px;background:#08110b;color:#fff}
+.skill{
+  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+  padding:8px 10px;border:1px solid rgba(184,242,13,.28);
+  border-radius:12px;background:rgba(184,242,13,.06)
+}
+.skill small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.skill strong{display:block;color:var(--accent);margin-top:2px;font-size:13px}
+.progress{display:flex;gap:6px}.step{width:10px;height:10px;border-radius:50%;background:#ffffff33}.step.active{background:var(--accent)}.step.done{background:var(--good)}
+.game-area{
+  min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:hidden
+}
+.zone{
+  position:relative;min-width:0;min-height:0;border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;background:rgba(16,26,20,.94);overflow:hidden;touch-action:none
+}
+.zone-title{
+  position:absolute;z-index:3;top:8px;left:50%;transform:translateX(-50%);
+  padding:5px 9px;border-radius:999px;background:#07100bcc;color:var(--muted);font-size:11px
+}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+footer{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.status{padding:9px 11px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#0c160f;color:var(--muted);font-size:12px}
+.status strong{color:var(--text)}
+.controls{display:flex;gap:7px}
+.btn{border:0;border-radius:11px;padding:11px 14px;background:var(--accent);color:#081006;font-weight:900;cursor:pointer}
+.btn.secondary{background:#17221b;color:#fff;border:1px solid rgba(255,255,255,.14)}
+.overlay{
+  position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:18px;
+  background:rgba(3,8,5,.82);backdrop-filter:blur(8px)
+}
+.overlay[hidden]{display:none}
+.panel{width:min(92vw,520px);padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:#0b150e}
+.panel h2{margin:0 0 8px}.panel p{margin:0 0 14px;color:var(--muted);line-height:1.45}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.result-card{padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;text-align:center;background:#101a14}
+.result-card small{display:block;color:var(--muted);font-size:10px}.result-card strong{display:block;margin-top:4px;color:var(--accent)}
+@media(max-width:620px){
+  #app{gap:6px;padding-left:7px;padding-right:7px}
+  header{grid-template-columns:1fr 100px}
+  .subtitle{font-size:11px}
+  footer{grid-template-columns:1fr}
+  .controls{display:grid;grid-template-columns:1fr 1fr}
+  .btn{width:100%;padding:10px}
+}
+@media(max-width:430px){
+  .game-area{gap:5px}.zone{border-radius:14px}.zone-title{font-size:10px}
+}
+@media(max-height:610px){
+  h1{font-size:20px}.subtitle{display:none}.skill{padding:6px 8px}
+  footer{grid-template-columns:1fr auto}.controls{display:flex}
+}
+</style>
+</head>
+<body>
+<main id="app">
+<header>
+  <div>
+    <h1>Traçage <span style="color:var(--accent)">bimanuel</span></h1>
+    <div class="subtitle">Un doigt par main, deux formes différentes à suivre simultanément.</div>
+  </div>
+  <label class="level-box">
+    <small>Niveau</small>
+    <select id="levelSelect"></select>
+  </label>
+</header>
+
+<section class="skill">
+  <div>
+    <small>Compétences travaillées</small>
+    <strong id="skillText"></strong>
+  </div>
+  <div id="progress" class="progress"></div>
+</section>
+
+<section class="game-area">
+  <div class="zone">
+    <div class="zone-title">MAIN GAUCHE</div>
+    <canvas id="leftCanvas"></canvas>
+  </div>
+  <div class="zone">
+    <div class="zone-title">MAIN DROITE</div>
+    <canvas id="rightCanvas"></canvas>
+  </div>
+</section>
+
+<footer>
+  <div id="status" class="status"><strong>Prêt.</strong> Appuie sur Commencer.</div>
+  <div class="controls">
+    <button id="restartBtn" class="btn secondary" type="button">Recommencer</button>
+    <button id="startBtn" class="btn" type="button">Commencer</button>
+  </div>
+</footer>
+
+<section id="resultOverlay" class="overlay" hidden>
+  <div class="panel">
+    <h2 id="resultTitle">Séquence terminée</h2>
+    <p id="resultText"></p>
+    <div class="result-grid">
+      <div class="result-card"><small>Gauche</small><strong id="leftScore">0%</strong></div>
+      <div class="result-card"><small>Droite</small><strong id="rightScore">0%</strong></div>
+      <div class="result-card"><small>Moyenne</small><strong id="avgScore">0%</strong></div>
+    </div>
+    <button id="continueBtn" class="btn" type="button">Continuer</button>
+  </div>
+</section>
+</main>
+
+<script>
+"use strict";
+
+const SHAPES={
+  square:t=>{const u=(t%1)*4;if(u<1)return{x:-1+2*u,y:-1};if(u<2)return{x:1,y:-1+2*(u-1)};if(u<3)return{x:1-2*(u-2),y:1};return{x:-1,y:1-2*(u-3)}},
+  triangle:t=>{const pts=[[-1,1],[0,-1],[1,1],[-1,1]],u=(t%1)*3,i=Math.floor(u),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}},
+  circle:t=>({x:Math.cos(t*Math.PI*2),y:Math.sin(t*Math.PI*2)}),
+  diamond:t=>{const pts=[[0,-1],[1,0],[0,1],[-1,0],[0,-1]],u=(t%1)*4,i=Math.floor(u),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}},
+  eight:t=>({x:Math.sin(t*Math.PI*2),y:Math.sin(t*Math.PI*4)*.72}),
+  zigzag:t=>{const pts=[[-1,-.8],[-.45,.8],[0,-.8],[.45,.8],[1,-.8]],u=(t%1)*4,i=Math.min(3,Math.floor(u)),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}},
+  wave:t=>({x:-1+2*(t%1),y:Math.sin(t*Math.PI*4)*.72}),
+  spiral:t=>{const a=t*Math.PI*4,r=.18+.82*t;return{x:Math.cos(a)*r,y:Math.sin(a)*r}}
+};
+
+const LEVELS={
+1:{speed:.065,tolerance:.24,laps:1,skill:"Coordination bimanuelle de base, attention divisée",seq:[["square","triangle",1,1],["circle","square",1,1],["triangle","circle",1,1],["diamond","square",1,1]]},
+2:{speed:.072,tolerance:.23,laps:1,skill:"Indépendance des deux mains, précision gestuelle",seq:[["square","triangle",1,-1],["circle","diamond",1,1],["triangle","square",-1,1],["diamond","circle",1,-1]]},
+3:{speed:.08,tolerance:.22,laps:1,skill:"Synchronisation visuomotrice, contrôle bilatéral",seq:[["zigzag","circle",1,1],["square","wave",1,-1],["triangle","diamond",-1,1],["circle","zigzag",1,-1]]},
+4:{speed:.087,tolerance:.21,laps:1,skill:"Précision bimanuelle sur formes asymétriques",seq:[["eight","square",1,1],["triangle","wave",1,-1],["zigzag","diamond",-1,1],["circle","eight",1,-1]]},
+5:{speed:.095,tolerance:.20,laps:1,skill:"Adaptation à des directions opposées",seq:[["square","triangle",1,-1],["eight","circle",-1,1],["wave","diamond",1,-1],["zigzag","square",-1,1]]},
+6:{speed:.103,tolerance:.19,laps:1.2,skill:"Coordination sous vitesse, maintien de l’attention",seq:[["circle","wave",1,1],["diamond","eight",-1,1],["triangle","zigzag",1,-1],["square","circle",-1,1]]},
+7:{speed:.112,tolerance:.18,laps:1.25,skill:"Double tâche et anticipation motrice",seq:[["spiral","square",1,1],["eight","triangle",1,-1],["wave","circle",-1,1],["zigzag","diamond",1,-1]]},
+8:{speed:.121,tolerance:.17,laps:1.3,skill:"Stabilité gestuelle sous charge cognitive",seq:[["spiral","circle",1,-1],["square","eight",-1,1],["triangle","wave",1,1],["diamond","zigzag",-1,1]]},
+9:{speed:.13,tolerance:.165,laps:1.35,skill:"Attention partagée et contrôle des trajectoires",seq:[["eight","spiral",1,1],["wave","triangle",-1,1],["circle","zigzag",1,-1],["square","diamond",-1,1]]},
+10:{speed:.14,tolerance:.16,laps:1.4,skill:"Décision motrice sous pression temporelle",seq:[["spiral","zigzag",1,-1],["eight","wave",-1,1],["diamond","triangle",1,-1],["circle","square",-1,1]]},
+11:{speed:.15,tolerance:.155,laps:1.45,skill:"Résistance à l’erreur et régularité bimanuelle",seq:[["zigzag","spiral",1,1],["wave","eight",-1,-1],["triangle","circle",1,-1],["diamond","square",-1,1]]},
+12:{speed:.16,tolerance:.15,laps:1.5,skill:"Flexibilité cognitive et coordination avancée",seq:[["spiral","eight",1,-1],["circle","wave",-1,1],["zigzag","triangle",1,-1],["square","diamond",-1,-1]]},
+13:{speed:.17,tolerance:.145,laps:1.55,skill:"Maîtrise de trajectoires complexes",seq:[["spiral","zigzag",-1,1],["eight","diamond",1,-1],["wave","square",-1,1],["circle","triangle",1,-1]]},
+14:{speed:.18,tolerance:.14,laps:1.65,skill:"Coordination bilatérale à haute vitesse",seq:[["spiral","wave",1,-1],["zigzag","eight",-1,1],["diamond","circle",1,-1],["triangle","square",-1,-1]]},
+15:{speed:.19,tolerance:.135,laps:1.75,skill:"Maîtrise bimanuelle sous forte charge cognitive",seq:[["spiral","eight",-1,1],["wave","zigzag",1,-1],["circle","diamond",-1,-1],["triangle","spiral",1,-1]]}
+};
+
+const levelSelect=document.getElementById("levelSelect");
+const leftCanvas=document.getElementById("leftCanvas");
+const rightCanvas=document.getElementById("rightCanvas");
+const skillText=document.getElementById("skillText");
+const progress=document.getElementById("progress");
+const status=document.getElementById("status");
+const startBtn=document.getElementById("startBtn");
+const restartBtn=document.getElementById("restartBtn");
+const overlay=document.getElementById("resultOverlay");
+const resultTitle=document.getElementById("resultTitle");
+const resultText=document.getElementById("resultText");
+const leftScore=document.getElementById("leftScore");
+const rightScore=document.getElementById("rightScore");
+const avgScore=document.getElementById("avgScore");
+const continueBtn=document.getElementById("continueBtn");
+
+levelSelect.innerHTML=Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("");
+
+let level=1,sequenceIndex=0,running=false,startTime=0,raf=null;
+let leftPointer=null,rightPointer=null,leftSamples=0,rightSamples=0,leftGood=0,rightGood=0;
+let current={leftShape:"square",rightShape:"triangle",leftDir:1,rightDir:1};
+
+function cfg(){return LEVELS[level]}
+function setStatus(title,text=""){status.innerHTML=`<strong>${title}</strong>${text?" "+text:""}`}
+function updateProgress(){
+  progress.innerHTML="";
+  for(let i=0;i<4;i++){const s=document.createElement("span");s.className="step"+(i<sequenceIndex?" done":i===sequenceIndex?" active":"");progress.appendChild(s)}
+}
+function resizeCanvas(canvas){
+  const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+  canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);
+  const ctx=canvas.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0)
+}
+function resize(){resizeCanvas(leftCanvas);resizeCanvas(rightCanvas);drawAll(performance.now())}
+function mapPoint(shape,t,canvas){
+  const p=SHAPES[shape]((t%1+1)%1),w=canvas.clientWidth,h=canvas.clientHeight;
+  const scale=Math.min(w,h)*.34;
+  return{x:w/2+p.x*scale,y:h/2+p.y*scale}
+}
+function drawPath(canvas,shape,dir,color){
+  const ctx=canvas.getContext("2d"),w=canvas.clientWidth,h=canvas.clientHeight;
+  ctx.clearRect(0,0,w,h);ctx.lineWidth=Math.max(7,Math.min(w,h)*.035);ctx.lineCap="round";ctx.lineJoin="round";
+  ctx.strokeStyle="rgba(255,255,255,.15)";ctx.beginPath();
+  for(let i=0;i<=180;i++){const t=dir>0?i/180:1-i/180,p=mapPoint(shape,t,canvas);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)}
+  ctx.stroke();
+  ctx.lineWidth=2;ctx.strokeStyle=color;ctx.stroke()
+}
+function drawFinger(ctx,p,color){
+  if(!p)return;ctx.beginPath();ctx.arc(p.x,p.y,12,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+  ctx.beginPath();ctx.arc(p.x,p.y,22,0,Math.PI*2);ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke()
+}
+function drawAll(now){
+  const c=cfg(),elapsed=running?(now-startTime)/1000:0;
+  const t=elapsed*c.speed;
+  drawPath(leftCanvas,current.leftShape,current.leftDir,"rgba(184,242,13,.55)");
+  drawPath(rightCanvas,current.rightShape,current.rightDir,"rgba(85,168,255,.55)");
+  const lctx=leftCanvas.getContext("2d"),rctx=rightCanvas.getContext("2d");
+  const lp=mapPoint(current.leftShape,current.leftDir>0?t:-t,leftCanvas);
+  const rp=mapPoint(current.rightShape,current.rightDir>0?t:-t,rightCanvas);
+  lctx.beginPath();lctx.arc(lp.x,lp.y,10,0,Math.PI*2);lctx.fillStyle="var(--accent)";lctx.fill();
+  rctx.beginPath();rctx.arc(rp.x,rp.y,10,0,Math.PI*2);rctx.fillStyle="var(--blue)";rctx.fill();
+  drawFinger(lctx,leftPointer,"rgba(184,242,13,.95)");
+  drawFinger(rctx,rightPointer,"rgba(85,168,255,.95)");
+  if(running){
+    sampleAccuracy(lp,rp);
+    if(t>=c.laps)finishSequence();
+    else raf=requestAnimationFrame(drawAll)
+  }
+}
+function sampleAccuracy(lp,rp){
+  const tol=Math.min(leftCanvas.clientWidth,leftCanvas.clientHeight)*cfg().tolerance;
+  if(leftPointer){leftSamples++;if(Math.hypot(leftPointer.x-lp.x,leftPointer.y-lp.y)<=tol)leftGood++}
+  if(rightPointer){rightSamples++;if(Math.hypot(rightPointer.x-rp.x,rightPointer.y-rp.y)<=tol)rightGood++}
+}
+function pointerPos(e,canvas){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top,id:e.pointerId}}
+function bindCanvas(canvas,side){
+  canvas.addEventListener("pointerdown",e=>{canvas.setPointerCapture(e.pointerId);const p=pointerPos(e,canvas);if(side==="left")leftPointer=p;else rightPointer=p});
+  canvas.addEventListener("pointermove",e=>{const p=pointerPos(e,canvas);if(side==="left"&&leftPointer?.id===e.pointerId)leftPointer=p;if(side==="right"&&rightPointer?.id===e.pointerId)rightPointer=p});
+  const up=e=>{if(side==="left"&&leftPointer?.id===e.pointerId)leftPointer=null;if(side==="right"&&rightPointer?.id===e.pointerId)rightPointer=null};
+  canvas.addEventListener("pointerup",up);canvas.addEventListener("pointercancel",up)
+}
+function loadSequence(){
+  const s=cfg().seq[sequenceIndex];
+  [current.leftShape,current.rightShape,current.leftDir,current.rightDir]=s;
+  setStatus("Séquence "+(sequenceIndex+1)+"/4.",`${current.leftShape} à gauche, ${current.rightShape} à droite.`);
+  leftPointer=rightPointer=null;leftSamples=rightSamples=leftGood=rightGood=0;
+  drawAll(performance.now());updateProgress()
+}
+function startSequence(){
+  if(running)return;
+  running=true;startTime=performance.now();leftSamples=rightSamples=leftGood=rightGood=0;
+  setStatus("En cours.","Pose un doigt dans chaque zone et suis les deux repères.");
+  startBtn.disabled=true;raf=requestAnimationFrame(drawAll)
+}
+function finishSequence(){
+  running=false;if(raf)cancelAnimationFrame(raf);raf=null;
+  const ls=leftSamples?Math.round(leftGood/leftSamples*100):0;
+  const rs=rightSamples?Math.round(rightGood/rightSamples*100):0;
+  const avg=Math.round((ls+rs)/2);
+  leftScore.textContent=ls+"%";rightScore.textContent=rs+"%";avgScore.textContent=avg+"%";
+  const passed=avg>=70&&ls>=60&&rs>=60;
+  resultTitle.textContent=passed?"Séquence validée":"Séquence à retravailler";
+  resultText.textContent=passed?"Les deux mains sont restées suffisamment proches des trajectoires.":"Une des deux mains s’est trop éloignée de sa trajectoire.";
+  continueBtn.textContent=passed?(sequenceIndex===3?"Terminer le niveau":"Séquence suivante"):"Réessayer";
+  continueBtn.onclick=()=>{
+    overlay.hidden=true;
+    if(passed){
+      if(sequenceIndex<3){sequenceIndex++;loadSequence();startBtn.disabled=false}
+      else{setStatus("Niveau validé !","Les 4 séquences sont réussies.");startBtn.disabled=false}
+    }else{loadSequence();startBtn.disabled=false}
+  };
+  overlay.hidden=false
+}
+function resetLevel(){running=false;if(raf)cancelAnimationFrame(raf);sequenceIndex=0;startBtn.disabled=false;loadSequence()}
+function updateLevel(){level=Number(levelSelect.value);skillText.textContent=cfg().skill;resetLevel()}
+
+bindCanvas(leftCanvas,"left");bindCanvas(rightCanvas,"right");
+levelSelect.addEventListener("change",updateLevel);
+startBtn.addEventListener("click",startSequence);
+restartBtn.addEventListener("click",resetLevel);
+window.addEventListener("resize",resize);
+
+updateLevel();
+resize();
+</script>
+</body>
+</html>

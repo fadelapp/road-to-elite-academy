@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#05090d;--panel:#0c151d;--text:#f7fbff;--muted:#9eafbb;--blue:#35b8ff;--green:#8ff052;--gold:#ffd65b;--red:#ff7070;--line:#ffffff17}
+*{box-sizing:border-box}body{margin:0;padding:8px;font-family:Inter,system-ui;background:#05090d;color:var(--text);overflow:hidden}
+button,input{font:inherit}button{cursor:pointer}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.k{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);font-weight:900}h2{margin:4px 0}.muted{color:var(--muted)}
+.levelnav{display:none}
+.next-levels{margin-top:16px}
+.next-levels h3{margin:0 0 10px}
+.next-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.next-card{padding:14px;border-radius:16px;background:#ffffff06;border:1px solid var(--line);opacity:.9}
+.next-card .lock{float:right;color:var(--gold);font-size:18px}
+.next-card b{display:block;margin:4px 0}
+.next-card small{color:var(--muted)}
+@media(max-width:650px){.next-grid{grid-template-columns:1fr}}
+.admin-mini{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:#ffffff07}
+.admin-mini span{font-size:11px;color:var(--gold);font-weight:900;text-transform:uppercase}
+.admin-mini select{padding:7px 9px;border-radius:9px;background:#0b151d;color:white;border:1px solid var(--line)}.levelnav button{border:1px solid var(--line);background:#ffffff07;color:var(--muted);padding:9px 4px;border-radius:11px;font-weight:900}.levelnav button.active{color:#061006;background:var(--green);border-color:var(--green)}
+.card{background:linear-gradient(145deg,#ffffff0d,#ffffff05);border:1px solid var(--line);border-radius:20px;padding:17px}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:12px;margin-bottom:12px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center;background:#ffffff07;border-radius:14px;padding:12px}.stat b{font-size:22px;display:block}
+.notice{padding:12px;border-radius:14px;background:#ffd65b10;border-left:3px solid var(--gold);margin-bottom:12px;color:#ffeeb1}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.challenge{position:relative}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:#35b8ff18;color:#9edfff;font-size:11px;font-weight:900}
+.diagram{height:135px;margin:11px 0;border-radius:15px;background:linear-gradient(#17432b,#0d281a);display:grid;place-items:center;border:1px solid var(--line);color:#d8e7de}.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}input{width:100%;padding:10px;border-radius:10px;background:#ffffff08;color:white;border:1px solid var(--line)}.primary{width:100%;margin-top:8px;padding:10px;border:0;border-radius:10px;background:var(--green);color:#061006;font-weight:1000}.result{margin-top:8px;padding:9px;border-radius:11px;background:#ffffff06;color:var(--muted);font-size:13px}.ok{border:1px solid #8ff05255;color:var(--green)}.bad{border:1px solid #ff707055;color:#ffaaaa}
+.progress{height:9px;border-radius:999px;background:#ffffff12;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue))}
+@media(max-width:850px){.levelnav{grid-template-columns:repeat(5,1fr)}.hero,.grid{grid-template-columns:1fr}}
+</style></head><body>
+<div class="top">
+  <div>
+    <div class="k">Conduite de balle</div>
+    <h2>Mon défi de conduite</h2>
+    <div class="muted">Ton défi actuel est ouvert. Les deux prochains sont visibles uniquement en résumé.</div>
+  </div>
+  <div class="admin-mini">
+    <span>Niveau joueur</span>
+    <select id="playerLevel"></select>
+  </div>
+</div>
+<div class="levelnav" id="nav"></div>
+<div id="app"></div>
+<script>
+const levels=[{"n": 1, "name": "L'Éclair", "detail": "Découverte du circuit", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 120, "plots": 2}, {"n": 2, "name": "Le Huit", "detail": "Orientation et changement de direction", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 115, "plots": 2}, {"n": 3, "name": "Le Zigzag", "detail": "Tracé physique repris avec ballon", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 110, "plots": 2}, {"n": 4, "name": "L'Illinois", "detail": "Première référence Illinois", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 105, "plots": 2}, {"n": 5, "name": "Le Serpent", "detail": "Conduite rapprochée", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 100, "plots": 2}, {"n": 6, "name": "Le Boomerang", "detail": "Accélération, slalom et retour", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 95, "plots": 1}, {"n": 7, "name": "L'Illinois", "detail": "Réévaluation Illinois", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 92, "plots": 1}, {"n": 8, "name": "Le Carré — Semelle", "detail": "Même tracé que le physique, maîtrise semelle", "variants": ["Semelle pied droit", "Semelle pied gauche", "Semelles alternées"], "time": 90, "plots": 1}, {"n": 9, "name": "Le Zigzag", "detail": "Réévaluation technique", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 87, "plots": 1}, {"n": 10, "name": "L'Illinois", "detail": "Illinois avancé", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 84, "plots": 1}, {"n": 11, "name": "Le Boomerang", "detail": "Boomerang avancé", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 81, "plots": 0}, {"n": 12, "name": "Le Serpent — Semelle", "detail": "Conduite semelle avancée", "variants": ["Semelle pied droit", "Semelle pied gauche", "Semelles alternées"], "time": 78, "plots": 0}, {"n": 13, "name": "L'Illinois", "detail": "Illinois expert", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 75, "plots": 0}, {"n": 14, "name": "Le Serpent", "detail": "Serpent expert", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 72, "plots": 0}, {"n": 15, "name": "Illinois Élite", "detail": "Bilan final de conduite", "variants": ["Pied droit", "Pied gauche", "Deux pieds alternés"], "time": 68, "plots": 0}];
+const state=JSON.parse(localStorage.getItem('fi-conduite-v5')||'{}');
+let playerLevel=Math.max(1,Math.min(15,Number(state.playerLevel||1)));
+let current=Math.max(playerLevel,Math.min(15,Number(state.current||playerLevel)));
+
+const playerSelect=document.getElementById('playerLevel');
+for(let i=1;i<=15;i++){
+  const o=document.createElement('option');
+  o.value=i;o.textContent='Niveau '+i;
+  playerSelect.appendChild(o);
+}
+playerSelect.value=playerLevel;
+playerSelect.onchange=()=>{
+  playerLevel=Number(playerSelect.value);
+  state.playerLevel=playerLevel;
+  current=playerLevel;
+  state.current=current;
+  save();
+  render();
+};
+
+function save(){localStorage.setItem('fi-conduite-v5',JSON.stringify(state))}
+function key(n,i){return 'N'+n+'V'+i}
+function accessibleLevels(){
+  return [levels[playerLevel-1]];
+}
+function renderNav(){
+ const nav=document.getElementById('nav');
+ nav.innerHTML='';
+}
+function validate(n,i){
+ const l=levels[n-1], t=Number(document.getElementById('t'+n+'_'+i).value), p=Number(document.getElementById('p'+n+'_'+i).value);
+ if(!t&&t!==0)return;
+ const ok=t<=l.time && p<=l.plots;
+ state[key(n,i)]={time:t,plots:p,ok};save();render()
+}
+function render(){
+ current=playerLevel;
+ state.current=current;
+ save();
+ renderNav();
+ const l=levels[current-1];
+ let done=0;
+ l.variants.forEach((v,i)=>{if(state[key(l.n,i)]?.ok)done++});
+ const pct=Math.round(done/l.variants.length*100);
+ document.getElementById('app').innerHTML=`
+ <section class="hero">
+  <article class="card"><div class="k">Niveau ${l.n}</div><h2>${l.name}</h2><p class="muted">${l.detail}</p><div class="progress"><span style="width:${pct}%"></span></div><b>${done} / ${l.variants.length} défis validés</b></article>
+  <article class="card stats"><div class="stat"><small>Temps repère</small><b>≤ ${l.time} s</b></div><div class="stat"><small>Plots autorisés</small><b>${l.plots}</b></div><div class="stat"><small>Statut</small><b>${done===l.variants.length?'Validé':'En cours'}</b></div></article>
+ </section>
+ <div class="notice">Barèmes provisoires et volontairement accessibles pour la phase terrain. Ils seront réajustés après les essais réels.</div>
+ <section class="grid">${l.variants.map((v,i)=>{
+   const r=state[key(l.n,i)];
+   return `<article class="card challenge"><div class="badge">Défi ${i+1}</div><h3>${v}</h3><p class="muted">Circuit : ${l.name}. Aucun raccourci et trajectoire complète.</p><div class="diagram">Schéma du circuit ${l.name}</div><div class="fields"><input id="t${l.n}_${i}" type="number" step="0.01" placeholder="Chrono en secondes"><input id="p${l.n}_${i}" type="number" min="0" value="0" placeholder="Plots touchés"></div><button class="primary" onclick="validate(${l.n},${i})">Valider le défi</button><div class="result ${r?(r.ok?'ok':'bad'):''}">${r?(r.ok?'✅ Validé — ':'❌ À refaire — ')+r.time+' s · '+r.plots+' plot(s) touché(s)':'Aucun résultat enregistré.'}</div></article>`
+ }).join('')}</section>
+ <section class="next-levels">
+   <h3>Prochains niveaux</h3>
+   <p class="muted">Tu peux voir les nouveautés qui t’attendent, mais tu ne peux pas encore ouvrir ces niveaux.</p>
+   <div class="next-grid">
+     ${levels.filter(x=>x.n>l.n && x.n<=l.n+2).map(x=>`
+       <article class="next-card">
+         <span class="lock">🔒</span>
+         <div class="k">Niveau ${x.n}</div>
+         <b>${x.name}</b>
+         <small>${x.detail}</small>
+       </article>
+     `).join('') || '<article class="next-card"><b>Parcours terminé</b><small>Tu es arrivé au dernier niveau.</small></article>'}
+   </div>
+ </section>`;
+}
+render();
+</script></body></html>
