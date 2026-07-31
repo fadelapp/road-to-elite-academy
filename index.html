@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<title>Foot Intelligence V2</title>
+<style>
+:root{--bg:#07110d;--panel:#0d1c15;--text:#f7fff9;--muted:#a9bbb0;--green:#67f18f;--green2:#20c96b;--blue:#45c7ff;--gold:#f5c85c;--line:#ffffff14}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#06100b,#091711 55%,#06100b);color:var(--text);font-family:Inter,system-ui,sans-serif}
+button,input{font:inherit}.app{max-width:1180px;margin:auto;padding:18px 18px 100px}.screen{display:none}.screen.active{display:block}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0 22px}.brand{display:flex;align-items:center;gap:10px;font-weight:900}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--green),var(--green2));display:grid;place-items:center;color:#062313}
+.user-head{display:flex;align-items:center;gap:10px}.avatar{width:44px;height:44px;border-radius:15px;background:#ffffff10;display:grid;place-items:center}.icon{border:0;background:#ffffff0b;color:white;width:42px;height:42px;border-radius:14px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.card{background:linear-gradient(145deg,#ffffff0a,#ffffff04);border:1px solid var(--line);border-radius:22px;padding:20px}.coach-card{background:linear-gradient(135deg,#173824,#0c2015)}
+.kicker{font-size:12px;color:var(--green);text-transform:uppercase;letter-spacing:1.4px;font-weight:900}h1,h2,h3{margin-top:0}.coach-card h1{font-size:42px;line-height:1.03;margin:8px 0 12px}.muted{color:var(--muted);line-height:1.55}
+.primary,.secondary{border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--green),var(--green2));color:#052312}.secondary{background:#ffffff0d;color:white;border:1px solid var(--line)}
+.ifi-box{display:flex;align-items:center;justify-content:space-between;gap:18px}.ifi-score{font-size:58px;font-weight:900;color:var(--green)}.progress{height:9px;background:#ffffff10;border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green))}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.today{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}.tag{display:inline-block;padding:7px 10px;border-radius:999px;background:#ffffff0c;color:var(--muted);font-size:12px}
+.ritual-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.mini{padding:12px;border-radius:15px;background:#ffffff08;border:1px solid var(--line)}
+.key-list{display:grid;gap:10px}.key-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border-radius:15px;background:#ffffff07}.status{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px}.mastered{background:#67f18f22;color:#88ffad}.progressing{background:#ffd36b22;color:#ffd98c}.coming{background:#ffffff0d;color:#aeb9b2}
+.cap-list{display:grid;gap:12px}.cap-row{display:grid;grid-template-columns:150px 1fr 42px;gap:10px;align-items:center}
+.nav-bottom{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(720px,calc(100% - 24px));background:rgba(8,19,13,.94);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:22px;display:grid;grid-template-columns:repeat(5,1fr);padding:8px;z-index:50}
+.nav-bottom button{border:0;background:transparent;color:#9fb0a5;padding:10px 6px;border-radius:14px;cursor:pointer;font-size:12px}.nav-bottom button.active{background:#ffffff0b;color:white}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:22px 0 16px}.challenge-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.challenge{padding:0;overflow:hidden}.challenge-top{padding:18px;background:linear-gradient(135deg,#18472c,#0d2618)}.challenge.interactive .challenge-top{background:linear-gradient(135deg,#12364a,#0b2230)}
+.challenge-body{padding:18px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.input-row{display:flex;gap:10px}.input-row input{flex:1;background:#ffffff08;color:white;border:1px solid var(--line);padding:12px;border-radius:13px}
+.notice{padding:13px;border-radius:14px;background:#ffffff07;border-left:3px solid var(--green);color:var(--muted);margin-top:12px}.attempts{display:flex;gap:7px;margin:12px 0}.attempt{width:30px;height:30px;border-radius:10px;background:#ffffff0c;display:grid;place-items:center}.attempt.used{background:#45c7ff22;color:#7edbff}
+.tabs{display:flex;gap:8px}.tabs button{border:0;background:#ffffff0a;color:white;padding:10px 13px;border-radius:999px}.tabs button.active{background:var(--green);color:#062313}.evolution-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px}.brain{min-height:250px;display:grid;place-items:center;font-size:120px;background:radial-gradient(circle,rgba(103,241,143,.22),transparent 55%)}
+.reward{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.reward div{padding:14px;text-align:center;border-radius:15px;background:#ffffff07}.profile-grid{display:grid;grid-template-columns:300px 1fr;gap:16px}.profile-card{text-align:center}.big-avatar{width:130px;height:130px;margin:auto;border-radius:32px;background:#ffffff0c;display:grid;place-items:center;font-size:70px}.hidden{display:none}
+@media(max-width:850px){.hero,.grid2,.evolution-grid,.profile-grid{grid-template-columns:1fr}.challenge-grid{grid-template-columns:1fr}.ritual-list{grid-template-columns:1fr}.cap-row{grid-template-columns:120px 1fr 35px}}
+
+.game-area{margin-top:14px;padding:16px;border-radius:18px;background:#06131b;border:1px solid #45c7ff30;min-height:210px;position:relative;overflow:hidden}
+.ball-target{position:absolute;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#b8c4ca 35%,#222 36% 43%,#fff 44%);cursor:pointer;display:none;place-items:center;color:#111;font-weight:900}
+.reaction-target{width:120px;height:120px;border-radius:50%;background:#ffffff0c;margin:28px auto;display:grid;place-items:center;cursor:pointer;border:2px solid #ffffff20}
+.quiz-options{display:grid;gap:10px;margin-top:14px}.quiz-options button{padding:12px;border-radius:13px;border:1px solid var(--line);background:#ffffff08;color:white;text-align:left;cursor:pointer}.quiz-options button:hover{border-color:var(--blue)}
+.signature{border:1px solid #f5c85c40;background:linear-gradient(145deg,#f5c85c10,#ffffff04)}
+.signature.locked{opacity:.65}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}.timeline div{padding:12px;border-radius:14px;background:#ffffff07;text-align:center}.timeline .current{border:1px solid var(--green);background:#67f18f12}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal.open{display:flex}.modal-box{width:min(560px,100%);background:#0d1c15;border:1px solid var(--line);border-radius:24px;padding:22px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.coach-note{padding:14px;border-radius:15px;background:#ffffff07;border-left:3px solid var(--blue);margin-top:12px;color:var(--muted)}
+.history{display:grid;gap:10px}.history-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px;border-radius:14px;background:#ffffff07}
+@media(max-width:700px){.timeline{grid-template-columns:1fr}.modal-actions{flex-direction:column}}
+
+.terrain-summary{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin:18px 0}
+.terrain-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.terrain-kpi{padding:14px;border-radius:16px;background:#ffffff07;border:1px solid var(--line)}
+.terrain-kpi b{display:block;font-size:26px}.terrain-kpi small{color:var(--muted)}
+.terrain-filter{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.terrain-filter button{border:0;background:#ffffff0a;color:white;padding:10px 13px;border-radius:999px;cursor:pointer}
+.terrain-filter button.active{background:var(--green);color:#062313}
+.challenge-state{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0}
+.state-dot{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800}
+.state-dot:before{content:"";width:8px;height:8px;border-radius:50%;background:#ffd36b}
+.state-dot.mastered:before{background:var(--green)}
+.state-dot.discover:before{background:var(--blue)}
+.proof-note{font-size:12px;color:var(--muted);margin-top:8px}
+.goal-meter{height:8px;background:#ffffff0d;border-radius:999px;overflow:hidden;margin:10px 0}
+.goal-meter span{display:block;height:100%;background:linear-gradient(90deg,var(--green2),var(--green))}
+.result-card{display:none;margin-top:14px;padding:14px;border-radius:14px;background:#67f18f10;border:1px solid #67f18f30}
+.result-card.active{display:block}
+.terrain-help{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.help-step{padding:14px;border-radius:15px;background:#ffffff07;border:1px solid var(--line)}
+.help-step b{display:block;margin-bottom:6px}
+@media(max-width:800px){.terrain-summary,.terrain-kpis,.terrain-help{grid-template-columns:1fr}}
+
+.interactive-summary{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.interactive-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.interactive-kpi{padding:14px;border-radius:16px;background:#ffffff07;border:1px solid var(--line)}
+.interactive-kpi b{display:block;font-size:26px}.interactive-kpi small{color:var(--muted)}
+.official-note{padding:13px;border-radius:14px;background:#45c7ff0e;border-left:3px solid var(--blue);color:var(--muted)}
+.training-note{padding:13px;border-radius:14px;background:#67f18f0e;border-left:3px solid var(--green);color:var(--muted)}
+.game-score{font-size:32px;font-weight:900;color:var(--blue);margin-top:10px}
+.scan-field{position:relative;min-height:230px;border-radius:18px;background:linear-gradient(180deg,#154c2b,#0c2f1d);border:2px solid #ffffff70;overflow:hidden}
+.scan-player{position:absolute;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#ffffff15;border:2px solid #ffffff60;cursor:pointer}
+.scan-player.free{box-shadow:0 0 0 4px #67f18f25}
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.memory-cell{aspect-ratio:1;border-radius:12px;background:#ffffff09;border:1px solid var(--line);display:grid;place-items:center;font-size:28px;cursor:pointer}
+.memory-cell.active{background:#45c7ff33;border-color:#45c7ff}
+.streak-banner{padding:16px;border-radius:18px;background:linear-gradient(135deg,#ffaf4d16,#ffffff05);border:1px solid #ffaf4d30}
+.ifi-explain{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.ifi-explain div{padding:12px;border-radius:14px;background:#ffffff07;text-align:center}
+@media(max-width:850px){.interactive-summary,.interactive-kpis,.ifi-explain{grid-template-columns:1fr}}
+
+.evo-overview{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px;margin-bottom:16px}
+.ifi-ring{width:220px;height:220px;border-radius:50%;margin:auto;display:grid;place-items:center;background:conic-gradient(var(--green) 0 74%,#ffffff0d 74%);position:relative}
+.ifi-ring:after{content:"";position:absolute;inset:18px;border-radius:50%;background:#0d1c15}
+.ifi-ring-content{position:relative;z-index:2;text-align:center}
+.ifi-ring-content b{display:block;font-size:56px;color:var(--green)}
+.ifi-ring-content small{color:var(--muted)}
+.skill-radar{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.skill-card{padding:14px;border-radius:16px;background:#ffffff07;border:1px solid var(--line)}
+.skill-card .value{font-size:28px;font-weight:900}
+.skill-card small{color:var(--muted)}
+.evo-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.evo-tabs button{border:0;background:#ffffff0a;color:white;padding:10px 13px;border-radius:999px;cursor:pointer}
+.evo-tabs button.active{background:var(--green);color:#062313}
+.evo-panel{display:none}.evo-panel.active{display:block}
+.path-track{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.path-step-card{padding:16px;border-radius:18px;background:#ffffff07;border:1px solid var(--line);text-align:center}
+.path-step-card.current{border-color:var(--green);background:#67f18f10}
+.path-step-card.locked{opacity:.55}
+.badges-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.badge-card{padding:16px;border-radius:18px;background:#ffffff07;border:1px solid var(--line);text-align:center}
+.badge-card .badge-icon{font-size:36px}
+.coach-history{display:grid;gap:10px}.coach-history article{padding:14px;border-radius:15px;background:#ffffff07;border-left:3px solid var(--blue)}
+.profile-hero{display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:center}
+.profile-photo{width:180px;height:180px;border-radius:40px;margin:auto;background:linear-gradient(135deg,#1f3e2b,#0f2518);display:grid;place-items:center;font-size:90px}
+.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.profile-stat{padding:14px;border-radius:16px;background:#ffffff07;border:1px solid var(--line)}
+.profile-stat b{display:block;font-size:26px}.profile-stat small{color:var(--muted)}
+.profile-sections{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.preference-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff0c}
+.preference-row:last-child{border-bottom:0}
+.switch{width:46px;height:26px;border-radius:999px;background:#ffffff14;position:relative;cursor:pointer}
+.switch:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:.2s}
+.switch.on{background:var(--green2)}.switch.on:after{left:23px}
+@media(max-width:900px){.evo-overview,.profile-hero,.profile-sections{grid-template-columns:1fr}.path-track,.badges-grid,.profile-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.skill-radar,.path-track,.badges-grid,.profile-stats{grid-template-columns:1fr}}
+
+.progression-center{margin:18px 0;padding:24px;border-radius:26px;background:radial-gradient(circle at center,rgba(103,241,143,.12),transparent 42%),linear-gradient(145deg,#ffffff0a,#ffffff04);border:1px solid var(--line)}
+.progression-center-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px}
+.progression-hub{position:relative;width:min(620px,100%);aspect-ratio:1;margin:0 auto;display:grid;place-items:center}
+.progression-ring{position:absolute;inset:7%;border-radius:50%;background:conic-gradient(#67f18f 0 58%,#45c7ff 58% 76%,#ffffff10 76% 100%);box-shadow:0 0 55px rgba(103,241,143,.12)}
+.progression-ring:after{content:"";position:absolute;inset:18px;border-radius:50%;background:#0b1812;border:1px solid #ffffff10}
+.hub-core{position:relative;z-index:3;width:36%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;padding:18px;background:radial-gradient(circle,#183626,#0b1812);border:1px solid #67f18f55;box-shadow:0 0 40px rgba(103,241,143,.18)}
+.hub-core strong{display:block;font-size:42px;color:var(--green)}.hub-core span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.hub-axis{position:absolute;z-index:4;width:31%;min-height:118px;border:1px solid var(--line);border-radius:20px;padding:15px;background:rgba(10,25,17,.96);color:white;cursor:pointer;text-align:left;transition:.2s ease}
+.hub-axis:hover{transform:translateY(-4px);border-color:#67f18f55}.hub-axis h3{margin:0 0 6px;font-size:17px}.hub-axis p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+.hub-axis .axis-progress{height:7px;background:#ffffff0d;border-radius:999px;overflow:hidden;margin-top:10px}.hub-axis .axis-progress span{display:block;height:100%}
+.axis-tech{left:0;top:19%}.axis-phys{right:0;top:19%}.axis-intel{left:34.5%;bottom:0}
+.axis-tech .axis-progress span{width:62%;background:var(--green)}.axis-phys .axis-progress span{width:48%;background:var(--gold)}.axis-intel .axis-progress span{width:74%;background:var(--blue)}
+.complement-note{margin-top:18px;padding:14px 16px;border-radius:16px;background:#ffffff06;border-left:3px solid var(--green);color:var(--muted)}
+@media(max-width:760px){.progression-hub{aspect-ratio:auto;display:grid;gap:12px}.progression-ring{display:none}.hub-core,.hub-axis{position:static;width:100%;min-height:auto}.hub-core{aspect-ratio:auto;border-radius:22px;padding:20px}}
+
+/* ===== Centre de progression à 5 défis ===== */
+.progression-hub.five{
+  width:min(760px,100%);
+  aspect-ratio:1;
+}
+.progression-hub.five .hub-core{width:30%}
+.progression-hub.five .hub-axis{width:27%;min-height:110px}
+.axis-tech5{left:6%;top:12%}
+.axis-phys5{right:6%;top:12%}
+.axis-tac5{left:0;bottom:23%}
+.axis-cog5{right:0;bottom:23%}
+.axis-law5{left:36.5%;bottom:0}
+.axis-tech5 .axis-progress span{width:62%;background:var(--green)}
+.axis-phys5 .axis-progress span{width:48%;background:var(--gold)}
+.axis-tac5 .axis-progress span{width:66%;background:#8f7dff}
+.axis-cog5 .axis-progress span{width:74%;background:var(--blue)}
+.axis-law5 .axis-progress span{width:70%;background:#ff9d5c}
+@media(max-width:760px){
+  .progression-hub.five{aspect-ratio:auto}
+  .progression-hub.five .hub-core,
+  .progression-hub.five .hub-axis{position:static;width:100%}
+}
+
+.nav-bottom{grid-template-columns:repeat(8,1fr)}
+@media(max-width:700px){
+  .nav-bottom button{font-size:10px;padding:9px 3px}
+}
+
+/* ===== Carnet de Performance Physique ===== */
+.performance-book{
+  margin-top:18px;
+  padding:20px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#ffffff0a,#ffffff04);
+  border:1px solid var(--line);
+}
+.performance-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px;
+}
+.performance-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+}
+.performance-card{
+  padding:18px;border-radius:20px;background:#ffffff07;border:1px solid var(--line);
+}
+.performance-card h3{margin-bottom:6px}
+.performance-metrics{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;
+}
+.performance-metric{
+  padding:12px;border-radius:14px;background:#ffffff06;text-align:center;
+}
+.performance-metric b{display:block;font-size:24px}
+.performance-metric small{color:var(--muted)}
+.performance-entry{
+  display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-top:12px;
+}
+.performance-entry input,
+.performance-entry select{
+  background:#ffffff08;color:white;border:1px solid var(--line);
+  padding:12px;border-radius:13px;
+}
+.performance-history{
+  display:grid;gap:8px;margin-top:14px;
+}
+.performance-row{
+  display:grid;grid-template-columns:110px 1fr auto;gap:12px;
+  padding:11px 12px;border-radius:13px;background:#ffffff06;
+}
+.performance-row span{color:var(--muted)}
+.record{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;
+  background:#f5c85c18;color:#ffe191;font-size:11px;font-weight:900;
+}
+.frequency-note{
+  margin-top:12px;padding:12px;border-left:3px solid var(--blue);
+  background:#45c7ff0b;border-radius:12px;color:var(--muted);
+}
+.vma-locked{
+  opacity:.65;filter:saturate(.6);
+}
+.vma-locked .performance-entry{display:none}
+@media(max-width:850px){
+  .performance-grid{grid-template-columns:1fr}
+  .performance-entry{grid-template-columns:1fr}
+  .performance-metrics{grid-template-columns:1fr}
+}
+
+/* ===== Performance physique intégrée au profil ===== */
+.physical-profile-card{
+  margin-top:16px;
+  padding:20px;
+  border-radius:22px;
+  background:linear-gradient(145deg,#ffffff0a,#ffffff04);
+  border:1px solid var(--line);
+}
+.physical-profile-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;
+}
+.physical-mini-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+}
+.physical-mini{
+  padding:16px;border-radius:18px;background:#ffffff07;border:1px solid var(--line);
+}
+.physical-mini h3{margin-bottom:6px}
+.physical-mini-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;
+}
+.physical-mini-stat{
+  padding:10px;border-radius:13px;background:#ffffff06;text-align:center;
+}
+.physical-mini-stat b{display:block;font-size:21px}
+.physical-mini-stat small{color:var(--muted)}
+.physical-empty{
+  padding:16px;border-radius:16px;background:#ffffff06;color:var(--muted);
+}
+.data-entry-page{
+  display:grid;grid-template-columns:.8fr 1.2fr;gap:16px;
+}
+.entry-menu{
+  display:grid;gap:10px;
+}
+.entry-choice{
+  padding:16px;border-radius:17px;background:#ffffff07;border:1px solid var(--line);
+  cursor:pointer;text-align:left;color:white;
+}
+.entry-choice.active{border-color:var(--green);background:#67f18f10}
+.measure-form{
+  padding:20px;border-radius:22px;background:#ffffff07;border:1px solid var(--line);
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-field{display:grid;gap:6px}
+.form-field label{color:var(--muted);font-size:13px}
+.form-field input,.form-field select,.form-field textarea{
+  width:100%;background:#ffffff08;color:white;border:1px solid var(--line);
+  padding:12px;border-radius:13px;
+}
+.form-field textarea{min-height:100px;resize:vertical}
+.form-actions{display:flex;gap:10px;margin-top:16px}
+.validation-note{
+  margin-top:12px;padding:12px;border-left:3px solid var(--green);
+  border-radius:12px;background:#67f18f0d;color:var(--muted);
+}
+.measure-history{
+  margin-top:18px;display:grid;gap:8px;
+}
+.measure-row{
+  display:grid;grid-template-columns:120px 1fr auto;gap:12px;
+  padding:11px 12px;border-radius:13px;background:#ffffff06;
+}
+.measure-row span{color:var(--muted)}
+@media(max-width:850px){
+  .physical-mini-grid,.data-entry-page,.form-grid{grid-template-columns:1fr}
+  .physical-mini-stats{grid-template-columns:1fr}
+}
+
+.juggle-shell{margin-top:18px}.juggle-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.juggle-tabs button{border:1px solid var(--line);background:#ffffff08;color:white;padding:9px 11px;border-radius:999px;cursor:pointer}
+.juggle-tabs button.active{background:var(--green);color:#062313}
+.juggle-screen{display:none}.juggle-screen.active{display:block}
+.juggle-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+.juggle-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.juggle-metric{padding:12px;border-radius:14px;background:#ffffff07;text-align:center}.juggle-metric b{display:block;font-size:23px}.juggle-metric small{color:var(--muted)}
+.juggle-progress{height:10px;background:#ffffff0d;border-radius:999px;overflow:hidden;margin:12px 0}.juggle-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue))}
+.juggle-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.juggle-item{padding:14px;border-radius:17px;background:#ffffff07;border:1px solid var(--line)}.juggle-item.done{border-color:var(--green)}
+.juggle-item h3{font-size:16px;margin-bottom:5px}.juggle-requirement{padding:10px;border-radius:12px;background:#ffffff06;color:var(--muted);margin:10px 0}
+.juggle-entry{display:grid;grid-template-columns:1fr auto;gap:8px}.juggle-entry input{width:100%;background:#ffffff08;color:white;border:1px solid var(--line);padding:10px;border-radius:11px}
+.juggle-feedback{margin-top:9px;color:var(--muted);font-size:12px}.juggle-feedback.ok{color:var(--green)}
+.juggle-badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:900;background:#67f18f20;color:#9cffb7}
+.juggle-actions{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.juggle-success{display:none;padding:17px;border-radius:17px;background:#67f18f10;border:1px solid #67f18f40;text-align:center;margin-top:14px}.juggle-success.active{display:block}
+@media(max-width:800px){.juggle-hero,.juggle-grid,.juggle-metrics{grid-template-columns:1fr}.juggle-entry{grid-template-columns:1fr}}
+
+.current-juggle-shell{margin-top:16px}
+.current-level-hero{display:flex;justify-content:space-between;align-items:center;gap:18px}
+.current-level-score{text-align:center;min-width:150px}
+.current-level-score strong{display:block;font-size:42px;color:var(--green)}
+.current-level-score small{color:var(--muted)}
+.current-juggle-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px;margin-top:16px}
+.acquired-panel{border-left:4px solid var(--green)}
+.progression-panel{border-left:4px solid var(--gold)}
+.next-levels-panel{margin-top:16px}
+.locked-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.locked-level-card{padding:16px;border-radius:18px;background:#ffffff07;border:1px solid var(--line);opacity:.75}
+.locked-level-card h3{margin-bottom:8px}
+.locked-level-card ul{margin:8px 0 0;padding-left:18px;color:var(--muted);line-height:1.6}
+.acquired-item{padding:11px 12px;border-radius:14px;background:#ffffff07;border:1px solid var(--line);margin-top:9px}
+.acquired-message{padding:13px;border-radius:14px;background:#67f18f0d;color:var(--muted);border-left:3px solid var(--green)}
+@media(max-width:850px){
+  .current-level-hero,.current-juggle-grid,.locked-grid{grid-template-columns:1fr;display:grid}
+  .current-level-score{text-align:left}
+}
+
+#terrain #terrainGrid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+@media(max-width:760px){
+  #terrain #terrainGrid{grid-template-columns:1fr}
+}
+
+/* Conduite 15 niveaux intégrée */
+.dribbling-shell{
+  display:grid;
+  gap:14px;
+}
+.dribbling-frame{
+  width:100%;
+  min-height:1050px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:#05090d;
+  box-shadow:0 20px 60px #0007;
+}
+@media(max-width:700px){
+  .dribbling-frame{min-height:1250px}
+}
+
+/* Modules intégrés sans barre de défilement interne */
+.embedded-module,
+.dribbling-frame,
+.physical-frame{
+  display:block;
+  width:100%;
+  min-height:900px;
+  height:900px;
+  border:0 !important;
+  border-radius:22px;
+  overflow:hidden !important;
+  background:#05090d;
+  box-shadow:none;
+}
+.module-shell{
+  width:100%;
+  overflow:visible;
+}
+
+.cognitive-empty-state{
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.cognitive-empty-icon{font-size:88px;margin-bottom:16px}
+.cognitive-empty-state p{max-width:620px}
+#tacticalGrid,#lawsGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:760px){
+  #tacticalGrid,#lawsGrid{grid-template-columns:1fr}
+}
+
+/* ===== Suivi d'objet ===== */
+.cog-intro{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-bottom:16px}
+.cog-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cog-level{padding:16px;border-radius:18px;background:#ffffff07;border:1px solid var(--line)}
+.cog-level.locked{opacity:.5}.cog-level.current{border-color:var(--blue);background:#45c7ff0d}
+.cog-level h3{margin:6px 0}.cog-seqs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
+.cog-seq{border:1px solid var(--line);background:#ffffff08;color:white;border-radius:11px;padding:9px 5px;font-size:12px;cursor:pointer}
+.cog-seq.test{border-color:#f5c85c70}.cog-seq.done{background:#67f18f22;border-color:#67f18f66}.cog-seq:disabled{cursor:not-allowed;opacity:.45}
+.test-console{display:grid;gap:10px}.test-console select{width:100%;background:#ffffff08;color:white;border:1px solid var(--line);padding:11px;border-radius:12px}
+.tracker-overlay{position:fixed;inset:0;z-index:500;background:#03090d;display:none;overflow:hidden}.tracker-overlay.open{display:block}
+.tracker-stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(circle at 50% 45%,#0c2330 0,#061018 46%,#020609 100%)}
+.tracker-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#45c7ff0b 1px,transparent 1px),linear-gradient(90deg,#45c7ff0b 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
+.tracker-hud{position:absolute;z-index:5;left:18px;right:18px;top:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
+.tracker-panel{background:#07131bdb;border:1px solid #45c7ff35;border-radius:16px;padding:11px 14px;backdrop-filter:blur(12px)}
+.tracker-panel b{display:block}.tracker-panel small{color:#a9c1cf}.tracker-timer{font-size:34px;color:var(--blue);font-weight:900;text-align:center}
+.tracker-close{pointer-events:auto;border:1px solid #ffffff25;background:#ffffff0c;color:white;border-radius:13px;padding:10px 13px;cursor:pointer}
+.tracker-message{position:absolute;z-index:6;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;padding:20px 26px;border-radius:20px;background:#06131be8;border:1px solid #45c7ff55;max-width:min(520px,90%)}
+.tracker-message.hidden{display:none}.tracker-message h2{margin-bottom:7px}.tracker-message p{color:#b9c9d1}
+.tracker-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.track-ball{position:absolute;width:58px;height:58px;display:grid;place-items:center;user-select:none;touch-action:manipulation;cursor:pointer;background:transparent;border:0;box-shadow:none;transition:opacity .12s,transform .12s;isolation:isolate}
+.track-ball:after{content:"";width:46px;height:46px;display:block;border-radius:50%;background:radial-gradient(circle at 32% 26%,#ffffff 0 18%,#f7f7f7 35%,#e7e7e7 66%,#c9c9c9 100%);border:1px solid rgba(255,255,255,.9);box-shadow:inset -7px -8px 10px rgba(0,0,0,.16),inset 5px 5px 9px rgba(255,255,255,.9),0 4px 6px rgba(0,0,0,.24);position:relative;z-index:2}
+.track-ball.target-lit:before{content:"";position:absolute;inset:-4px;border-radius:50%;background:rgba(56,211,105,.22);border:5px solid rgba(75,224,125,.58);z-index:1}
+.track-ball.target-lit{transform:scale(1.04)}
+.track-ball.lure-lit{}
+.track-ball.selected{transform:scale(1.04)}
+.track-ball.wrong{opacity:.8}
+.tracker-footer{position:absolute;z-index:5;left:50%;bottom:18px;transform:translateX(-50%);background:#07131bd9;border:1px solid #ffffff16;border-radius:999px;padding:9px 15px;color:#bfd0d8;text-align:center}
+@media(max-width:900px){.cog-intro{grid-template-columns:1fr}.cog-levels{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.cog-levels{grid-template-columns:1fr}.tracker-hud{left:8px;right:8px;top:8px}.tracker-panel{padding:8px 10px}.tracker-timer{font-size:26px}.track-ball{width:50px;height:50px}.track-ball:after{width:40px;height:40px}}
+
+
+/* ===== Jeux cognitifs intégrés ===== */
+.cognitive-games-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}
+.cognitive-game-card{padding:18px;border-radius:20px;background:#ffffff07;border:1px solid var(--line)}
+.cognitive-game-card h3{margin:8px 0 6px}.cognitive-game-card .game-icon{font-size:42px}
+.stroop-shell,.bimanual-shell{width:100%;overflow:hidden;border-radius:22px;background:#07100b;border:1px solid var(--line)}
+.stroop-frame,.bimanual-frame{display:block;width:100%;height:820px;border:0;background:#07100b}
+.competence-tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.competence-tags span{padding:6px 9px;border-radius:999px;background:#67f18f14;border:1px solid #67f18f2f;color:#b9f7ca;font-size:11px;font-weight:800}
+@media(max-width:760px){.cognitive-games-grid{grid-template-columns:1fr}.stroop-frame,.bimanual-frame{height:760px}}
+</style></head>
+<body><div class="app">
+<header class="top"><div class="brand"><div class="logo">🧠</div><span>Foot Intelligence</span></div><div class="user-head"><div><b>Lucas</b><div class="muted" style="font-size:12px">Débutant · Bronze</div></div><div class="avatar">👤</div><button class="icon">🔔</button></div></header>
+<section class="screen active" id="home">
+<div class="hero">
+<article class="card coach-card"><div class="kicker">Coach</div><h1>Que dois-tu faire aujourd’hui ?</h1><p class="muted">Commence par ton Rituel d’Activation, puis poursuis le Défi Clé « Scanner avant réception ».</p><button class="primary" onclick="continuePath()">▶ Continuer mon parcours</button></article>
+<article class="card"><div class="ifi-box"><div><div class="kicker">Indice Foot Intelligence</div><div class="ifi-score" id="ifiMain">74</div></div><div>🧠</div></div><div class="progress"><span style="width:74%"></span></div><p class="muted">Ton IFI évolue grâce aux défis interactifs : vision, lecture du jeu, décision et anticipation.</p></article>
+</div>
+<section class="progression-center">
+<div class="progression-center-head">
+<div>
+<div class="kicker">Centre de progression</div>
+<h2 style="margin:6px 0">Cinq défis, un seul parcours</h2>
+</div>
+<span class="tag">Progression globale : 58 %</span>
+</div>
+<div class="progression-hub five">
+<div class="progression-ring"></div>
+<div class="hub-core">
+<div>
+<strong>58%</strong>
+<b>Étape Bronze</b>
+<span>Les cinq défis sont complémentaires et nécessaires pour évoluer.</span>
+</div>
+</div>
+<button class="hub-axis axis-tech5" onclick="show('terrain',document.querySelectorAll('.nav-bottom button')[1])">
+<h3>⚽ Défis Techniques</h3>
+<p>Jonglerie et circuits de conduite mesurés sur le terrain.</p>
+<div class="axis-progress"><span></span></div>
+</button>
+<button class="hub-axis axis-phys5" onclick="show('physical',document.querySelectorAll('.nav-bottom button')[1])">
+<h3>🏃 Défis Physiques</h3>
+<p>Vitesse sur 10 m et VMA avec résultats objectifs.</p>
+<div class="axis-progress"><span></span></div>
+</button>
+<button class="hub-axis axis-tac5" onclick="show('tactical',null)">
+<h3>♟ Défis Tactiques</h3>
+<p>Lire les espaces, trouver le joueur libre et choisir la meilleure option.</p>
+<div class="axis-progress"><span></span></div>
+</button>
+<button class="hub-axis axis-cog5" onclick="show('interactive',document.querySelectorAll('.nav-bottom button')[2])">
+<h3>🧠 Défis Cognitifs</h3>
+<p>Vision, réflexes, mémoire, attention et rapidité de décision.</p>
+<div class="axis-progress"><span></span></div>
+</button>
+<button class="hub-axis axis-law5" onclick="show('laws',null)">
+<h3>📘 Lois du jeu</h3>
+<p>Comprendre les règles pour mieux analyser et agir sur le terrain.</p>
+<div class="axis-progress"><span></span></div>
+</button>
+</div>
+<div class="complement-note">
+  La progression dépend de l’ensemble :
+  <b>Technique + Physique + Tactique + Cognitif + Lois du jeu</b>.
+</div>
+</section>
+<div class="grid2">
+<article class="card today"><div><div class="kicker">Objectif du jour</div><h2>Lever la tête avant chaque contrôle</h2><p class="muted">Essaie de scanner ton environnement avant de recevoir le ballon.</p></div><span class="tag">Conseil terrain</span></article>
+<article class="card"><div class="kicker">Progression globale</div><h3>⚽ Parcours Bronze</h3><div class="progress"><span style="width:58%"></span></div><p class="muted">Les cinq défis doivent progresser ensemble pour débloquer les Crampons Argent.</p></article>
+</div>
+<article class="card" style="margin-top:16px"><div class="section-head" style="margin:0 0 8px"><div><div class="kicker">Rituel d’Activation</div><h2>6 minutes pour te préparer</h2></div><span class="tag">Disponible aujourd’hui</span></div><div class="ritual-list">
+<div class="mini">
+<b>🧠 Jeux cognitifs</b>
+<p class="muted">Nouveaux jeux à intégrer</p>
+</div>
+<div class="mini"><b>🏃 Vitesse 10 m légers</b><p class="muted">2 séries</p></div></div><button class="primary" onclick="startRitual()">Commencer le rituel</button><div class="notice hidden" id="ritualDone">Activation terminée. Ton cerveau et ton corps sont prêts.</div></article>
+<div class="grid2">
+<article class="card"><div class="kicker">Défis Clés</div><h2>À suivre</h2><div class="key-list"><div class="key-item"><span>Scanner avant réception</span><span class="status progressing">En progression</span></div><div class="key-item"><span>Défi Signature Bronze</span><span class="status coming">À venir</span></div></div></article>
+<article class="card"><div class="kicker">Mes capacités</div><div class="cap-list"><div class="cap-row"><span>Vision</span><div class="progress"><span style="width:82%"></span></div><b>82</b></div><div class="cap-row"><span>Lecture du jeu</span><div class="progress"><span style="width:68%"></span></div><b>68</b></div><div class="cap-row"><span>Décision</span><div class="progress"><span style="width:71%"></span></div><b>71</b></div><div class="cap-row"><span>Maîtrise ballon</span><div class="progress"><span style="width:76%"></span></div><b>76</b></div></div></article>
+</div></section>
+<section class="screen" id="terrain">
+<div class="section-head">
+<div><div class="kicker">Livraison 2 · Défis Terrain</div><h1>Mes objectifs sur le terrain</h1></div>
+<span class="tag">Résultats saisis par le joueur</span>
+</div>
+<div class="terrain-summary">
+<article class="card">
+<div class="kicker">Progression terrain</div>
+<h2>Étape Bronze</h2>
+<div class="progress"><span id="terrainProgressBar" style="width:0%"></span></div>
+<p class="muted" id="terrainProgressText">2 défis techniques à réaliser.</p>
+</article>
+<article class="card">
+<div class="terrain-kpis">
+<div class="terrain-kpi"><small>Défis maîtrisés</small><b id="terrainMastered">0</b></div>
+<div class="terrain-kpi"><small>En progression</small><b id="terrainProgressing">2</b></div>
+<div class="terrain-kpi"><small>Prochaine évolution</small><b>Argent</b></div>
+</div>
+</article>
+</div>
+<div class="notice">
+  Foot Intelligence repose sur ton engagement. Renseigne ton vrai résultat : le but est de suivre ta progression personnelle, pas de te comparer.
+</div>
+<div class="terrain-help" style="margin-top:16px">
+<div class="help-step"><b>1. Réalise le défi</b><span class="muted">Sur le terrain ou à la maison, selon les consignes.</span></div>
+<div class="help-step"><b>2. Entre ton résultat</b><span class="muted">Nombre, temps ou durée selon l’exercice.</span></div>
+<div class="help-step"><b>3. Suis ta progression</b><span class="muted">Ton meilleur résultat et ton statut sont mis à jour.</span></div>
+</div>
+<div class="notice" style="margin-top:16px"><b>Défis techniques :</b><br/>Cette rubrique regroupe uniquement :<ul><li>⚽ Jonglerie</li><li>🌀 Circuit de conduite</li></ul></div><div class="terrain-filter">
+<button class="active" onclick="filterTerrain('all',this)">Tous</button>
+<button onclick="filterTerrain('technical',this)">Technique</button>
+<button onclick="filterTerrain('key',this)">Défis Clés</button>
+</div>
+<div class="challenge-grid" id="terrainGrid">
+<article class="card challenge" data-type="technical key">
+<div class="challenge-top"><h2>⚽ Jonglerie</h2><p class="muted">Objectif : 20 jongles consécutifs</p></div>
+<div class="challenge-body">
+<div class="challenge-state"><span class="state-dot progressing" id="jongState">En progression</span><span class="tag">Défi Clé</span></div>
+<div class="goal-meter"><span id="jongMeter" style="width:90%"></span></div>
+<p class="muted">Dernier résultat : <b id="jongLast">12</b> · Meilleur : <b id="jongBest">18</b></p>
+<div class="input-row"><button class="primary" onclick="show('juggling',null)" type="button">Ouvrir les 15 niveaux de jonglerie</button></div>
+<div class="proof-note">Saisie unique après ta séance.</div>
+<div class="result-card" id="jongMsg">Chaque niveau contient ses défis exacts, ses résultats et sa validation.</div>
+</div>
+</article>
+<article class="card challenge" data-type="technical key">
+<div class="challenge-top"><h2>🌀 Circuit de conduite</h2><p class="muted">5 circuits · 15 niveaux de progression</p></div>
+<div class="challenge-body">
+<div class="challenge-state"><span class="state-dot progressing" id="slalomState">En progression</span><span class="tag">Défi Clé</span></div>
+<div class="goal-meter"><span id="slalomMeter" style="width:93%"></span></div>
+<p class="muted">Dernier résultat : <b id="slalomLast">52</b>s · Meilleur : <b id="slalomBest">48</b>s</p>
+<div class="input-row"><button class="primary" onclick="show('dribbling',null)" type="button">Ouvrir les 15 niveaux de conduite</button></div>
+<div class="result-card" id="slalomMsg">Chaque niveau contient son circuit, son protocole, sa saisie de chrono et son meilleur résultat.</div>
+</div>
+</article>
+</div>
+<article class="card signature" style="margin-top:18px">
+<div class="kicker">Défi Signature Terrain</div>
+<h2>Bronze · Maîtrise en mouvement</h2>
+<p class="muted" id="terrainSignatureText">Maîtrise la Jonglerie et le Circuit de conduite pour débloquer ce défi.</p>
+<button class="secondary" id="terrainSignatureBtn" onclick="launchTerrainSignature()">À venir</button>
+</article>
+</section>
+<section class="screen" id="juggling">
+<div class="section-head"><div><div class="kicker">Défi Technique</div><h1>Progression Jonglerie</h1></div>
+<button class="secondary" onclick="show('terrain',document.querySelectorAll('.nav-bottom button')[1])">← Retour aux défis techniques</button></div>
+<div class="current-juggle-shell">
+<article class="card current-level-hero">
+<div>
+<div class="kicker">Niveau actuel</div>
+<h2 id="currentJuggleTitle">🥉 Débutant Bronze</h2>
+<p class="muted" id="currentJugglePhase">Maîtrise statique</p>
+</div>
+<div class="current-level-score">
+<strong id="currentJugglePercent">0 %</strong>
+<small>Progression Jonglerie</small>
+</div>
+</article>
+<div class="juggle-progress"><span id="currentJuggleBar"></span></div>
+<div class="current-juggle-grid">
+<section class="card acquired-panel">
+<div class="kicker">✅ Défis acquis</div>
+<div id="currentJuggleAcquired"></div>
+</section>
+<section class="card progression-panel">
+<div class="kicker">⭐ Défis de progression</div>
+<p class="muted">Tu peux uniquement réaliser les défis de ton niveau actuel.</p>
+<div class="juggle-grid" id="currentJuggleChallenges"></div>
+</section>
+</div>
+<section class="card next-levels-panel">
+<div class="kicker">🔒 Prochains niveaux</div>
+<p class="muted">Tu peux voir les nouveautés qui t’attendent, mais tu ne peux pas encore ouvrir ces niveaux.</p>
+<div class="locked-grid" id="currentJuggleNext"></div>
+</section>
+</div>
+</section>
+<section class="screen" id="dribbling">
+<div class="section-head">
+<div>
+<div class="kicker">Défi Technique</div>
+<h1>Conduite de balle · progression par niveau</h1>
+<p class="muted">Les circuits sont désormais organisés par niveau, avec validation pied droit, pied gauche et alterné.</p>
+</div>
+<button class="secondary" onclick="show('terrain',document.querySelectorAll('.nav-bottom button')[1])">
+      ← Retour aux défis techniques
+    </button>
+</div>
+<div class="dribbling-shell">
+<div class="notice">
+      Le joueur retrouve le circuit correspondant à son niveau, saisit son chrono et conserve son meilleur résultat personnel.
+    </div>
+<iframe class="embedded-module dribbling-frame" onload="resizeEmbeddedFrame(this)" scrolling="no" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;fr&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;style&gt;
+:root{--bg:#05090d;--panel:#0c151d;--text:#f7fbff;--muted:#9eafbb;--blue:#35b8ff;--green:#8ff052;--gold:#ffd65b;--red:#ff7070;--line:#ffffff17}
+*{box-sizing:border-box}body{margin:0;padding:8px;font-family:Inter,system-ui;background:#05090d;color:var(--text);overflow:hidden}
+button,input{font:inherit}button{cursor:pointer}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.k{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);font-weight:900}h2{margin:4px 0}.muted{color:var(--muted)}
+.levelnav{display:none}
+.next-levels{margin-top:16px}
+.next-levels h3{margin:0 0 10px}
+.next-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.next-card{padding:14px;border-radius:16px;background:#ffffff06;border:1px solid var(--line);opacity:.9}
+.next-card .lock{float:right;color:var(--gold);font-size:18px}
+.next-card b{display:block;margin:4px 0}
+.next-card small{color:var(--muted)}
+@media(max-width:650px){.next-grid{grid-template-columns:1fr}}
+.admin-mini{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:#ffffff07}
+.admin-mini span{font-size:11px;color:var(--gold);font-weight:900;text-transform:uppercase}
+.admin-mini select{padding:7px 9px;border-radius:9px;background:#0b151d;color:white;border:1px solid var(--line)}.levelnav button{border:1px solid var(--line);background:#ffffff07;color:var(--muted);padding:9px 4px;border-radius:11px;font-weight:900}.levelnav button.active{color:#061006;background:var(--green);border-color:var(--green)}
+.card{background:linear-gradient(145deg,#ffffff0d,#ffffff05);border:1px solid var(--line);border-radius:20px;padding:17px}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:12px;margin-bottom:12px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center;background:#ffffff07;border-radius:14px;padding:12px}.stat b{font-size:22px;display:block}
+.notice{padding:12px;border-radius:14px;background:#ffd65b10;border-left:3px solid var(--gold);margin-bottom:12px;color:#ffeeb1}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.challenge{position:relative}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:#35b8ff18;color:#9edfff;font-size:11px;font-weight:900}
+.diagram{height:135px;margin:11px 0;border-radius:15px;background:linear-gradient(#17432b,#0d281a);display:grid;place-items:center;border:1px solid var(--line);color:#d8e7de}.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}input{width:100%;padding:10px;border-radius:10px;background:#ffffff08;color:white;border:1px solid var(--line)}.primary{width:100%;margin-top:8px;padding:10px;border:0;border-radius:10px;background:var(--green);color:#061006;font-weight:1000}.result{margin-top:8px;padding:9px;border-radius:11px;background:#ffffff06;color:var(--muted);font-size:13px}.ok{border:1px solid #8ff05255;color:var(--green)}.bad{border:1px solid #ff707055;color:#ffaaaa}
+.progress{height:9px;border-radius:999px;background:#ffffff12;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue))}
+@media(max-width:850px){.levelnav{grid-template-columns:repeat(5,1fr)}.hero,.grid{grid-template-columns:1fr}}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;div class=&quot;top&quot;&gt;
+  &lt;div&gt;
+    &lt;div class=&quot;k&quot;&gt;Conduite de balle&lt;/div&gt;
+    &lt;h2&gt;Mon défi de conduite&lt;/h2&gt;
+    &lt;div class=&quot;muted&quot;&gt;Ton défi actuel est ouvert. Les deux prochains sont visibles uniquement en résumé.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;admin-mini&quot;&gt;
+    &lt;span&gt;Niveau joueur&lt;/span&gt;
+    &lt;select id=&quot;playerLevel&quot;&gt;&lt;/select&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;levelnav&quot; id=&quot;nav&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+const levels=[{&quot;n&quot;: 1, &quot;name&quot;: &quot;L'Éclair&quot;, &quot;detail&quot;: &quot;Découverte du circuit&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 120, &quot;plots&quot;: 2}, {&quot;n&quot;: 2, &quot;name&quot;: &quot;Le Huit&quot;, &quot;detail&quot;: &quot;Orientation et changement de direction&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 115, &quot;plots&quot;: 2}, {&quot;n&quot;: 3, &quot;name&quot;: &quot;Le Zigzag&quot;, &quot;detail&quot;: &quot;Tracé physique repris avec ballon&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 110, &quot;plots&quot;: 2}, {&quot;n&quot;: 4, &quot;name&quot;: &quot;L'Illinois&quot;, &quot;detail&quot;: &quot;Première référence Illinois&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 105, &quot;plots&quot;: 2}, {&quot;n&quot;: 5, &quot;name&quot;: &quot;Le Serpent&quot;, &quot;detail&quot;: &quot;Conduite rapprochée&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 100, &quot;plots&quot;: 2}, {&quot;n&quot;: 6, &quot;name&quot;: &quot;Le Boomerang&quot;, &quot;detail&quot;: &quot;Accélération, slalom et retour&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 95, &quot;plots&quot;: 1}, {&quot;n&quot;: 7, &quot;name&quot;: &quot;L'Illinois&quot;, &quot;detail&quot;: &quot;Réévaluation Illinois&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 92, &quot;plots&quot;: 1}, {&quot;n&quot;: 8, &quot;name&quot;: &quot;Le Carré — Semelle&quot;, &quot;detail&quot;: &quot;Même tracé que le physique, maîtrise semelle&quot;, &quot;variants&quot;: [&quot;Semelle pied droit&quot;, &quot;Semelle pied gauche&quot;, &quot;Semelles alternées&quot;], &quot;time&quot;: 90, &quot;plots&quot;: 1}, {&quot;n&quot;: 9, &quot;name&quot;: &quot;Le Zigzag&quot;, &quot;detail&quot;: &quot;Réévaluation technique&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 87, &quot;plots&quot;: 1}, {&quot;n&quot;: 10, &quot;name&quot;: &quot;L'Illinois&quot;, &quot;detail&quot;: &quot;Illinois avancé&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 84, &quot;plots&quot;: 1}, {&quot;n&quot;: 11, &quot;name&quot;: &quot;Le Boomerang&quot;, &quot;detail&quot;: &quot;Boomerang avancé&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 81, &quot;plots&quot;: 0}, {&quot;n&quot;: 12, &quot;name&quot;: &quot;Le Serpent — Semelle&quot;, &quot;detail&quot;: &quot;Conduite semelle avancée&quot;, &quot;variants&quot;: [&quot;Semelle pied droit&quot;, &quot;Semelle pied gauche&quot;, &quot;Semelles alternées&quot;], &quot;time&quot;: 78, &quot;plots&quot;: 0}, {&quot;n&quot;: 13, &quot;name&quot;: &quot;L'Illinois&quot;, &quot;detail&quot;: &quot;Illinois expert&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 75, &quot;plots&quot;: 0}, {&quot;n&quot;: 14, &quot;name&quot;: &quot;Le Serpent&quot;, &quot;detail&quot;: &quot;Serpent expert&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 72, &quot;plots&quot;: 0}, {&quot;n&quot;: 15, &quot;name&quot;: &quot;Illinois Élite&quot;, &quot;detail&quot;: &quot;Bilan final de conduite&quot;, &quot;variants&quot;: [&quot;Pied droit&quot;, &quot;Pied gauche&quot;, &quot;Deux pieds alternés&quot;], &quot;time&quot;: 68, &quot;plots&quot;: 0}];
+const state=JSON.parse(localStorage.getItem('fi-conduite-v5')||'{}');
+let playerLevel=Math.max(1,Math.min(15,Number(state.playerLevel||1)));
+let current=Math.max(playerLevel,Math.min(15,Number(state.current||playerLevel)));
+
+const playerSelect=document.getElementById('playerLevel');
+for(let i=1;i&lt;=15;i++){
+  const o=document.createElement('option');
+  o.value=i;o.textContent='Niveau '+i;
+  playerSelect.appendChild(o);
+}
+playerSelect.value=playerLevel;
+playerSelect.onchange=()=&gt;{
+  playerLevel=Number(playerSelect.value);
+  state.playerLevel=playerLevel;
+  current=playerLevel;
+  state.current=current;
+  save();
+  render();
+};
+
+function save(){localStorage.setItem('fi-conduite-v5',JSON.stringify(state))}
+function key(n,i){return 'N'+n+'V'+i}
+function accessibleLevels(){
+  return [levels[playerLevel-1]];
+}
+function renderNav(){
+ const nav=document.getElementById('nav');
+ nav.innerHTML='';
+}
+function validate(n,i){
+ const l=levels[n-1], t=Number(document.getElementById('t'+n+'_'+i).value), p=Number(document.getElementById('p'+n+'_'+i).value);
+ if(!t&amp;&amp;t!==0)return;
+ const ok=t&lt;=l.time &amp;&amp; p&lt;=l.plots;
+ state[key(n,i)]={time:t,plots:p,ok};save();render()
+}
+function render(){
+ current=playerLevel;
+ state.current=current;
+ save();
+ renderNav();
+ const l=levels[current-1];
+ let done=0;
+ l.variants.forEach((v,i)=&gt;{if(state[key(l.n,i)]?.ok)done++});
+ const pct=Math.round(done/l.variants.length*100);
+ document.getElementById('app').innerHTML=`
+ &lt;section class=&quot;hero&quot;&gt;
+  &lt;article class=&quot;card&quot;&gt;&lt;div class=&quot;k&quot;&gt;Niveau ${l.n}&lt;/div&gt;&lt;h2&gt;${l.name}&lt;/h2&gt;&lt;p class=&quot;muted&quot;&gt;${l.detail}&lt;/p&gt;&lt;div class=&quot;progress&quot;&gt;&lt;span style=&quot;width:${pct}%&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;b&gt;${done} / ${l.variants.length} défis validés&lt;/b&gt;&lt;/article&gt;
+  &lt;article class=&quot;card stats&quot;&gt;&lt;div class=&quot;stat&quot;&gt;&lt;small&gt;Temps repère&lt;/small&gt;&lt;b&gt;≤ ${l.time} s&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;&lt;small&gt;Plots autorisés&lt;/small&gt;&lt;b&gt;${l.plots}&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;&lt;small&gt;Statut&lt;/small&gt;&lt;b&gt;${done===l.variants.length?'Validé':'En cours'}&lt;/b&gt;&lt;/div&gt;&lt;/article&gt;
+ &lt;/section&gt;
+ &lt;div class=&quot;notice&quot;&gt;Barèmes provisoires et volontairement accessibles pour la phase terrain. Ils seront réajustés après les essais réels.&lt;/div&gt;
+ &lt;section class=&quot;grid&quot;&gt;${l.variants.map((v,i)=&gt;{
+   const r=state[key(l.n,i)];
+   return `&lt;article class=&quot;card challenge&quot;&gt;&lt;div class=&quot;badge&quot;&gt;Défi ${i+1}&lt;/div&gt;&lt;h3&gt;${v}&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;Circuit : ${l.name}. Aucun raccourci et trajectoire complète.&lt;/p&gt;&lt;div class=&quot;diagram&quot;&gt;Schéma du circuit ${l.name}&lt;/div&gt;&lt;div class=&quot;fields&quot;&gt;&lt;input id=&quot;t${l.n}_${i}&quot; type=&quot;number&quot; step=&quot;0.01&quot; placeholder=&quot;Chrono en secondes&quot;&gt;&lt;input id=&quot;p${l.n}_${i}&quot; type=&quot;number&quot; min=&quot;0&quot; value=&quot;0&quot; placeholder=&quot;Plots touchés&quot;&gt;&lt;/div&gt;&lt;button class=&quot;primary&quot; onclick=&quot;validate(${l.n},${i})&quot;&gt;Valider le défi&lt;/button&gt;&lt;div class=&quot;result ${r?(r.ok?'ok':'bad'):''}&quot;&gt;${r?(r.ok?'✅ Validé — ':'❌ À refaire — ')+r.time+' s · '+r.plots+' plot(s) touché(s)':'Aucun résultat enregistré.'}&lt;/div&gt;&lt;/article&gt;`
+ }).join('')}&lt;/section&gt;
+ &lt;section class=&quot;next-levels&quot;&gt;
+   &lt;h3&gt;Prochains niveaux&lt;/h3&gt;
+   &lt;p class=&quot;muted&quot;&gt;Tu peux voir les nouveautés qui t’attendent, mais tu ne peux pas encore ouvrir ces niveaux.&lt;/p&gt;
+   &lt;div class=&quot;next-grid&quot;&gt;
+     ${levels.filter(x=&gt;x.n&gt;l.n &amp;&amp; x.n&lt;=l.n+2).map(x=&gt;`
+       &lt;article class=&quot;next-card&quot;&gt;
+         &lt;span class=&quot;lock&quot;&gt;🔒&lt;/span&gt;
+         &lt;div class=&quot;k&quot;&gt;Niveau ${x.n}&lt;/div&gt;
+         &lt;b&gt;${x.name}&lt;/b&gt;
+         &lt;small&gt;${x.detail}&lt;/small&gt;
+       &lt;/article&gt;
+     `).join('') || '&lt;article class=&quot;next-card&quot;&gt;&lt;b&gt;Parcours terminé&lt;/b&gt;&lt;small&gt;Tu es arrivé au dernier niveau.&lt;/small&gt;&lt;/article&gt;'}
+   &lt;/div&gt;
+ &lt;/section&gt;`;
+}
+render();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="width:100%;border:0;overflow:hidden;" title="Conduite de balle par niveau — 15 niveaux">
+</iframe>
+</div>
+</section>
+<section class="screen" id="physical">
+<div class="section-head">
+<div>
+<div class="kicker">Défis Physiques</div>
+<h1>Parcours physique · 15 niveaux</h1>
+<p class="muted">Tests terrain, progression personnelle, records et IFI.</p>
+</div>
+<span class="tag">V1 test réel</span>
+</div>
+<div class="notice" style="margin-bottom:16px">
+    Aucun chrono universel n’est obligatoire : le joueur progresse par rapport à ses propres références. Utilise le panneau administrateur intégré pour vérifier tous les niveaux.
+  </div>
+<div class="module-shell">
+<iframe class="embedded-module physical-frame" onload="resizeEmbeddedFrame(this)" scrolling="no" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;fr&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+&lt;title&gt;Foot Intelligence — Physique V1&lt;/title&gt;
+&lt;style&gt;
+:root{--bg:#05090d;--panel:#0c151d;--text:#f8fbff;--muted:#9aadb9;--green:#91f257;--blue:#36b8ff;--gold:#ffd65b;--red:#ff7272;--line:#ffffff17}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui;background:radial-gradient(circle at 50% -10%,#17374b,transparent 32%),linear-gradient(#04080c,#09131b 60%,#04080c);color:var(--text);min-height:100vh}button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:1350px;margin:auto;padding:18px 20px 100px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:12px}.logo{width:50px;height:50px;border-radius:16px;background:#eef5f8;color:#071019;display:grid;place-items:center;font-weight:1000}
+.card{background:linear-gradient(145deg,#ffffff0d,#ffffff05);border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 60px #0007}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.hero&gt;div{padding:20px}h1{font-size:38px;margin:6px 0}.k{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;font-weight:900;color:var(--green)}.muted{color:var(--muted);line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{padding:13px;border-radius:15px;background:#ffffff07;text-align:center}.stat b{display:block;font-size:24px}.bar{height:10px;background:#ffffff12;border-radius:999px;overflow:hidden;margin:14px 0}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:.3s}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:16px;margin-top:16px}.side{padding:16px;align-self:start;position:sticky;top:15px}.step{padding:12px;border-radius:14px;background:#ffffff07;margin-top:9px;border:1px solid transparent}.step.done{border-color:#91f25755}
+.warn{padding:14px;border-radius:15px;background:#ff727210;border-left:3px solid var(--red);margin-bottom:14px}.warm{padding:16px;margin-bottom:14px}.anim{height:165px;border-radius:17px;background:linear-gradient(#153047,#081018);position:relative;overflow:hidden}.body{position:absolute;left:50%;top:30px;width:10px;height:70px;background:#eaf4f7;box-shadow:-24px 22px 0 -2px #eaf4f7,24px 22px 0 -2px #eaf4f7,-17px 77px 0 -2px #eaf4f7,17px 77px 0 -2px #eaf4f7;animation:mv 1s infinite alternate}.body:before{content:&quot;&quot;;position:absolute;width:28px;height:28px;border-radius:50%;background:#eaf4f7;left:-9px;top:-28px;box-shadow:0 0 18px var(--blue)}@keyframes mv{to{transform:rotate(5deg)}}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.primary,.secondary,.danger{padding:10px 13px;border-radius:11px;font-weight:900}.primary{border:0;background:#a6f84d;color:#071404}.secondary{border:1px solid var(--line);background:#ffffff08;color:white}.danger{border:1px solid #ff727255;background:#ff727212;color:#ffbaba}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.challenge{padding:16px}.challenge h3{margin:5px 0}.diagram{height:120px;border-radius:15px;background:linear-gradient(#17432b,#0d281a);border:1px solid var(--line);display:grid;place-items:center;color:#d8e8df;margin:11px 0}.entry{display:grid;grid-template-columns:1fr auto;gap:8px}input{width:100%;padding:10px;border-radius:10px;background:#ffffff08;color:white;border:1px solid var(--line)}.result{margin-top:9px;padding:9px;border-radius:11px;background:#ffffff06;color:var(--muted);font-size:13px}.result.ok{color:var(--green);border:1px solid #91f25745}
+.admin{position:fixed;right:12px;bottom:75px;width:300px;padding:14px;background:#0a1118ed;border:1px solid #ffd65b55;border-radius:18px;z-index:20}.admin select{width:100%;padding:9px;border-radius:10px;background:#ffffff0d;color:white;border:1px solid var(--line)}nav{position:fixed;left:0;right:0;bottom:0;background:#05090deb;border-top:1px solid var(--line)}nav div{max-width:800px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr)}nav button{border:0;background:none;color:var(--muted);padding:12px}nav button:nth-child(2){color:var(--green)}
+@media(max-width:950px){.hero,.layout{grid-template-columns:1fr}.side{position:static}.grid{grid-template-columns:1fr 1fr}}@media(max-width:650px){.stats,.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.admin{left:10px;right:10px;width:auto}h1{font-size:29px}}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;div class=&quot;app&quot;&gt;&lt;header class=&quot;top&quot;&gt;&lt;div class=&quot;brand&quot;&gt;&lt;div class=&quot;logo&quot;&gt;FI&lt;/div&gt;&lt;div&gt;&lt;b&gt;FOOT INTELLIGENCE&lt;/b&gt;&lt;div class=&quot;k&quot;&gt;Physique · V1 terrain&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;LÉO&lt;/b&gt;&lt;div class=&quot;k&quot;&gt;Interface joueur&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;section class=&quot;hero&quot;&gt;&lt;div class=&quot;card&quot;&gt;&lt;div class=&quot;k&quot; id=&quot;lvl&quot;&gt;&lt;/div&gt;&lt;h1 id=&quot;title&quot;&gt;&lt;/h1&gt;&lt;p class=&quot;muted&quot; id=&quot;desc&quot;&gt;Progression personnelle, sans chrono universel obligatoire.&lt;/p&gt;&lt;div class=&quot;bar&quot;&gt;&lt;span id=&quot;bar&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;b id=&quot;pct&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;card stats&quot;&gt;&lt;div class=&quot;stat&quot;&gt;&lt;small&gt;Défis&lt;/small&gt;&lt;b id=&quot;done&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;&lt;small&gt;IFI&lt;/small&gt;&lt;b id=&quot;ifi&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stat&quot;&gt;&lt;small&gt;Statut&lt;/small&gt;&lt;b id=&quot;status&quot;&gt;&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;div class=&quot;layout&quot;&gt;&lt;aside class=&quot;card side&quot;&gt;&lt;div class=&quot;k&quot;&gt;Parcours&lt;/div&gt;&lt;div class=&quot;step&quot; id=&quot;sw&quot;&gt;&lt;b&gt;🔥 Échauffement&lt;/b&gt;&lt;div class=&quot;muted&quot;&gt;Rituel et gammes&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; id=&quot;sd&quot;&gt;&lt;b&gt;🏃 Défis&lt;/b&gt;&lt;div class=&quot;muted&quot;&gt;Résultats personnels&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step&quot; id=&quot;sb&quot;&gt;&lt;b&gt;📈 Bilan&lt;/b&gt;&lt;div class=&quot;muted&quot;&gt;Records et IFI&lt;/div&gt;&lt;/div&gt;&lt;/aside&gt;
+&lt;main&gt;&lt;div id=&quot;warn&quot;&gt;&lt;/div&gt;&lt;section class=&quot;card warm&quot;&gt;&lt;div class=&quot;k&quot;&gt;Rituel obligatoire&lt;/div&gt;&lt;h2&gt;Échauffement 3D&lt;/h2&gt;&lt;div class=&quot;anim&quot;&gt;&lt;div class=&quot;body&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;muted&quot;&gt;Mobilité, montées de genoux, talons-fesses, pas chassés, foulées bondissantes et accélérations progressives.&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button class=&quot;primary&quot; onclick=&quot;warm()&quot;&gt;Valider l'échauffement&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;&lt;section class=&quot;grid&quot; id=&quot;grid&quot;&gt;&lt;/section&gt;&lt;/main&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;admin&quot;&gt;&lt;div class=&quot;k&quot; style=&quot;color:var(--gold)&quot;&gt;Mode admin&lt;/div&gt;&lt;h3&gt;Tester un niveau&lt;/h3&gt;&lt;select id=&quot;sel&quot;&gt;&lt;/select&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button class=&quot;secondary&quot; onclick=&quot;apply()&quot;&gt;Afficher&lt;/button&gt;&lt;button class=&quot;danger&quot; onclick=&quot;resetLevel()&quot;&gt;Réinitialiser&lt;/button&gt;&lt;/div&gt;&lt;p class=&quot;muted&quot; style=&quot;font-size:12px&quot;&gt;Le joueur ne voit que le niveau sélectionné.&lt;/p&gt;&lt;/div&gt;
+&lt;nav&gt;&lt;div&gt;&lt;button&gt;⌂&lt;br&gt;Accueil&lt;/button&gt;&lt;button&gt;💪&lt;br&gt;Physique&lt;/button&gt;&lt;button&gt;🏆&lt;br&gt;Défis&lt;/button&gt;&lt;button&gt;📊&lt;br&gt;Stats&lt;/button&gt;&lt;button&gt;👤&lt;br&gt;Profil&lt;/button&gt;&lt;/div&gt;&lt;/nav&gt;
+&lt;script&gt;
+const L={&quot;1&quot;: [&quot;Bilan d'accélération&quot;, [&quot;Sprint 5 m&quot;, &quot;Sprint 10 m&quot;, &quot;Sprint 20 m&quot;], &quot;&quot;], &quot;2&quot;: [&quot;Freinage et relance&quot;, [&quot;5 m Aller / Retour&quot;, &quot;10 m Aller / Retour&quot;, &quot;Le Carré — départ A/B&quot;], &quot;&quot;], &quot;3&quot;: [&quot;Agilité et résistance&quot;, [&quot;Le Zigzag&quot;, &quot;Tour 280 m&quot;, &quot;Le Légionnaire&quot;], &quot;Tour 280 m et Légionnaire sur des jours différents.&quot;], &quot;4&quot;: [&quot;Premier grand bilan&quot;, [&quot;Sprint 5-10-20 m&quot;, &quot;VAMEVAL&quot;, &quot;Illinois&quot;], &quot;VAMEVAL lors d'une séance dédiée.&quot;], &quot;5&quot;: [&quot;Appuis et résistance&quot;, [&quot;5 m Aller / Retour&quot;, &quot;Le Serpent&quot;, &quot;Tour 280 m&quot;], &quot;&quot;], &quot;6&quot;: [&quot;Bilan intermédiaire&quot;, [&quot;Réévaluation Zigzag&quot;, &quot;Le Légionnaire&quot;, &quot;VAMEVAL&quot;], &quot;Légionnaire et VAMEVAL obligatoirement à des jours différents.&quot;], &quot;7&quot;: [&quot;Vitesse et agilité&quot;, [&quot;Sprint 5-10-20 m&quot;, &quot;Illinois&quot;, &quot;Tour 280 m&quot;], &quot;&quot;], &quot;8&quot;: [&quot;Relance et VMA&quot;, [&quot;5 m Aller / Retour&quot;, &quot;Le Serpent&quot;, &quot;VAMEVAL&quot;], &quot;VAMEVAL lors d'une séance dédiée.&quot;], &quot;9&quot;: [&quot;Mental et résistance&quot;, [&quot;Le Zigzag&quot;, &quot;Le Légionnaire&quot;, &quot;Tour 280 m&quot;], &quot;Légionnaire et Tour 280 m sur des jours différents.&quot;], &quot;10&quot;: [&quot;Bilan avancé&quot;, [&quot;Sprint 5-10-20 m&quot;, &quot;Illinois&quot;, &quot;VAMEVAL&quot;], &quot;VAMEVAL lors d'une séance dédiée.&quot;], &quot;11&quot;: [&quot;Relance et endurance&quot;, [&quot;5 m Aller / Retour&quot;, &quot;Le Serpent&quot;, &quot;Tour 280 m&quot;], &quot;&quot;], &quot;12&quot;: [&quot;Résistance de haut niveau&quot;, [&quot;Le Zigzag&quot;, &quot;Le Légionnaire&quot;, &quot;VAMEVAL&quot;], &quot;Légionnaire et VAMEVAL à des jours différents.&quot;], &quot;13&quot;: [&quot;Puissance et résistance&quot;, [&quot;Sprint 5-10-20 m&quot;, &quot;Illinois&quot;, &quot;Tour 280 × 2 — 560 m&quot;], &quot;&quot;], &quot;14&quot;: [&quot;Dernière préparation&quot;, [&quot;5 m Aller / Retour&quot;, &quot;Le Serpent&quot;, &quot;VAMEVAL&quot;], &quot;VAMEVAL lors d'une séance dédiée.&quot;], &quot;15&quot;: [&quot;Consécration physique&quot;, [&quot;Sprint 5-10-20 m — bilan&quot;, &quot;Illinois — bilan&quot;, &quot;Tour 280 × 2 — 560 m&quot;, &quot;Le Légionnaire — sacre&quot;], &quot;Répartir les tests maximaux sur plusieurs jours.&quot;]};const S=JSON.parse(localStorage.getItem('fi-phy-v1')||'{}');const sel=document.getElementById('sel');for(let i=1;i&lt;=15;i++){let o=document.createElement('option');o.value=i;o.textContent='Niveau '+i+' — '+L[i][0];sel.appendChild(o)}sel.value=S.level||1;
+function save(){localStorage.setItem('fi-phy-v1',JSON.stringify(S))}function k(n,i){return 'L'+n+'C'+i}function warm(){S['W'+sel.value]=true;save();render()}function store(id){let e=document.getElementById(id);if(!e.value)return;S[id]=e.value;save();render()}function apply(){S.level=+sel.value;save();render()}function resetLevel(){let n=+sel.value;Object.keys(S).filter(x=&gt;x.startsWith('L'+n+'C')||x==='W'+n).forEach(x=&gt;delete S[x]);save();render()}
+function render(){let n=+sel.value,d=L[n],ch=d[1],warn=d[2];document.getElementById('lvl').textContent=(n%3===1?'🥉':n%3===2?'🥈':'🥇')+' Niveau '+n;document.getElementById('title').textContent=d[0];document.getElementById('warn').innerHTML=warn?'&lt;div class=&quot;warn&quot;&gt;&lt;b&gt;⚠️ Organisation des séances&lt;/b&gt;&lt;br&gt;'+warn+'&lt;/div&gt;':'';let g=document.getElementById('grid');g.innerHTML='';let c=0;ch.forEach((name,i)=&gt;{let id=k(n,i),ok=S[id]!==undefined;if(ok)c++;g.innerHTML+=`&lt;article class=&quot;card challenge&quot;&gt;&lt;div class=&quot;k&quot;&gt;Défi ${i+1}&lt;/div&gt;&lt;h3&gt;${name}&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;Consigne, schéma terrain et protocole de test.&lt;/p&gt;&lt;div class=&quot;diagram&quot;&gt;Schéma graphique · version terrain&lt;/div&gt;&lt;div class=&quot;entry&quot;&gt;&lt;input id=&quot;${id}&quot; placeholder=&quot;Entrer le résultat&quot;&gt;&lt;button class=&quot;primary&quot; onclick=&quot;store('${id}')&quot;&gt;Valider&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;result ${ok?'ok':''}&quot;&gt;${ok?'Résultat enregistré : '+S[id]+' · +25 IFI':'Aucun résultat enregistré.'}&lt;/div&gt;&lt;/article&gt;`});let w=!!S['W'+n],tot=ch.length+1,done=c+(w?1:0),p=Math.round(done/tot*100);document.getElementById('bar').style.width=p+'%';document.getElementById('pct').textContent=p+' % du niveau validé';document.getElementById('done').textContent=c+'/'+ch.length;document.getElementById('ifi').textContent=c*25+(w?10:0);document.getElementById('status').textContent=c===ch.length&amp;&amp;w?'Validé':'En cours';document.getElementById('sw').classList.toggle('done',w);document.getElementById('sd').classList.toggle('done',c===ch.length);document.getElementById('sb').classList.toggle('done',c===ch.length&amp;&amp;w)}render();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" style="width:100%;border:0;overflow:hidden;" title="Filière physique Foot Intelligence — 15 niveaux">
+</iframe>
+</div>
+</section>
+<section class="screen" id="interactive">
+<div class="section-head"><div><div class="kicker">Défis cognitifs</div><h1>Suivi d'objet</h1><p class="muted">Suis les ballons-cibles, mémorise leur ordre et valide chaque séquence pour progresser.</p></div><span class="tag" id="trackerProfileBadge">Profil joueur</span></div>
+<div class="cog-intro">
+<article class="card"><div class="kicker">Progression cognitive</div><h2 id="trackerCurrentLabel">Débutant · Crampons de bronze</h2><div class="progress"><span id="trackerProgressBar" style="width:0%"></span></div><p class="muted" id="trackerProgressText">Séquence 1 disponible.</p><div class="notice">Chaque sous-niveau contient 4 séquences. La séquence 4 est le test obligatoire avec les cibles placées aux extrémités de l'écran.</div></article>
+<article class="card test-console"><div class="kicker">Profil de test interne</div><h3>Contrôle des niveaux</h3><select id="trackerTestLevel"></select><div class="input-row"><button class="secondary" id="trackerTestModeBtn" type="button">Activer le profil test</button><button class="secondary" id="trackerResetBtn" type="button">Réinitialiser</button></div><div class="input-row"><button class="secondary" id="trackerPassBtn" type="button">Simuler réussite</button><button class="secondary" id="trackerFailBtn" type="button">Simuler échec</button></div><p class="muted" style="font-size:12px">Le profil test peut ouvrir toutes les séquences et n'alimente pas les statistiques joueur.</p></article>
+</div>
+
+<div class="cognitive-games-grid">
+  <article class="cognitive-game-card">
+    <div class="game-icon">⚪</div>
+    <div class="kicker">Jeu cognitif 1</div>
+    <h3>Suivi d’objet</h3>
+    <p class="muted">Suis les cibles en mouvement et retrouve-les après la phase de déplacement.</p>
+    <button class="primary" type="button" onclick="document.getElementById('trackerLevels').scrollIntoView({behavior:'smooth'})">Ouvrir le jeu</button>
+  </article>
+  <article class="cognitive-game-card">
+    <div class="game-icon">🎨</div>
+    <div class="kicker">Jeu cognitif 2</div>
+    <h3>Test de Stroop</h3>
+    <p class="muted">Travaille l’inhibition, l’attention sélective et la rapidité de décision en 4 manches.</p>
+    <button class="primary" type="button" onclick="show('stroop',null)">Ouvrir le jeu</button>
+  </article>
+  <article class="cognitive-game-card">
+    <div class="game-icon">👐</div>
+    <div class="kicker">Jeu cognitif 3</div>
+    <h3>Traçage bimanuel</h3>
+    <p class="muted">Suis simultanément deux trajectoires différentes avec les deux mains.</p>
+    <div class="competence-tags"><span>Attention divisée</span><span>Coordination bimanuelle</span><span>Précision gestuelle</span><span>Contrôle moteur fin</span></div>
+    <button class="primary" type="button" onclick="show('bimanual',null)">Ouvrir le jeu</button>
+  </article>
+</div>
+<div class="cog-levels" id="trackerLevels"></div>
+<div aria-hidden="true" class="hidden"><span id="officialTotal">0</span><span id="bestInteractive">—</span><span id="ifiInteractive">74</span><span id="interactiveKeyText"></span><span id="interactiveKeyBar"></span><div id="memoryGrid"></div></div>
+</section>
+<section class="screen" id="stroop">
+  <div class="section-head">
+    <div>
+      <div class="kicker">Défi cognitif</div>
+      <h1>Test de Stroop</h1>
+      <p class="muted">Version de test avec sélecteurs de niveau et de manche conservés.</p>
+    </div>
+    <button class="secondary" type="button" onclick="show('interactive',document.querySelectorAll('.nav-bottom button')[3])">← Retour aux jeux cognitifs</button>
+  </div>
+  <div class="stroop-shell">
+    <iframe class="stroop-frame" title="Test de Stroop — 15 niveaux" scrolling="no" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;fr&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover&quot;&gt;
+&lt;title&gt;Stroop Football — 15 niveaux&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#07100b;--panel:#101a14;--text:#f7fff9;--muted:#9bad9f;
+  --accent:#b8f20d;--good:#38dc79;--bad:#ff5d73;--blue:#55a8ff;--yellow:#f3d93b;--purple:#9b7cff;--orange:#ff9f43;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+button,select{font:inherit}
+#app{
+  position:fixed;inset:0;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;
+  gap:8px;padding:max(8px,env(safe-area-inset-top)) 9px max(8px,env(safe-area-inset-bottom));
+  overflow:hidden;background:radial-gradient(circle at 50% 35%,rgba(47,113,65,.23),transparent 48%),var(--bg)
+}
+header{display:grid;grid-template-columns:1fr 116px;gap:10px;align-items:center}
+h1{margin:0;font-size:clamp(22px,5.7vw,36px);line-height:1}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.control-stack{display:grid;gap:6px}
+.select-box{padding:7px 9px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(10,19,13,.84)}
+.select-box small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}
+select{width:100%;margin-top:3px;padding:6px;border:1px solid rgba(255,255,255,.16);border-radius:8px;background:#08110b;color:#fff}
+.skill{
+  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+  padding:8px 10px;border:1px solid rgba(184,242,13,.28);border-radius:12px;background:rgba(184,242,13,.06)
+}
+.skill small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.skill strong{display:block;color:var(--accent);margin-top:2px;font-size:13px}
+.progress{display:flex;gap:6px}.step{width:10px;height:10px;border-radius:50%;background:#ffffff33}.step.active{background:var(--accent)}.step.done{background:var(--good)}
+.arena{
+  min-height:0;position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  gap:10px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(16,26,20,.94);overflow:hidden
+}
+.rule{
+  padding:8px 10px;border-radius:12px;background:#0b150e;border:1px solid rgba(255,255,255,.1);
+  color:var(--muted);font-size:12px;text-align:center
+}
+.rule strong{color:var(--text)}
+.stimulus-wrap{display:grid;place-items:center;min-height:0}
+.stimulus{
+  font-weight:950;font-size:clamp(44px,14vw,118px);letter-spacing:.02em;text-align:center;
+  padding:12px;line-height:1;word-break:break-word
+}
+.countdown{position:absolute;top:10px;right:10px;padding:6px 9px;border-radius:999px;background:#07100bcc;color:var(--accent);font-weight:800;font-size:12px}
+.answers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.answer{
+  min-height:58px;border:0;border-radius:13px;color:#07100b;font-weight:900;cursor:pointer;
+  padding:8px;font-size:clamp(12px,2.8vw,16px)
+}
+.answer:active{transform:scale(.98)}
+footer{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.status{padding:9px 11px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#0c160f;color:var(--muted);font-size:12px}
+.status strong{color:var(--text)}
+.controls{display:flex;gap:7px}
+.btn{border:0;border-radius:11px;padding:11px 14px;background:var(--accent);color:#081006;font-weight:900;cursor:pointer}
+.btn.secondary{background:#17221b;color:#fff;border:1px solid rgba(255,255,255,.14)}
+.overlay{
+  position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:18px;
+  background:rgba(3,8,5,.82);backdrop-filter:blur(8px)
+}
+.overlay[hidden]{display:none}
+.panel{width:min(92vw,520px);padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:#0b150e}
+.panel h2{margin:0 0 8px}.panel p{margin:0 0 14px;color:var(--muted);line-height:1.45}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.result-card{padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;text-align:center;background:#101a14}
+.result-card small{display:block;color:var(--muted);font-size:10px}.result-card strong{display:block;margin-top:4px;color:var(--accent)}
+@media(max-width:620px){
+  header{grid-template-columns:1fr 104px}.subtitle{font-size:11px}
+  .answers{grid-template-columns:repeat(2,1fr)}
+  footer{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:1fr 1fr}
+  .btn{width:100%;padding:10px}
+}
+@media(max-height:610px){
+  h1{font-size:20px}.subtitle{display:none}.skill{padding:6px 8px}
+  footer{grid-template-columns:1fr auto}.controls{display:flex}
+  .answer{min-height:46px}.stimulus{font-size:clamp(38px,10vw,82px)}
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;main id=&quot;app&quot;&gt;
+&lt;header&gt;
+  &lt;div&gt;
+    &lt;h1&gt;Test de &lt;span style=&quot;color:var(--accent)&quot;&gt;Stroop&lt;/span&gt;&lt;/h1&gt;
+    &lt;div class=&quot;subtitle&quot;&gt;Réponds selon la règle affichée, pas selon ton premier réflexe.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;control-stack&quot;&gt;
+    &lt;label class=&quot;select-box&quot;&gt;
+      &lt;small&gt;Niveau&lt;/small&gt;
+      &lt;select id=&quot;levelSelect&quot;&gt;&lt;/select&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;select-box&quot;&gt;
+      &lt;small&gt;Manche&lt;/small&gt;
+      &lt;select id=&quot;roundSelect&quot;&gt;
+        &lt;option value=&quot;0&quot;&gt;1 / 4&lt;/option&gt;&lt;option value=&quot;1&quot;&gt;2 / 4&lt;/option&gt;
+        &lt;option value=&quot;2&quot;&gt;3 / 4&lt;/option&gt;&lt;option value=&quot;3&quot;&gt;4 / 4&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/label&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+
+&lt;section class=&quot;skill&quot;&gt;
+  &lt;div&gt;
+    &lt;small&gt;Compétences travaillées&lt;/small&gt;
+    &lt;strong id=&quot;skillText&quot;&gt;&lt;/strong&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;progress&quot; class=&quot;progress&quot;&gt;&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;arena&quot;&gt;
+  &lt;div id=&quot;ruleText&quot; class=&quot;rule&quot;&gt;&lt;strong&gt;Règle :&lt;/strong&gt; choisis la couleur de l’encre.&lt;/div&gt;
+  &lt;div class=&quot;stimulus-wrap&quot;&gt;
+    &lt;div id=&quot;stimulus&quot; class=&quot;stimulus&quot;&gt;PRÊT&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;answers&quot; class=&quot;answers&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;countdown&quot; class=&quot;countdown&quot;&gt;—&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;footer&gt;
+  &lt;div id=&quot;status&quot; class=&quot;status&quot;&gt;&lt;strong&gt;Prêt.&lt;/strong&gt; Appuie sur Commencer.&lt;/div&gt;
+  &lt;div class=&quot;controls&quot;&gt;
+    &lt;button id=&quot;restartBtn&quot; class=&quot;btn secondary&quot; type=&quot;button&quot;&gt;Recommencer&lt;/button&gt;
+    &lt;button id=&quot;startBtn&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Commencer&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;
+
+&lt;section id=&quot;resultOverlay&quot; class=&quot;overlay&quot; hidden&gt;
+  &lt;div class=&quot;panel&quot;&gt;
+    &lt;h2 id=&quot;resultTitle&quot;&gt;Manche terminée&lt;/h2&gt;
+    &lt;p id=&quot;resultText&quot;&gt;&lt;/p&gt;
+    &lt;div class=&quot;result-grid&quot;&gt;
+      &lt;div class=&quot;result-card&quot;&gt;&lt;small&gt;Précision&lt;/small&gt;&lt;strong id=&quot;accuracyValue&quot;&gt;0%&lt;/strong&gt;&lt;/div&gt;
+      &lt;div class=&quot;result-card&quot;&gt;&lt;small&gt;Temps moyen&lt;/small&gt;&lt;strong id=&quot;timeValue&quot;&gt;0 ms&lt;/strong&gt;&lt;/div&gt;
+      &lt;div class=&quot;result-card&quot;&gt;&lt;small&gt;Score&lt;/small&gt;&lt;strong id=&quot;scoreValue&quot;&gt;0&lt;/strong&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button id=&quot;continueBtn&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Continuer&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;
+
+&lt;script&gt;
+&quot;use strict&quot;;
+
+const COLORS=[
+  {name:&quot;ROUGE&quot;,hex:&quot;#ff5d73&quot;},
+  {name:&quot;VERT&quot;,hex:&quot;#38dc79&quot;},
+  {name:&quot;BLEU&quot;,hex:&quot;#55a8ff&quot;},
+  {name:&quot;JAUNE&quot;,hex:&quot;#f3d93b&quot;},
+  {name:&quot;VIOLET&quot;,hex:&quot;#9b7cff&quot;},
+  {name:&quot;ORANGE&quot;,hex:&quot;#ff9f43&quot;}
+];
+
+const LEVELS={
+1:{colors:3,trials:8,limit:2600,incongruent:.45,shuffle:false,distractor:false,switchRule:false,neutral:false,skill:&quot;Attention sélective, inhibition simple&quot;},
+2:{colors:4,trials:10,limit:2450,incongruent:.55,shuffle:false,distractor:true,switchRule:false,neutral:false,skill:&quot;Contrôle de l’interférence, attention visuelle&quot;},
+3:{colors:4,trials:10,limit:2300,incongruent:.65,shuffle:true,distractor:true,switchRule:false,neutral:false,skill:&quot;Inhibition et vitesse de décision&quot;},
+4:{colors:4,trials:12,limit:2150,incongruent:.72,shuffle:true,distractor:true,switchRule:true,neutral:false,skill:&quot;Flexibilité cognitive et changement de règle&quot;},
+5:{colors:4,trials:12,limit:2000,incongruent:.78,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Attention soutenue, adaptation à des stimuli neutres&quot;},
+6:{colors:5,trials:12,limit:1900,incongruent:.8,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Traitement rapide et inhibition renforcée&quot;},
+7:{colors:5,trials:14,limit:1800,incongruent:.82,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Mémoire de règle et contrôle attentionnel&quot;},
+8:{colors:5,trials:14,limit:1700,incongruent:.84,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Flexibilité sous pression temporelle&quot;},
+9:{colors:5,trials:15,limit:1600,incongruent:.86,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Décision rapide avec forte interférence&quot;},
+10:{colors:6,trials:15,limit:1500,incongruent:.88,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Sélection de l’information sous charge élevée&quot;},
+11:{colors:6,trials:16,limit:1420,incongruent:.9,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Inhibition avancée et concentration durable&quot;},
+12:{colors:6,trials:16,limit:1340,incongruent:.91,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Adaptation cognitive à rythme rapide&quot;},
+13:{colors:6,trials:18,limit:1260,incongruent:.92,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Décision sous forte pression&quot;},
+14:{colors:6,trials:18,limit:1180,incongruent:.94,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Contrôle exécutif à haute vitesse&quot;},
+15:{colors:6,trials:20,limit:1050,incongruent:.95,shuffle:true,distractor:true,switchRule:true,neutral:true,skill:&quot;Maîtrise de l’inhibition et flexibilité maximale&quot;}
+};
+
+const ROUND_VARIANTS=[
+  {name:&quot;Couleur de l’encre&quot;,baseRule:&quot;ink&quot;,randomRule:false,doubleDistractor:false},
+  {name:&quot;Mot écrit&quot;,baseRule:&quot;word&quot;,randomRule:false,doubleDistractor:false},
+  {name:&quot;Règle alternée&quot;,baseRule:&quot;ink&quot;,randomRule:true,doubleDistractor:false},
+  {name:&quot;Interférence renforcée&quot;,baseRule:&quot;ink&quot;,randomRule:true,doubleDistractor:true}
+];
+
+const levelSelect=document.getElementById(&quot;levelSelect&quot;);
+const roundSelect=document.getElementById(&quot;roundSelect&quot;);
+const skillText=document.getElementById(&quot;skillText&quot;);
+const progress=document.getElementById(&quot;progress&quot;);
+const ruleText=document.getElementById(&quot;ruleText&quot;);
+const stimulus=document.getElementById(&quot;stimulus&quot;);
+const answers=document.getElementById(&quot;answers&quot;);
+const countdown=document.getElementById(&quot;countdown&quot;);
+const status=document.getElementById(&quot;status&quot;);
+const startBtn=document.getElementById(&quot;startBtn&quot;);
+const restartBtn=document.getElementById(&quot;restartBtn&quot;);
+const overlay=document.getElementById(&quot;resultOverlay&quot;);
+const resultTitle=document.getElementById(&quot;resultTitle&quot;);
+const resultText=document.getElementById(&quot;resultText&quot;);
+const accuracyValue=document.getElementById(&quot;accuracyValue&quot;);
+const timeValue=document.getElementById(&quot;timeValue&quot;);
+const scoreValue=document.getElementById(&quot;scoreValue&quot;);
+const continueBtn=document.getElementById(&quot;continueBtn&quot;);
+
+levelSelect.innerHTML=Array.from({length:15},(_,i)=&gt;`&lt;option value=&quot;${i+1}&quot;&gt;${i+1}&lt;/option&gt;`).join(&quot;&quot;);
+
+let level=1,roundIndex=0,trial=0,correct=0,totalTime=0,trialStarted=0,currentAnswer=&quot;&quot;,running=false,timer=null,passedRounds=new Set();
+
+function cfg(){return LEVELS[level]}
+function variant(){return ROUND_VARIANTS[roundIndex]}
+function setStatus(title,text=&quot;&quot;){status.innerHTML=`&lt;strong&gt;${title}&lt;/strong&gt;${text?&quot; &quot;+text:&quot;&quot;}`}
+function updateProgress(){
+  progress.innerHTML=&quot;&quot;;
+  for(let i=0;i&lt;4;i++){
+    const s=document.createElement(&quot;span&quot;);
+    s.className=&quot;step&quot;+(passedRounds.has(i)?&quot; done&quot;:i===roundIndex?&quot; active&quot;:&quot;&quot;);
+    progress.appendChild(s)
+  }
+}
+function shuffle(arr){return [...arr].sort(()=&gt;Math.random()-.5)}
+function updateUI(){
+  skillText.textContent=cfg().skill+&quot; — &quot;+variant().name;
+  roundSelect.value=String(roundIndex);
+  updateProgress();
+  resetRound()
+}
+function resetRound(){
+  clearTimeout(timer);running=false;trial=0;correct=0;totalTime=0;currentAnswer=&quot;&quot;;
+  startBtn.disabled=false;stimulus.textContent=&quot;PRÊT&quot;;stimulus.style.color=&quot;var(--text)&quot;;
+  countdown.textContent=&quot;—&quot;;answers.innerHTML=&quot;&quot;;setStatus(&quot;Prêt.&quot;,&quot;Appuie sur Commencer.&quot;);
+  setRuleLabel(variant().baseRule)
+}
+function setRuleLabel(rule){
+  ruleText.innerHTML=`&lt;strong&gt;Règle :&lt;/strong&gt; ${rule===&quot;ink&quot;?&quot;choisis la couleur de l’encre.&quot;:&quot;choisis le mot écrit.&quot;}`
+}
+function chooseRule(){
+  const v=variant(),c=cfg();
+  if(v.randomRule &amp;&amp; c.switchRule)return Math.random()&lt;.5?&quot;ink&quot;:&quot;word&quot;;
+  return v.baseRule
+}
+function makeTrial(){
+  const c=cfg(),v=variant(),available=COLORS.slice(0,c.colors);
+  let wordColor=available[Math.floor(Math.random()*available.length)];
+  let inkColor;
+  const useNeutral=c.neutral&amp;&amp;Math.random()&lt;.12;
+  if(useNeutral){
+    stimulus.textContent=&quot;BALLON&quot;;
+    inkColor=available[Math.floor(Math.random()*available.length)]
+  }else{
+    stimulus.textContent=wordColor.name;
+    if(Math.random()&lt;c.incongruent){
+      do{inkColor=available[Math.floor(Math.random()*available.length)]}while(inkColor.name===wordColor.name)
+    }else inkColor=wordColor
+  }
+  stimulus.style.color=inkColor.hex;
+
+  const rule=chooseRule();
+  setRuleLabel(rule);
+  currentAnswer=rule===&quot;ink&quot;?inkColor.name:(useNeutral?inkColor.name:wordColor.name);
+
+  let options=available;
+  if(c.shuffle)options=shuffle(options);
+  answers.innerHTML=&quot;&quot;;
+  options.forEach(col=&gt;{
+    const b=document.createElement(&quot;button&quot;);
+    b.type=&quot;button&quot;;b.className=&quot;answer&quot;;b.textContent=col.name;b.style.background=col.hex;
+    b.addEventListener(&quot;click&quot;,()=&gt;submit(col.name));
+    answers.appendChild(b)
+  });
+
+  if(c.distractor){
+    stimulus.style.textShadow=v.doubleDistractor
+      ?&quot;8px 7px 0 rgba(255,255,255,.12), -8px -7px 0 rgba(255,255,255,.08)&quot;
+      :&quot;5px 5px 0 rgba(255,255,255,.1)&quot;;
+    stimulus.style.transform=`translate(${(Math.random()-.5)*18}px,${(Math.random()-.5)*12}px) rotate(${(Math.random()-.5)*6}deg)`
+  }else{
+    stimulus.style.textShadow=&quot;none&quot;;stimulus.style.transform=&quot;none&quot;
+  }
+
+  trialStarted=performance.now();
+  let remaining=c.limit;
+  countdown.textContent=(remaining/1000).toFixed(1)+&quot; s&quot;;
+  clearTimeout(timer);
+  const tick=()=&gt;{
+    if(!running)return;
+    remaining=c.limit-(performance.now()-trialStarted);
+    countdown.textContent=Math.max(0,remaining/1000).toFixed(1)+&quot; s&quot;;
+    if(remaining&lt;=0){submit(null);return}
+    timer=setTimeout(tick,60)
+  };
+  tick()
+}
+function submit(value){
+  if(!running)return;
+  clearTimeout(timer);
+  const elapsed=performance.now()-trialStarted;
+  totalTime+=Math.min(elapsed,cfg().limit);
+  if(value===currentAnswer)correct++;
+  trial++;
+  setStatus(value===currentAnswer?&quot;Correct.&quot;:&quot;Incorrect.&quot;,`${correct}/${trial} bonnes réponses.`);
+  if(trial&gt;=cfg().trials){finishRound();return}
+  stimulus.textContent=&quot;•&quot;;answers.innerHTML=&quot;&quot;;countdown.textContent=&quot;—&quot;;
+  timer=setTimeout(makeTrial,280)
+}
+function startRound(){
+  if(running)return;
+  running=true;trial=0;correct=0;totalTime=0;startBtn.disabled=true;
+  setStatus(&quot;Manche en cours.&quot;,variant().name);
+  makeTrial()
+}
+function finishRound(){
+  running=false;clearTimeout(timer);
+  const accuracy=Math.round(correct/cfg().trials*100);
+  const avg=Math.round(totalTime/cfg().trials);
+  const score=Math.max(0,Math.round(accuracy*10+(cfg().limit-avg)/3));
+  const passed=accuracy&gt;=80&amp;&amp;avg&lt;=cfg().limit*.9;
+  if(passed)passedRounds.add(roundIndex);
+
+  accuracyValue.textContent=accuracy+&quot;%&quot;;
+  timeValue.textContent=avg+&quot; ms&quot;;
+  scoreValue.textContent=score;
+  resultTitle.textContent=passed?&quot;Manche validée&quot;:&quot;Manche à retravailler&quot;;
+  resultText.textContent=passed
+    ?&quot;La précision et la vitesse sont suffisantes pour cette manche.&quot;
+    :&quot;Il faut améliorer la précision ou répondre plus rapidement.&quot;;
+  continueBtn.textContent=passed?(roundIndex===3?&quot;Terminer le niveau&quot;:&quot;Manche suivante&quot;):&quot;Réessayer&quot;;
+  continueBtn.onclick=()=&gt;{
+    overlay.hidden=true;
+    if(passed&amp;&amp;roundIndex&lt;3){roundIndex++;updateUI()}
+    else if(passed&amp;&amp;roundIndex===3){setStatus(&quot;Niveau validé !&quot;,&quot;Les 4 manches sont réussies.&quot;);startBtn.disabled=false}
+    else resetRound()
+  };
+  overlay.hidden=false
+}
+levelSelect.addEventListener(&quot;change&quot;,()=&gt;{level=Number(levelSelect.value);passedRounds.clear();roundIndex=0;updateUI()});
+roundSelect.addEventListener(&quot;change&quot;,()=&gt;{roundIndex=Number(roundSelect.value);updateUI()});
+startBtn.addEventListener(&quot;click&quot;,startRound);
+restartBtn.addEventListener(&quot;click&quot;,resetRound);
+
+updateUI();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </div>
+</section>
+<section class="screen" id="bimanual">
+  <div class="section-head">
+    <div>
+      <div class="kicker">Défi cognitif</div>
+      <h1>Traçage bimanuel</h1>
+      <p class="muted">Version de test avec les 15 niveaux et les 4 séquences conservés.</p>
+      <div class="competence-tags"><span>Attention divisée</span><span>Coordination bimanuelle</span><span>Coordination œil-main</span><span>Précision gestuelle</span><span>Contrôle moteur fin</span></div>
+    </div>
+    <button class="secondary" type="button" onclick="show('interactive',document.querySelectorAll('.nav-bottom button')[3])">← Retour aux jeux cognitifs</button>
+  </div>
+  <div class="bimanual-shell">
+    <iframe class="bimanual-frame" title="Traçage bimanuel — 15 niveaux" scrolling="no" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;fr&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover&quot;&gt;
+&lt;title&gt;Traçage bimanuel — 15 niveaux&lt;/title&gt;
+&lt;style&gt;
+:root{
+  --bg:#07100b;--panel:#101a14;--text:#f7fff9;--muted:#9bad9f;
+  --accent:#b8f20d;--good:#38dc79;--bad:#ff5d73;--blue:#55a8ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+button,select{font:inherit}
+#app{
+  position:fixed;inset:0;display:grid;
+  grid-template-rows:auto auto minmax(0,1fr) auto;
+  gap:8px;padding:max(8px,env(safe-area-inset-top)) 9px max(8px,env(safe-area-inset-bottom));
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,rgba(47,113,65,.23),transparent 48%),var(--bg);
+}
+header{display:grid;grid-template-columns:1fr 112px;gap:10px;align-items:center}
+h1{margin:0;font-size:clamp(22px,5.7vw,36px);line-height:1}
+.subtitle{color:var(--muted);font-size:12px;margin-top:4px}
+.level-box{padding:8px 10px;border:1px solid rgba(255,255,255,.14);border-radius:13px;background:rgba(10,19,13,.84)}
+.level-box small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}
+select{width:100%;margin-top:4px;padding:7px;border:1px solid rgba(255,255,255,.16);border-radius:8px;background:#08110b;color:#fff}
+.skill{
+  display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+  padding:8px 10px;border:1px solid rgba(184,242,13,.28);
+  border-radius:12px;background:rgba(184,242,13,.06)
+}
+.skill small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.skill strong{display:block;color:var(--accent);margin-top:2px;font-size:13px}
+.progress{display:flex;gap:6px}.step{width:10px;height:10px;border-radius:50%;background:#ffffff33}.step.active{background:var(--accent)}.step.done{background:var(--good)}
+.game-area{
+  min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:hidden
+}
+.zone{
+  position:relative;min-width:0;min-height:0;border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;background:rgba(16,26,20,.94);overflow:hidden;touch-action:none
+}
+.zone-title{
+  position:absolute;z-index:3;top:8px;left:50%;transform:translateX(-50%);
+  padding:5px 9px;border-radius:999px;background:#07100bcc;color:var(--muted);font-size:11px
+}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+footer{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.status{padding:9px 11px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#0c160f;color:var(--muted);font-size:12px}
+.status strong{color:var(--text)}
+.controls{display:flex;gap:7px}
+.btn{border:0;border-radius:11px;padding:11px 14px;background:var(--accent);color:#081006;font-weight:900;cursor:pointer}
+.btn.secondary{background:#17221b;color:#fff;border:1px solid rgba(255,255,255,.14)}
+.overlay{
+  position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:18px;
+  background:rgba(3,8,5,.82);backdrop-filter:blur(8px)
+}
+.overlay[hidden]{display:none}
+.panel{width:min(92vw,520px);padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:20px;background:#0b150e}
+.panel h2{margin:0 0 8px}.panel p{margin:0 0 14px;color:var(--muted);line-height:1.45}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.result-card{padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;text-align:center;background:#101a14}
+.result-card small{display:block;color:var(--muted);font-size:10px}.result-card strong{display:block;margin-top:4px;color:var(--accent)}
+@media(max-width:620px){
+  #app{gap:6px;padding-left:7px;padding-right:7px}
+  header{grid-template-columns:1fr 100px}
+  .subtitle{font-size:11px}
+  footer{grid-template-columns:1fr}
+  .controls{display:grid;grid-template-columns:1fr 1fr}
+  .btn{width:100%;padding:10px}
+}
+@media(max-width:430px){
+  .game-area{gap:5px}.zone{border-radius:14px}.zone-title{font-size:10px}
+}
+@media(max-height:610px){
+  h1{font-size:20px}.subtitle{display:none}.skill{padding:6px 8px}
+  footer{grid-template-columns:1fr auto}.controls{display:flex}
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;main id=&quot;app&quot;&gt;
+&lt;header&gt;
+  &lt;div&gt;
+    &lt;h1&gt;Traçage &lt;span style=&quot;color:var(--accent)&quot;&gt;bimanuel&lt;/span&gt;&lt;/h1&gt;
+    &lt;div class=&quot;subtitle&quot;&gt;Un doigt par main, deux formes différentes à suivre simultanément.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;label class=&quot;level-box&quot;&gt;
+    &lt;small&gt;Niveau&lt;/small&gt;
+    &lt;select id=&quot;levelSelect&quot;&gt;&lt;/select&gt;
+  &lt;/label&gt;
+&lt;/header&gt;
+
+&lt;section class=&quot;skill&quot;&gt;
+  &lt;div&gt;
+    &lt;small&gt;Compétences travaillées&lt;/small&gt;
+    &lt;strong id=&quot;skillText&quot;&gt;&lt;/strong&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;progress&quot; class=&quot;progress&quot;&gt;&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;game-area&quot;&gt;
+  &lt;div class=&quot;zone&quot;&gt;
+    &lt;div class=&quot;zone-title&quot;&gt;MAIN GAUCHE&lt;/div&gt;
+    &lt;canvas id=&quot;leftCanvas&quot;&gt;&lt;/canvas&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;zone&quot;&gt;
+    &lt;div class=&quot;zone-title&quot;&gt;MAIN DROITE&lt;/div&gt;
+    &lt;canvas id=&quot;rightCanvas&quot;&gt;&lt;/canvas&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;footer&gt;
+  &lt;div id=&quot;status&quot; class=&quot;status&quot;&gt;&lt;strong&gt;Prêt.&lt;/strong&gt; Appuie sur Commencer.&lt;/div&gt;
+  &lt;div class=&quot;controls&quot;&gt;
+    &lt;button id=&quot;restartBtn&quot; class=&quot;btn secondary&quot; type=&quot;button&quot;&gt;Recommencer&lt;/button&gt;
+    &lt;button id=&quot;startBtn&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Commencer&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;
+
+&lt;section id=&quot;resultOverlay&quot; class=&quot;overlay&quot; hidden&gt;
+  &lt;div class=&quot;panel&quot;&gt;
+    &lt;h2 id=&quot;resultTitle&quot;&gt;Séquence terminée&lt;/h2&gt;
+    &lt;p id=&quot;resultText&quot;&gt;&lt;/p&gt;
+    &lt;div class=&quot;result-grid&quot;&gt;
+      &lt;div class=&quot;result-card&quot;&gt;&lt;small&gt;Gauche&lt;/small&gt;&lt;strong id=&quot;leftScore&quot;&gt;0%&lt;/strong&gt;&lt;/div&gt;
+      &lt;div class=&quot;result-card&quot;&gt;&lt;small&gt;Droite&lt;/small&gt;&lt;strong id=&quot;rightScore&quot;&gt;0%&lt;/strong&gt;&lt;/div&gt;
+      &lt;div class=&quot;result-card&quot;&gt;&lt;small&gt;Moyenne&lt;/small&gt;&lt;strong id=&quot;avgScore&quot;&gt;0%&lt;/strong&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button id=&quot;continueBtn&quot; class=&quot;btn&quot; type=&quot;button&quot;&gt;Continuer&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;
+
+&lt;script&gt;
+&quot;use strict&quot;;
+
+const SHAPES={
+  square:t=&gt;{const u=(t%1)*4;if(u&lt;1)return{x:-1+2*u,y:-1};if(u&lt;2)return{x:1,y:-1+2*(u-1)};if(u&lt;3)return{x:1-2*(u-2),y:1};return{x:-1,y:1-2*(u-3)}},
+  triangle:t=&gt;{const pts=[[-1,1],[0,-1],[1,1],[-1,1]],u=(t%1)*3,i=Math.floor(u),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}},
+  circle:t=&gt;({x:Math.cos(t*Math.PI*2),y:Math.sin(t*Math.PI*2)}),
+  diamond:t=&gt;{const pts=[[0,-1],[1,0],[0,1],[-1,0],[0,-1]],u=(t%1)*4,i=Math.floor(u),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}},
+  eight:t=&gt;({x:Math.sin(t*Math.PI*2),y:Math.sin(t*Math.PI*4)*.72}),
+  zigzag:t=&gt;{const pts=[[-1,-.8],[-.45,.8],[0,-.8],[.45,.8],[1,-.8]],u=(t%1)*4,i=Math.min(3,Math.floor(u)),f=u-i;return{x:pts[i][0]+(pts[i+1][0]-pts[i][0])*f,y:pts[i][1]+(pts[i+1][1]-pts[i][1])*f}},
+  wave:t=&gt;({x:-1+2*(t%1),y:Math.sin(t*Math.PI*4)*.72}),
+  spiral:t=&gt;{const a=t*Math.PI*4,r=.18+.82*t;return{x:Math.cos(a)*r,y:Math.sin(a)*r}}
+};
+
+const LEVELS={
+1:{speed:.065,tolerance:.24,laps:1,skill:&quot;Coordination bimanuelle de base, attention divisée&quot;,seq:[[&quot;square&quot;,&quot;triangle&quot;,1,1],[&quot;circle&quot;,&quot;square&quot;,1,1],[&quot;triangle&quot;,&quot;circle&quot;,1,1],[&quot;diamond&quot;,&quot;square&quot;,1,1]]},
+2:{speed:.072,tolerance:.23,laps:1,skill:&quot;Indépendance des deux mains, précision gestuelle&quot;,seq:[[&quot;square&quot;,&quot;triangle&quot;,1,-1],[&quot;circle&quot;,&quot;diamond&quot;,1,1],[&quot;triangle&quot;,&quot;square&quot;,-1,1],[&quot;diamond&quot;,&quot;circle&quot;,1,-1]]},
+3:{speed:.08,tolerance:.22,laps:1,skill:&quot;Synchronisation visuomotrice, contrôle bilatéral&quot;,seq:[[&quot;zigzag&quot;,&quot;circle&quot;,1,1],[&quot;square&quot;,&quot;wave&quot;,1,-1],[&quot;triangle&quot;,&quot;diamond&quot;,-1,1],[&quot;circle&quot;,&quot;zigzag&quot;,1,-1]]},
+4:{speed:.087,tolerance:.21,laps:1,skill:&quot;Précision bimanuelle sur formes asymétriques&quot;,seq:[[&quot;eight&quot;,&quot;square&quot;,1,1],[&quot;triangle&quot;,&quot;wave&quot;,1,-1],[&quot;zigzag&quot;,&quot;diamond&quot;,-1,1],[&quot;circle&quot;,&quot;eight&quot;,1,-1]]},
+5:{speed:.095,tolerance:.20,laps:1,skill:&quot;Adaptation à des directions opposées&quot;,seq:[[&quot;square&quot;,&quot;triangle&quot;,1,-1],[&quot;eight&quot;,&quot;circle&quot;,-1,1],[&quot;wave&quot;,&quot;diamond&quot;,1,-1],[&quot;zigzag&quot;,&quot;square&quot;,-1,1]]},
+6:{speed:.103,tolerance:.19,laps:1.2,skill:&quot;Coordination sous vitesse, maintien de l’attention&quot;,seq:[[&quot;circle&quot;,&quot;wave&quot;,1,1],[&quot;diamond&quot;,&quot;eight&quot;,-1,1],[&quot;triangle&quot;,&quot;zigzag&quot;,1,-1],[&quot;square&quot;,&quot;circle&quot;,-1,1]]},
+7:{speed:.112,tolerance:.18,laps:1.25,skill:&quot;Double tâche et anticipation motrice&quot;,seq:[[&quot;spiral&quot;,&quot;square&quot;,1,1],[&quot;eight&quot;,&quot;triangle&quot;,1,-1],[&quot;wave&quot;,&quot;circle&quot;,-1,1],[&quot;zigzag&quot;,&quot;diamond&quot;,1,-1]]},
+8:{speed:.121,tolerance:.17,laps:1.3,skill:&quot;Stabilité gestuelle sous charge cognitive&quot;,seq:[[&quot;spiral&quot;,&quot;circle&quot;,1,-1],[&quot;square&quot;,&quot;eight&quot;,-1,1],[&quot;triangle&quot;,&quot;wave&quot;,1,1],[&quot;diamond&quot;,&quot;zigzag&quot;,-1,1]]},
+9:{speed:.13,tolerance:.165,laps:1.35,skill:&quot;Attention partagée et contrôle des trajectoires&quot;,seq:[[&quot;eight&quot;,&quot;spiral&quot;,1,1],[&quot;wave&quot;,&quot;triangle&quot;,-1,1],[&quot;circle&quot;,&quot;zigzag&quot;,1,-1],[&quot;square&quot;,&quot;diamond&quot;,-1,1]]},
+10:{speed:.14,tolerance:.16,laps:1.4,skill:&quot;Décision motrice sous pression temporelle&quot;,seq:[[&quot;spiral&quot;,&quot;zigzag&quot;,1,-1],[&quot;eight&quot;,&quot;wave&quot;,-1,1],[&quot;diamond&quot;,&quot;triangle&quot;,1,-1],[&quot;circle&quot;,&quot;square&quot;,-1,1]]},
+11:{speed:.15,tolerance:.155,laps:1.45,skill:&quot;Résistance à l’erreur et régularité bimanuelle&quot;,seq:[[&quot;zigzag&quot;,&quot;spiral&quot;,1,1],[&quot;wave&quot;,&quot;eight&quot;,-1,-1],[&quot;triangle&quot;,&quot;circle&quot;,1,-1],[&quot;diamond&quot;,&quot;square&quot;,-1,1]]},
+12:{speed:.16,tolerance:.15,laps:1.5,skill:&quot;Flexibilité cognitive et coordination avancée&quot;,seq:[[&quot;spiral&quot;,&quot;eight&quot;,1,-1],[&quot;circle&quot;,&quot;wave&quot;,-1,1],[&quot;zigzag&quot;,&quot;triangle&quot;,1,-1],[&quot;square&quot;,&quot;diamond&quot;,-1,-1]]},
+13:{speed:.17,tolerance:.145,laps:1.55,skill:&quot;Maîtrise de trajectoires complexes&quot;,seq:[[&quot;spiral&quot;,&quot;zigzag&quot;,-1,1],[&quot;eight&quot;,&quot;diamond&quot;,1,-1],[&quot;wave&quot;,&quot;square&quot;,-1,1],[&quot;circle&quot;,&quot;triangle&quot;,1,-1]]},
+14:{speed:.18,tolerance:.14,laps:1.65,skill:&quot;Coordination bilatérale à haute vitesse&quot;,seq:[[&quot;spiral&quot;,&quot;wave&quot;,1,-1],[&quot;zigzag&quot;,&quot;eight&quot;,-1,1],[&quot;diamond&quot;,&quot;circle&quot;,1,-1],[&quot;triangle&quot;,&quot;square&quot;,-1,-1]]},
+15:{speed:.19,tolerance:.135,laps:1.75,skill:&quot;Maîtrise bimanuelle sous forte charge cognitive&quot;,seq:[[&quot;spiral&quot;,&quot;eight&quot;,-1,1],[&quot;wave&quot;,&quot;zigzag&quot;,1,-1],[&quot;circle&quot;,&quot;diamond&quot;,-1,-1],[&quot;triangle&quot;,&quot;spiral&quot;,1,-1]]}
+};
+
+const levelSelect=document.getElementById(&quot;levelSelect&quot;);
+const leftCanvas=document.getElementById(&quot;leftCanvas&quot;);
+const rightCanvas=document.getElementById(&quot;rightCanvas&quot;);
+const skillText=document.getElementById(&quot;skillText&quot;);
+const progress=document.getElementById(&quot;progress&quot;);
+const status=document.getElementById(&quot;status&quot;);
+const startBtn=document.getElementById(&quot;startBtn&quot;);
+const restartBtn=document.getElementById(&quot;restartBtn&quot;);
+const overlay=document.getElementById(&quot;resultOverlay&quot;);
+const resultTitle=document.getElementById(&quot;resultTitle&quot;);
+const resultText=document.getElementById(&quot;resultText&quot;);
+const leftScore=document.getElementById(&quot;leftScore&quot;);
+const rightScore=document.getElementById(&quot;rightScore&quot;);
+const avgScore=document.getElementById(&quot;avgScore&quot;);
+const continueBtn=document.getElementById(&quot;continueBtn&quot;);
+
+levelSelect.innerHTML=Array.from({length:15},(_,i)=&gt;`&lt;option value=&quot;${i+1}&quot;&gt;${i+1}&lt;/option&gt;`).join(&quot;&quot;);
+
+let level=1,sequenceIndex=0,running=false,startTime=0,raf=null;
+let leftPointer=null,rightPointer=null,leftSamples=0,rightSamples=0,leftGood=0,rightGood=0;
+let current={leftShape:&quot;square&quot;,rightShape:&quot;triangle&quot;,leftDir:1,rightDir:1};
+
+function cfg(){return LEVELS[level]}
+function setStatus(title,text=&quot;&quot;){status.innerHTML=`&lt;strong&gt;${title}&lt;/strong&gt;${text?&quot; &quot;+text:&quot;&quot;}`}
+function updateProgress(){
+  progress.innerHTML=&quot;&quot;;
+  for(let i=0;i&lt;4;i++){const s=document.createElement(&quot;span&quot;);s.className=&quot;step&quot;+(i&lt;sequenceIndex?&quot; done&quot;:i===sequenceIndex?&quot; active&quot;:&quot;&quot;);progress.appendChild(s)}
+}
+function resizeCanvas(canvas){
+  const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+  canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);
+  const ctx=canvas.getContext(&quot;2d&quot;);ctx.setTransform(dpr,0,0,dpr,0,0)
+}
+function resize(){resizeCanvas(leftCanvas);resizeCanvas(rightCanvas);drawAll(performance.now())}
+function mapPoint(shape,t,canvas){
+  const p=SHAPES[shape]((t%1+1)%1),w=canvas.clientWidth,h=canvas.clientHeight;
+  const scale=Math.min(w,h)*.34;
+  return{x:w/2+p.x*scale,y:h/2+p.y*scale}
+}
+function drawPath(canvas,shape,dir,color){
+  const ctx=canvas.getContext(&quot;2d&quot;),w=canvas.clientWidth,h=canvas.clientHeight;
+  ctx.clearRect(0,0,w,h);ctx.lineWidth=Math.max(7,Math.min(w,h)*.035);ctx.lineCap=&quot;round&quot;;ctx.lineJoin=&quot;round&quot;;
+  ctx.strokeStyle=&quot;rgba(255,255,255,.15)&quot;;ctx.beginPath();
+  for(let i=0;i&lt;=180;i++){const t=dir&gt;0?i/180:1-i/180,p=mapPoint(shape,t,canvas);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)}
+  ctx.stroke();
+  ctx.lineWidth=2;ctx.strokeStyle=color;ctx.stroke()
+}
+function drawFinger(ctx,p,color){
+  if(!p)return;ctx.beginPath();ctx.arc(p.x,p.y,12,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+  ctx.beginPath();ctx.arc(p.x,p.y,22,0,Math.PI*2);ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke()
+}
+function drawAll(now){
+  const c=cfg(),elapsed=running?(now-startTime)/1000:0;
+  const t=elapsed*c.speed;
+  drawPath(leftCanvas,current.leftShape,current.leftDir,&quot;rgba(184,242,13,.55)&quot;);
+  drawPath(rightCanvas,current.rightShape,current.rightDir,&quot;rgba(85,168,255,.55)&quot;);
+  const lctx=leftCanvas.getContext(&quot;2d&quot;),rctx=rightCanvas.getContext(&quot;2d&quot;);
+  const lp=mapPoint(current.leftShape,current.leftDir&gt;0?t:-t,leftCanvas);
+  const rp=mapPoint(current.rightShape,current.rightDir&gt;0?t:-t,rightCanvas);
+  lctx.beginPath();lctx.arc(lp.x,lp.y,10,0,Math.PI*2);lctx.fillStyle=&quot;var(--accent)&quot;;lctx.fill();
+  rctx.beginPath();rctx.arc(rp.x,rp.y,10,0,Math.PI*2);rctx.fillStyle=&quot;var(--blue)&quot;;rctx.fill();
+  drawFinger(lctx,leftPointer,&quot;rgba(184,242,13,.95)&quot;);
+  drawFinger(rctx,rightPointer,&quot;rgba(85,168,255,.95)&quot;);
+  if(running){
+    sampleAccuracy(lp,rp);
+    if(t&gt;=c.laps)finishSequence();
+    else raf=requestAnimationFrame(drawAll)
+  }
+}
+function sampleAccuracy(lp,rp){
+  const tol=Math.min(leftCanvas.clientWidth,leftCanvas.clientHeight)*cfg().tolerance;
+  if(leftPointer){leftSamples++;if(Math.hypot(leftPointer.x-lp.x,leftPointer.y-lp.y)&lt;=tol)leftGood++}
+  if(rightPointer){rightSamples++;if(Math.hypot(rightPointer.x-rp.x,rightPointer.y-rp.y)&lt;=tol)rightGood++}
+}
+function pointerPos(e,canvas){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top,id:e.pointerId}}
+function bindCanvas(canvas,side){
+  canvas.addEventListener(&quot;pointerdown&quot;,e=&gt;{canvas.setPointerCapture(e.pointerId);const p=pointerPos(e,canvas);if(side===&quot;left&quot;)leftPointer=p;else rightPointer=p});
+  canvas.addEventListener(&quot;pointermove&quot;,e=&gt;{const p=pointerPos(e,canvas);if(side===&quot;left&quot;&amp;&amp;leftPointer?.id===e.pointerId)leftPointer=p;if(side===&quot;right&quot;&amp;&amp;rightPointer?.id===e.pointerId)rightPointer=p});
+  const up=e=&gt;{if(side===&quot;left&quot;&amp;&amp;leftPointer?.id===e.pointerId)leftPointer=null;if(side===&quot;right&quot;&amp;&amp;rightPointer?.id===e.pointerId)rightPointer=null};
+  canvas.addEventListener(&quot;pointerup&quot;,up);canvas.addEventListener(&quot;pointercancel&quot;,up)
+}
+function loadSequence(){
+  const s=cfg().seq[sequenceIndex];
+  [current.leftShape,current.rightShape,current.leftDir,current.rightDir]=s;
+  setStatus(&quot;Séquence &quot;+(sequenceIndex+1)+&quot;/4.&quot;,`${current.leftShape} à gauche, ${current.rightShape} à droite.`);
+  leftPointer=rightPointer=null;leftSamples=rightSamples=leftGood=rightGood=0;
+  drawAll(performance.now());updateProgress()
+}
+function startSequence(){
+  if(running)return;
+  running=true;startTime=performance.now();leftSamples=rightSamples=leftGood=rightGood=0;
+  setStatus(&quot;En cours.&quot;,&quot;Pose un doigt dans chaque zone et suis les deux repères.&quot;);
+  startBtn.disabled=true;raf=requestAnimationFrame(drawAll)
+}
+function finishSequence(){
+  running=false;if(raf)cancelAnimationFrame(raf);raf=null;
+  const ls=leftSamples?Math.round(leftGood/leftSamples*100):0;
+  const rs=rightSamples?Math.round(rightGood/rightSamples*100):0;
+  const avg=Math.round((ls+rs)/2);
+  leftScore.textContent=ls+&quot;%&quot;;rightScore.textContent=rs+&quot;%&quot;;avgScore.textContent=avg+&quot;%&quot;;
+  const passed=avg&gt;=70&amp;&amp;ls&gt;=60&amp;&amp;rs&gt;=60;
+  resultTitle.textContent=passed?&quot;Séquence validée&quot;:&quot;Séquence à retravailler&quot;;
+  resultText.textContent=passed?&quot;Les deux mains sont restées suffisamment proches des trajectoires.&quot;:&quot;Une des deux mains s’est trop éloignée de sa trajectoire.&quot;;
+  continueBtn.textContent=passed?(sequenceIndex===3?&quot;Terminer le niveau&quot;:&quot;Séquence suivante&quot;):&quot;Réessayer&quot;;
+  continueBtn.onclick=()=&gt;{
+    overlay.hidden=true;
+    if(passed){
+      if(sequenceIndex&lt;3){sequenceIndex++;loadSequence();startBtn.disabled=false}
+      else{setStatus(&quot;Niveau validé !&quot;,&quot;Les 4 séquences sont réussies.&quot;);startBtn.disabled=false}
+    }else{loadSequence();startBtn.disabled=false}
+  };
+  overlay.hidden=false
+}
+function resetLevel(){running=false;if(raf)cancelAnimationFrame(raf);sequenceIndex=0;startBtn.disabled=false;loadSequence()}
+function updateLevel(){level=Number(levelSelect.value);skillText.textContent=cfg().skill;resetLevel()}
+
+bindCanvas(leftCanvas,&quot;left&quot;);bindCanvas(rightCanvas,&quot;right&quot;);
+levelSelect.addEventListener(&quot;change&quot;,updateLevel);
+startBtn.addEventListener(&quot;click&quot;,startSequence);
+restartBtn.addEventListener(&quot;click&quot;,resetLevel);
+window.addEventListener(&quot;resize&quot;,resize);
+
+updateLevel();
+resize();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe>
+  </div>
+</section>
+<section class="screen" id="tactical">
+<div class="section-head">
+<div>
+<div class="kicker">Défis tactiques</div>
+<h1>Lecture du jeu et prise de décision</h1>
+</div>
+<button class="secondary" onclick="show('home',document.querySelectorAll('.nav-bottom button')[0])">← Retour</button>
+</div>
+<div class="challenge-grid" id="tacticalGrid"><article class="card challenge interactive" data-cat="tactical">
+<div class="challenge-top"><h2>♟ Joueur libre</h2><p class="muted">Identifie la meilleure option de passe.</p></div>
+<div class="challenge-body">
+<div class="attempts" id="freeAttempts"><span class="attempt">1</span><span class="attempt">2</span><span class="attempt">3</span></div>
+<div class="game-area">
+<p><b>Situation :</b> ton porteur est pressé à droite. Quel choix crée le plus d’espace ?</p>
+<div class="quiz-options">
+<button onclick="answerQuiz('free',false)">Jouer dans l’axe sous pression</button>
+<button onclick="answerQuiz('free',true)">Renverser vers le joueur libre à gauche</button>
+<button onclick="answerQuiz('free',false)">Conserver dos au jeu</button>
+</div>
+</div>
+<div class="notice hidden" id="freeResult"></div>
+</div>
+</article><article class="card challenge interactive" data-cat="tactical">
+<div class="challenge-top"><h2>🗺 Scanner avant réception</h2><p class="muted">Repère le joueur libre avant que le ballon arrive.</p></div>
+<div class="challenge-body">
+<div class="attempts" id="scanAttempts"><span class="attempt">1</span><span class="attempt">2</span><span class="attempt">3</span></div>
+<button class="primary" onclick="startScan(true)">Essai officiel</button>
+<button class="secondary" onclick="startScan(false)">Entraînement libre</button>
+<div class="scan-field" id="scanField">
+<div class="scan-player" style="left:12%;top:20%">1</div>
+<div class="scan-player" style="left:68%;top:18%">2</div>
+<div class="scan-player" style="left:30%;top:66%">3</div>
+<div class="scan-player" style="left:72%;top:62%">4</div>
+</div>
+<div class="notice hidden" id="scanResult"></div>
+</div>
+</article></div>
+</section><section class="screen" id="laws">
+<div class="section-head">
+<div>
+<div class="kicker">Lois du jeu</div>
+<h1>Règles et situations d’arbitrage</h1>
+</div>
+<button class="secondary" onclick="show('home',document.querySelectorAll('.nav-bottom button')[0])">← Retour</button>
+</div>
+<div class="challenge-grid" id="lawsGrid"><article class="card challenge interactive" data-cat="laws">
+<div class="challenge-top"><h2>📘 Hors-jeu</h2><p class="muted">Comprendre quand une position devient sanctionnable.</p></div>
+<div class="challenge-body">
+<div class="attempts" id="lawAttempts"><span class="attempt">1</span><span class="attempt">2</span><span class="attempt">3</span></div>
+<div class="game-area">
+<p>Un joueur est en position de hors-jeu mais ne participe pas à l’action. L’arbitre doit-il arrêter le jeu ?</p>
+<div class="quiz-options">
+<button onclick="answerQuiz('law',false)">Oui, automatiquement</button>
+<button onclick="answerQuiz('law',true)">Non, seulement s’il intervient dans le jeu</button>
+</div>
+</div>
+<div class="notice hidden" id="lawResult"></div>
+</div>
+</article></div>
+</section>
+<section class="screen" id="evolution">
+<div class="section-head">
+<div><div class="kicker">Livraison 4 · Mon évolution</div><h1>Comprendre ta progression</h1></div>
+<span class="tag">Progression personnelle</span>
+</div>
+<div class="evo-overview">
+<article class="card">
+<div class="ifi-ring">
+<div class="ifi-ring-content"><b id="ifiEvolution">74</b><small>Indice Foot Intelligence</small></div>
+</div>
+<p class="muted" style="text-align:center">Ton IFI synthétise ta vision, ta lecture du jeu, ta décision et ton anticipation.</p>
+</article>
+<article class="card">
+<div class="kicker">Capacités principales</div>
+<div class="skill-radar">
+<div class="skill-card"><small>Vision</small><div class="value">82</div><div class="progress"><span style="width:82%"></span></div></div>
+<div class="skill-card"><small>Lecture du jeu</small><div class="value">68</div><div class="progress"><span style="width:68%"></span></div></div>
+<div class="skill-card"><small>Décision</small><div class="value">71</div><div class="progress"><span style="width:71%"></span></div></div>
+<div class="skill-card"><small>Anticipation</small><div class="value">73</div><div class="progress"><span style="width:73%"></span></div></div>
+<div class="skill-card"><small>Maîtrise du ballon</small><div class="value">76</div><div class="progress"><span style="width:76%"></span></div></div>
+<div class="skill-card"><small>Mobilité</small><div class="value">69</div><div class="progress"><span style="width:69%"></span></div></div>
+</div>
+</article>
+</div>
+<div class="evo-tabs">
+<button class="active" onclick="showEvoPanel('pathPanel',this)">Parcours</button>
+<button onclick="showEvoPanel('historyPanel',this)">Historique</button>
+<button onclick="showEvoPanel('badgesPanel',this)">Récompenses</button>
+<button onclick="showEvoPanel('coachPanel',this)">Coach</button>
+<button onclick="showEvoPanel('performancePanel',this)">Performance physique</button></div>
+<div class="evo-panel active" id="pathPanel">
+<article class="card">
+<div class="kicker">Progression du parcours</div>
+<h2>Débutant · Étape Bronze</h2>
+<div class="progress"><span style="width:58%"></span></div>
+<p class="muted">3 Défis Clés maîtrisés sur 6. Encore 3 avant le Défi Signature.</p>
+<div class="path-track">
+<div class="path-step-card current"><div>🥉</div><b>Débutant</b><small>Bronze</small></div>
+<div class="path-step-card locked"><div>🥈</div><b>Débutant</b><small>Argent</small></div>
+<div class="path-step-card locked"><div>🥇</div><b>Débutant</b><small>Or</small></div>
+<div class="path-step-card locked"><div>🏃</div><b>Apprenti</b><small>À venir</small></div>
+<div class="path-step-card locked"><div>⚽</div><b>Intermédiaire</b><small>À venir</small></div>
+</div>
+</article>
+<article class="card signature locked" id="signatureCard" style="margin-top:16px">
+<div class="kicker">Défi Signature</div>
+<h2>Bronze · Lire et agir</h2>
+<p class="muted" id="signatureText">Maîtrise encore 3 Défis Clés pour débloquer ce défi.</p>
+<button class="secondary" id="signatureBtn" onclick="startSignature()">À venir</button>
+</article>
+</div>
+<div class="evo-panel" id="historyPanel">
+<article class="card">
+<h2>Historique récent</h2>
+<div class="history" id="historyList">
+
+<div class="history-item"><span>Jonglerie</span><b>18</b></div>
+
+<div class="history-item"><span>Vitesse 10 m</span><b>30</b></div>
+</div>
+</article>
+</div>
+<div class="evo-panel" id="badgesPanel">
+<article class="card">
+<h2>Récompenses débloquées</h2>
+<div class="badges-grid">
+<div class="badge-card"><div class="badge-icon">🥉</div><b>Crampons Bronze</b><p class="muted">Première étape du parcours.</p></div>
+<div class="badge-card"><div class="badge-icon">🔥</div><b>Régularité</b><p class="muted">6 activations réalisées.</p></div>
+<div class="badge-card"><div class="badge-icon">👀</div><b>Vision niveau 2</b><p class="muted">Capacité vision en progression.</p></div>
+<div class="badge-card"><div class="badge-icon">⚽</div><b>Maîtrise Terrain</b><p class="muted">2 Défis Terrain maîtrisés.</p></div>
+</div>
+</article>
+</div>
+<div class="evo-panel" id="coachPanel">
+<article class="card">
+<h2>Observations du coach</h2>
+<div class="coach-history">
+<article><b>Cette semaine</b><p class="muted">Ta vision progresse. Continue à scanner avant la réception.</p></article>
+<article><b>Semaine précédente</b><p class="muted">Bonne régularité dans les défis cognitifs. Travaille maintenant la vitesse de décision.</p></article>
+<article><b>Objectif actuel</b><p class="muted">Lever la tête avant chaque contrôle de balle.</p></article>
+</div>
+</article>
+</div>
+<div class="evo-panel" id="performancePanel">
+<section class="performance-book">
+<div class="performance-head">
+<div>
+<div class="kicker">Carnet de Performance</div>
+<h2 style="margin:6px 0">Suivre ton évolution physique personnelle</h2>
+</div>
+<span class="tag">Aucune comparaison entre joueurs</span>
+</div>
+<div class="notice">
+      Les performances physiques ne bloquent jamais ton parcours. Elles servent uniquement à mesurer
+      ta progression par rapport à toi-même.
+    </div>
+<div class="performance-grid">
+<article class="performance-card">
+<div class="kicker">Vitesse</div>
+<h3>🏃 Sprint 10 m</h3>
+<p class="muted">Une mesure par semaine pour suivre ton explosivité.</p>
+<div class="performance-metrics">
+<div class="performance-metric"><small>Dernier</small><b id="speedCurrent">2.18 s</b></div>
+<div class="performance-metric"><small>Meilleur</small><b id="speedRecord">2.12 s</b></div>
+<div class="performance-metric"><small>Évolution</small><b id="speedChange">+0.06 s</b></div>
+</div>
+<div class="performance-entry">
+<input id="speedDate" type="date"/>
+<input id="speedValue" min="0" placeholder="Temps en secondes" step="0.01" type="number"/>
+<button class="primary" onclick="addPhysicalMeasure('speed')">Ajouter</button>
+</div>
+<div class="frequency-note">
+          Fréquence recommandée : <b>1 fois par semaine</b>, pour tous les parcours.
+        </div>
+<div class="performance-history" id="speedHistory">
+<div class="performance-row"><span>01/07/2026</span><b>2.12 s</b><span class="record">⭐ Record</span></div>
+<div class="performance-row"><span>24/06/2026</span><b>2.18 s</b><span>Mesure</span></div>
+<div class="performance-row"><span>17/06/2026</span><b>2.21 s</b><span>Mesure</span></div>
+</div>
+</article>
+<article class="performance-card vma-locked" id="vmaCard">
+<div class="kicker">Endurance</div>
+<h3>📈 VMA</h3>
+<p class="muted" id="vmaIntro">La VMA devient disponible à partir du parcours Apprenti.</p>
+<div class="performance-metrics">
+<div class="performance-metric"><small>Dernière</small><b id="vmaCurrent">—</b></div>
+<div class="performance-metric"><small>Meilleure</small><b id="vmaRecord">—</b></div>
+<div class="performance-metric"><small>Évolution</small><b id="vmaChange">—</b></div>
+</div>
+<div class="performance-entry">
+<input id="vmaDate" type="date"/>
+<input id="vmaValue" min="0" placeholder="VMA en km/h" step="0.1" type="number"/>
+<button class="primary" onclick="addPhysicalMeasure('vma')">Ajouter</button>
+</div>
+<div class="frequency-note" id="vmaFrequency">
+          Débutant : non proposé.<br/>
+          Apprenti et Intermédiaire : toutes les 6 semaines.<br/>
+          Confirmé et Expert : toutes les 4 semaines.
+        </div>
+<div class="performance-history" id="vmaHistory"></div>
+</article>
+</div>
+</section>
+</div>
+</section>
+<section class="screen" id="profile">
+<div class="section-head">
+<div><div class="kicker">Livraison 4 · Profil</div><h1>Mon identité de joueur</h1></div>
+<button class="secondary" onclick="toggleEditProfile()">Modifier</button>
+</div>
+<article class="card profile-hero">
+<div class="profile-photo">👤</div>
+<div>
+<h2 id="profileName">Lucas Martin</h2>
+<p class="muted">Débutant · Étape Bronze · IFI <span id="profileIFI">74</span></p>
+<p class="muted">Profil orienté vision et maîtrise du ballon. La lecture du jeu est actuellement la capacité prioritaire.</p>
+<div class="profile-stats">
+<div class="profile-stat"><small>Série actuelle</small><b>6</b></div>
+<div class="profile-stat"><small>Défis Terrain</small><b>3</b></div>
+<div class="profile-stat"><small>Défis Interactifs</small><b>8</b></div>
+<div class="profile-stat"><small>Prochaine évolution</small><b>Argent</b></div>
+</div>
+</div>
+</article>
+<div class="profile-sections">
+<article class="card">
+<h2>Mes préférences</h2>
+<div class="preference-row"><span>Notifications du Rituel</span><div class="switch on" onclick="toggleSwitch(this)"></div></div>
+<div class="preference-row"><span>Conseils du coach</span><div class="switch on" onclick="toggleSwitch(this)"></div></div>
+<div class="preference-row"><span>Mode sombre</span><div class="switch on" onclick="toggleSwitch(this)"></div></div>
+<div class="preference-row"><span>Classement visible</span><div class="switch" onclick="toggleSwitch(this)"></div></div>
+</article>
+<article class="card">
+<h2>Planning du Rituel</h2>
+<p class="muted">Débutant : 3 activations par semaine.</p>
+<div class="week-strip">
+<div class="day-box day-active"><b>Lun</b><small>🧠</small></div>
+<div class="day-box"><b>Mar</b><small>•</small></div>
+<div class="day-box day-active"><b>Mer</b><small>🧠</small></div>
+<div class="day-box"><b>Jeu</b><small>•</small></div>
+<div class="day-box day-active"><b>Ven</b><small>🧠</small></div>
+<div class="day-box day-match"><b>Sam</b><small>⚽</small></div>
+<div class="day-box day-rest"><b>Dim</b><small>🌿</small></div>
+</div>
+</article>
+</div>
+<article class="card" id="editProfileCard" style="margin-top:16px;display:none">
+<h2>Modifier mon profil</h2>
+<div class="input-row">
+<input id="profileNameInput" type="text" value="Lucas Martin"/>
+<button class="primary" onclick="saveProfile()">Enregistrer</button>
+</div>
+</article>
+<article class="physical-profile-card">
+<div class="physical-profile-head">
+<div>
+<div class="kicker">Mes performances physiques</div>
+<h2 style="margin:6px 0">Suivre ma progression personnelle</h2>
+</div>
+<button class="primary" onclick="show('physical-entry',null)">➕ Nouvelle mesure</button>
+</div>
+<div class="notice">
+    Ces données ne bloquent jamais ton parcours. Elles servent uniquement à suivre ton évolution par rapport à toi-même.
+  </div>
+<div class="physical-mini-grid" style="margin-top:14px">
+<section class="physical-mini">
+<h3>🏃 Vitesse 10 m</h3>
+<p class="muted">Mesure recommandée : une fois par semaine.</p>
+<div class="physical-mini-stats">
+<div class="physical-mini-stat"><small>Dernier</small><b id="profileSpeedCurrent">2.18 s</b></div>
+<div class="physical-mini-stat"><small>Meilleur</small><b id="profileSpeedBest">2.12 s</b></div>
+<div class="physical-mini-stat"><small>Évolution</small><b id="profileSpeedChange">+0.06 s</b></div>
+</div>
+</section>
+<section class="physical-mini">
+<h3>📈 VMA</h3>
+<p class="muted">Disponible à partir du parcours Apprenti.</p>
+<div class="physical-empty" id="profileVmaStatus">
+        🔒 Ton parcours actuel est Débutant. La VMA sera ajoutée plus tard.
+      </div>
+</section>
+</div>
+</article>
+</section>
+<section class="screen" id="physical-entry">
+<div class="section-head">
+<div>
+<div class="kicker">Saisie des données physiques</div>
+<h1>Ajouter une nouvelle mesure</h1>
+</div>
+<button class="secondary" onclick="show('profile',document.querySelectorAll('.nav-bottom button')[7])">← Retour au profil</button>
+</div>
+<div class="data-entry-page">
+<aside class="card">
+<h2>Choisir une mesure</h2>
+<div class="entry-menu">
+<button class="entry-choice active" id="speedChoice" onclick="selectMeasureType('speed')">
+<b>🏃 Vitesse 10 m</b>
+<p class="muted">Une mesure par semaine.</p>
+</button>
+<button class="entry-choice" id="vmaChoice" onclick="selectMeasureType('vma')">
+<b>📈 VMA</b>
+<p class="muted">À partir du parcours Apprenti.</p>
+</button>
+</div>
+<div class="validation-note">
+        Utilise toujours les mêmes conditions de test pour comparer correctement tes résultats.
+      </div>
+</aside>
+<main class="measure-form">
+<div id="speedForm">
+<div class="kicker">Vitesse 10 m</div>
+<h2>Enregistrer un chrono</h2>
+<div class="form-grid">
+<div class="form-field">
+<label>Date du test</label>
+<input id="entrySpeedDate" type="date"/>
+</div>
+<div class="form-field">
+<label>Temps sur 10 m</label>
+<input id="entrySpeedValue" min="0" placeholder="Ex. 2.18" step="0.01" type="number"/>
+</div>
+<div class="form-field">
+<label>Lieu</label>
+<input id="entrySpeedPlace" placeholder="Club, terrain, centre" type="text"/>
+</div>
+<div class="form-field">
+<label>Mode de mesure</label>
+<select id="entrySpeedMethod">
+<option>Chronomètre manuel</option>
+<option>Cellules photoélectriques</option>
+<option>Application mobile</option>
+</select>
+</div>
+</div>
+<div class="form-field" style="margin-top:12px">
+<label>Commentaire facultatif</label>
+<textarea id="entrySpeedComment" placeholder="Conditions, fatigue, surface..."></textarea>
+</div>
+<div class="form-actions">
+<button class="primary" onclick="saveProfilePhysical('speed')">Enregistrer la mesure</button>
+<button class="secondary" onclick="show('profile',document.querySelectorAll('.nav-bottom button')[7])">Annuler</button>
+</div>
+</div>
+<div id="vmaForm" style="display:none">
+<div class="kicker">VMA</div>
+<h2>Enregistrer un résultat VMA</h2>
+<div class="notice">
+          La VMA est disponible à partir du parcours Apprenti.
+        </div>
+<div class="form-grid" style="margin-top:14px">
+<div class="form-field">
+<label>Date du test</label>
+<input id="entryVmaDate" type="date"/>
+</div>
+<div class="form-field">
+<label>VMA obtenue</label>
+<input id="entryVmaValue" min="0" placeholder="Ex. 14.8" step="0.1" type="number"/>
+</div>
+<div class="form-field">
+<label>Test utilisé</label>
+<select id="entryVmaTest">
+<option>Vameval</option>
+<option>30-15 IFT</option>
+<option>Yo-Yo</option>
+</select>
+</div>
+<div class="form-field">
+<label>Lieu</label>
+<input id="entryVmaPlace" placeholder="Club, terrain, centre" type="text"/>
+</div>
+</div>
+<div class="form-actions">
+<button class="primary" onclick="saveProfilePhysical('vma')">Enregistrer la mesure</button>
+<button class="secondary" onclick="show('profile',document.querySelectorAll('.nav-bottom button')[7])">Annuler</button>
+</div>
+</div>
+<div class="measure-history">
+<h3>Dernières mesures</h3>
+<div id="profilePhysicalHistory">
+<div class="measure-row"><span>01/07/2026</span><b>10 m · 2.12 s</b><span>Record</span></div>
+<div class="measure-row"><span>24/06/2026</span><b>10 m · 2.18 s</b><span>Mesure</span></div>
+</div>
+</div>
+</main>
+</div>
+</section>
+<div class="modal" id="coachModal"><div class="modal-box"><div class="kicker">Avis du coach</div><h2>Observation terrain</h2><p class="muted">Ta vision progresse. Continue à lever la tête avant la réception et utilise le pied opposé pour orienter ton premier contrôle.</p><div class="modal-actions"><button class="secondary" onclick="closeCoach()">Fermer</button><button class="primary" onclick="closeCoach()">J’ai compris</button></div></div></div>
+<div class="tracker-overlay" id="trackerOverlay" aria-hidden="true">
+<div class="tracker-stage" id="trackerStage"></div>
+<div class="tracker-hud"><div class="tracker-panel"><small id="trackerHudLevel">Suivi d'objet</small><b id="trackerHudSequence">Séquence</b></div><div class="tracker-panel"><div class="tracker-timer" id="trackerTimer">00</div><small id="trackerHudTargets">Cibles</small></div><button class="tracker-close" id="trackerCloseBtn" type="button">✕ Quitter</button></div>
+<div class="tracker-message" id="trackerMessage"><h2 id="trackerMessageTitle">Prêt ?</h2><p id="trackerMessageText"></p><div class="tracker-actions" id="trackerMessageActions"></div></div>
+<div class="tracker-footer" id="trackerFooter">Observe les cibles.</div>
+</div>
+<nav class="nav-bottom"><button class="active" onclick="show('home',this)">🏠<br/>Accueil</button><button onclick="show('terrain',this)">⚽<br/>Technique</button><button onclick="show('physical',this)">🏃<br/>Physique</button><button onclick="show('interactive',this)">🧠<br/>Cognitif</button><button onclick="show('tactical',this)">♟<br/>Tactique</button><button onclick="show('laws',this)">📘<br/>Lois du jeu</button><button onclick="show('evolution',this)">📈<br/>Évolution</button><button onclick="show('profile',this)">👤<br/>Profil</button></nav>
+</div>
+<script>
+let ifi=74;
+const attempts={ball:0,reaction:0,free:0,law:0};
+let ballOfficial=false,ballStart=0,reactionOfficial=false,reactionReady=false,reactionStart=0;
+let masteredKeys=3;
+
+function show(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-bottom button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function continuePath(){show('interactive',document.querySelectorAll('.nav-bottom button')[2])}
+function startRitual(){document.getElementById('ritualDone').classList.remove('hidden');addHistory('Rituel d’Activation','Terminé')}
+function addHistory(name,result){const list=document.getElementById('historyList');if(!list)return;const row=document.createElement('div');row.className='history-item';row.innerHTML='<span>'+name+'</span><b>'+result+'</b>';list.prepend(row)}
+function updateIFI(delta){ifi=Math.min(99,Math.max(0,ifi+delta));document.getElementById('ifiMain').textContent=ifi;document.getElementById('ifiEvolution').textContent=ifi}
+function saveTerrain(type){const c=type==='jong'?{input:'jongInput',last:'jongLast',best:'jongBest',msg:'jongMsg',goal:20,name:'Jonglerie'}:{input:'squatInput',last:'squatLast',best:'squatBest',msg:'squatMsg',goal:30,name:'Vitesse 10 m'};saveCount(c)}
+function saveCount(c){const v=Number(document.getElementById(c.input).value);if(!v){alert('Entre un résultat.');return}document.getElementById(c.last).textContent=v;const best=document.getElementById(c.best);if(v>Number(best.textContent))best.textContent=v;const msg=document.getElementById(c.msg);msg.classList.remove('hidden');const mastered=v>=c.goal;msg.textContent=mastered?'Défi maîtrisé. Ta progression du parcours avance.':'Ce défi est en progression. Continue à ton rythme.';addHistory(c.name,String(v));if(mastered){masteredKeys=Math.min(6,masteredKeys+1);checkSignature()}}
+function saveCountTerrain(type,goal){saveCount({input:type+'Input',last:type+'Last',best:type+'Best',msg:type+'Msg',goal,name:type==='plank'?'VMA':type})}
+function saveTimedTerrain(type,goal){const v=Number(document.getElementById(type+'Input').value);if(!v){alert('Entre un temps.');return}document.getElementById(type+'Last').textContent=v;const best=document.getElementById(type+'Best');if(v<Number(best.textContent))best.textContent=v;const msg=document.getElementById(type+'Msg');msg.classList.remove('hidden');const mastered=v<=goal;msg.textContent=mastered?'Défi maîtrisé. Ta progression du parcours avance.':'Tu te rapproches de l’objectif. Continue à ton rythme.';addHistory('Slalom',v+' s');if(mastered){masteredKeys=Math.min(6,masteredKeys+1);checkSignature()}}
+function useAttempt(type){if(attempts[type]>=3){alert('Tes 3 essais officiels du jour sont terminés. Le mode entraînement libre reste disponible.');return false}attempts[type]++;const box=document.getElementById(type+'Attempts');if(box)box.children[attempts[type]-1].classList.add('used');return true}
+function startBallTracker(official){if(official&&!useAttempt('ball'))return;ballOfficial=official;const area=document.getElementById('ballGame'),target=document.getElementById('ballTarget');area.querySelector('p').textContent='Clique sur le ballon dès qu’il apparaît.';target.style.display='none';setTimeout(()=>{target.style.left=Math.floor(Math.random()*75+5)+'%';target.style.top=Math.floor(Math.random()*60+20)+'%';target.style.display='grid';ballStart=performance.now()},700+Math.random()*1200)}
+document.addEventListener('click',e=>{if(e.target.id==='ballTarget'){const ms=Math.round(performance.now()-ballStart);e.target.style.display='none';const score=Math.max(50,Math.min(100,Math.round(120-ms/10)));const r=document.getElementById('ballResult');r.classList.remove('hidden');r.textContent='Réaction : '+ms+' ms · Score '+score+'/100.'+(ballOfficial?' Résultat pris en compte pour ton IFI.':' Entraînement libre.');if(ballOfficial){updateIFI(score>=80?1:0);addHistory('Ball Tracker',score+'/100')}}})
+function startReaction(official){if(official&&!useAttempt('reaction'))return;reactionOfficial=official;reactionReady=false;const t=document.getElementById('reactionTarget');t.textContent='Attends...';t.style.background='#ffffff0c';setTimeout(()=>{reactionReady=true;reactionStart=performance.now();t.textContent='CLIQUE !';t.style.background='#67f18f';t.style.color='#052312'},1000+Math.random()*1800)}
+function hitReaction(){const t=document.getElementById('reactionTarget');if(!reactionReady){t.textContent='Trop tôt';return}const ms=Math.round(performance.now()-reactionStart);reactionReady=false;const score=Math.max(50,Math.min(100,Math.round(125-ms/8)));const r=document.getElementById('reactionResult');r.classList.remove('hidden');r.textContent='Temps : '+ms+' ms · Score '+score+'/100.'+(reactionOfficial?' Résultat pris en compte pour ton IFI.':' Entraînement libre.');t.style.background='#ffffff0c';t.style.color='white';if(reactionOfficial){updateIFI(score>=80?1:0);addHistory('Réflexes',score+'/100')}}
+function answerQuiz(type,correct){if(!useAttempt(type))return;const id=type==='free'?'freeResult':'lawResult';const r=document.getElementById(id);r.classList.remove('hidden');r.textContent=correct?'Bonne lecture. Cette capacité progresse.':'Cette situation reste en progression. Observe les espaces et retente demain.';if(correct){updateIFI(1);addHistory(type==='free'?'Joueur libre':'Lois du jeu','Maîtrisé')}}
+function filterInteractive(cat,btn){document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('#interactive .challenge').forEach(c=>c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none')}
+function checkSignature(){const card=document.getElementById('signatureCard'),btn=document.getElementById('signatureBtn'),txt=document.getElementById('signatureText');if(masteredKeys>=6){card.classList.remove('locked');btn.className='primary';btn.textContent='Relever le Défi Signature';txt.textContent='Tes capacités sont prêtes. Relève ce défi pour débloquer les Crampons Argent.'}else{txt.textContent='Maîtrise encore '+(6-masteredKeys)+' Défis Clés pour débloquer ce défi.'}}
+function startSignature(){if(masteredKeys<6){alert('Le Défi Signature est encore à venir.');return}alert('Défi Signature lancé : 5 situations de jeu à analyser.');addHistory('Défi Signature','Disponible')}
+function closeCoach(){document.getElementById('coachModal').classList.remove('open')}
+document.querySelector('.icon').onclick=()=>document.getElementById('coachModal').classList.add('open');
+checkSignature();
+
+const terrainData = {
+  jong:{goal:20,type:'count',mastered:false},
+  slalom:{goal:45,type:'time',mastered:false},
+  squat:{goal:30,type:'count',mastered:true},
+  plank:{goal:60,type:'count',mastered:true},
+  control:{goal:8,type:'count',mastered:false},
+  steps:{goal:3,type:'count',mastered:false}
+};
+
+function saveTerrainResult(id, goal, type){
+  const input=document.getElementById(id+'Input');
+  const value=Number(input.value);
+  if(!value){alert('Entre ton résultat.');return}
+  const last=document.getElementById(id+'Last');
+  const best=document.getElementById(id+'Best');
+  if(last) last.textContent=value;
+  if(best){
+    const current=Number(best.textContent);
+    if(type==='time'){
+      if(value<current) best.textContent=value;
+    }else{
+      if(value>current) best.textContent=value;
+    }
+  }
+  const mastered=type==='time'?value<=goal:value>=goal;
+  terrainData[id].mastered=mastered;
+
+  const state=document.getElementById(id+'State');
+  const meter=document.getElementById(id+'Meter');
+  const msg=document.getElementById(id+'Msg');
+  state.textContent=mastered?'Maîtrisé':'En progression';
+  state.className='state-dot '+(mastered?'mastered':'progressing');
+
+  let percent=type==='time'?Math.min(100,Math.round((goal/value)*100)):Math.min(100,Math.round((value/goal)*100));
+  meter.style.width=percent+'%';
+
+  msg.classList.add('active');
+  msg.innerHTML=mastered
+    ? '<strong>Défi maîtrisé.</strong><br>Ton résultat est enregistré et ta progression Terrain avance.'
+    : '<strong>Défi en progression.</strong><br>Tu te rapproches de l’objectif. Continue à ton rythme.';
+
+  addHistory(
+    id==='jong'?'Jonglerie':id==='slalom'?'Slalom':id==='squat'?'Vitesse 10 m':id==='plank'?'VMA':id==='control'?'(à venir)':'(à venir)',
+    type==='time'?value+' s':String(value)
+  );
+  updateTerrainSummary();
+}
+
+function updateTerrainSummary(){
+  const keyIds=['jong','slalom','squat','plank'];
+  const mastered=keyIds.filter(id=>terrainData[id].mastered).length;
+  document.getElementById('terrainMastered').textContent=mastered;
+  document.getElementById('terrainProgressing').textContent=4-mastered;
+  document.getElementById('terrainProgressBar').style.width=(mastered/4*100)+'%';
+  document.getElementById('terrainProgressText').textContent=mastered+' Défis Clés maîtrisés sur 4.';
+  const txt=document.getElementById('terrainSignatureText');
+  const btn=document.getElementById('terrainSignatureBtn');
+  if(mastered===4){
+    txt.textContent='Tes Défis Clés Terrain sont prêts. Tu peux relever le Défi Signature.';
+    btn.textContent='Relever le Défi Signature';
+    btn.className='primary';
+  }else{
+    txt.textContent='Maîtrise encore '+(4-mastered)+' Défis Clés Terrain pour débloquer ce défi.';
+    btn.textContent='À venir';
+    btn.className='secondary';
+  }
+}
+
+function filterTerrain(type,btn){
+  document.querySelectorAll('.terrain-filter button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#terrainGrid .challenge').forEach(card=>{
+    const types=card.dataset.type.split(' ');
+    card.style.display=(type==='all'||types.includes(type))?'block':'none';
+  });
+}
+
+function launchTerrainSignature(){
+  const mastered=['jong','slalom','squat','plank'].filter(id=>terrainData[id].mastered).length;
+  if(mastered<4){
+    alert('Le Défi Signature Terrain est encore à venir.');
+    return;
+  }
+  alert('Défi Signature Terrain lancé : enchaîne jonglerie, slalom et contrôle orienté dans un même circuit.');
+  addHistory('Défi Signature Terrain','Disponible');
+}
+
+updateTerrainSummary();
+
+let totalOfficial=0;
+let bestInteractiveScore=0;
+const interactiveScores={ball:0,reaction:0,memory:0,free:0,scan:0,law:0};
+let memoryOfficial=false,memoryPattern=[],memorySelected=[];
+let scanOfficial=false,scanCorrectIndex=0;
+
+function updateInteractiveDashboard(type,score,official){
+  if(!official) return;
+  totalOfficial++;
+  interactiveScores[type]=Math.max(interactiveScores[type],score);
+  bestInteractiveScore=Math.max(bestInteractiveScore,score);
+  document.getElementById('officialTotal').textContent=totalOfficial;
+  document.getElementById('bestInteractive').textContent=bestInteractiveScore+'/100';
+  document.getElementById('ifiInteractive').textContent=ifi;
+  const mastered=Object.values(interactiveScores).filter(v=>v>=70).length;
+  const pct=Math.min(100,mastered/3*100);
+  document.getElementById('interactiveKeyBar').style.width=pct+'%';
+  document.getElementById('interactiveKeyText').textContent=mastered+' défi'+(mastered>1?'s':'')+' sur 3 au-dessus de 70.';
+}
+
+const oldUpdateIFI=updateIFI;
+updateIFI=function(delta){
+  oldUpdateIFI(delta);
+  const e=document.getElementById('ifiInteractive');
+  if(e)e.textContent=ifi;
+};
+
+const oldBallClickHandler = function(){};
+document.addEventListener('click',e=>{
+  if(e.target.id==='ballTarget'){
+    const ms=Math.round(performance.now()-ballStart);
+    e.target.style.display='none';
+    const score=Math.max(50,Math.min(100,Math.round(120-ms/10)));
+    const r=document.getElementById('ballResult');
+    r.classList.remove('hidden');
+    r.textContent='Réaction : '+ms+' ms · Score '+score+'/100.'+(ballOfficial?' Résultat pris en compte pour ton IFI.':' Entraînement libre.');
+    if(ballOfficial){
+      updateIFI(score>=80?1:0);
+      addHistory('Ball Tracker',score+'/100');
+      updateInteractiveDashboard('ball',score,true);
+    }
+  }
+});
+
+const oldHitReaction=hitReaction;
+hitReaction=function(){
+  const t=document.getElementById('reactionTarget');
+  if(!reactionReady){t.textContent='Trop tôt';return}
+  const ms=Math.round(performance.now()-reactionStart);
+  reactionReady=false;
+  const score=Math.max(50,Math.min(100,Math.round(125-ms/8)));
+  const r=document.getElementById('reactionResult');
+  r.classList.remove('hidden');
+  r.textContent='Temps : '+ms+' ms · Score '+score+'/100.'+(reactionOfficial?' Résultat pris en compte pour ton IFI.':' Entraînement libre.');
+  t.style.background='#ffffff0c';t.style.color='white';
+  if(reactionOfficial){
+    updateIFI(score>=80?1:0);
+    addHistory('Réflexes',score+'/100');
+    updateInteractiveDashboard('reaction',score,true);
+  }
+};
+
+function buildMemoryGrid(){
+  const grid=document.getElementById('memoryGrid');
+  grid.innerHTML='';
+  for(let i=0;i<8;i++){
+    const c=document.createElement('button');
+    c.className='memory-cell';
+    c.dataset.index=i;
+    c.onclick=()=>selectMemory(i,c);
+    grid.appendChild(c);
+  }
+}
+buildMemoryGrid();
+
+function startMemory(official){
+  if(official&&!useAttempt('memory'))return;
+  memoryOfficial=official;
+  memorySelected=[];
+  memoryPattern=[];
+  while(memoryPattern.length<3){
+    const n=Math.floor(Math.random()*8);
+    if(!memoryPattern.includes(n))memoryPattern.push(n);
+  }
+  document.querySelectorAll('.memory-cell').forEach(c=>c.classList.remove('active'));
+  memoryPattern.forEach(i=>document.querySelectorAll('.memory-cell')[i].classList.add('active'));
+  setTimeout(()=>document.querySelectorAll('.memory-cell').forEach(c=>c.classList.remove('active')),1200);
+  const r=document.getElementById('memoryResult');r.classList.remove('hidden');r.textContent='Mémorise les 3 cases puis sélectionne-les.';
+}
+
+function selectMemory(i,cell){
+  if(memorySelected.includes(i)||memoryPattern.length===0)return;
+  memorySelected.push(i);cell.classList.add('active');
+  if(memorySelected.length===3){
+    const correct=memorySelected.filter(x=>memoryPattern.includes(x)).length;
+    const score=Math.round(correct/3*100);
+    const r=document.getElementById('memoryResult');
+    r.textContent='Score mémoire : '+score+'/100.'+(memoryOfficial?' Résultat pris en compte pour ton IFI.':' Entraînement libre.');
+    if(memoryOfficial){
+      updateIFI(score>=80?1:0);
+      addHistory('Mémoire visuelle',score+'/100');
+      updateInteractiveDashboard('memory',score,true);
+    }
+    memoryPattern=[];
+  }
+}
+
+function startScan(official){
+  if(official&&!useAttempt('scan'))return;
+  scanOfficial=official;
+  const players=[...document.querySelectorAll('#scanField .scan-player')];
+  players.forEach(p=>{p.classList.remove('free');p.onclick=null});
+  scanCorrectIndex=Math.floor(Math.random()*players.length);
+  players[scanCorrectIndex].classList.add('free');
+  players.forEach((p,i)=>p.onclick=()=>answerScan(i));
+  const r=document.getElementById('scanResult');r.classList.remove('hidden');r.textContent='Repère le joueur libre et clique dessus.';
+}
+
+function answerScan(i){
+  const correct=i===scanCorrectIndex;
+  const score=correct?100:55;
+  const r=document.getElementById('scanResult');
+  r.textContent=correct?'Bonne lecture : joueur libre identifié. Score 100/100.':'Cette lecture reste en progression. Score 55/100.';
+  document.querySelectorAll('#scanField .scan-player').forEach(p=>p.onclick=null);
+  if(scanOfficial){
+    updateIFI(correct?1:0);
+    addHistory('Scanner avant réception',score+'/100');
+    updateInteractiveDashboard('scan',score,true);
+  }
+}
+
+const oldAnswerQuiz=answerQuiz;
+answerQuiz=function(type,correct){
+  if(!useAttempt(type))return;
+  const id=type==='free'?'freeResult':'lawResult';
+  const r=document.getElementById(id);
+  r.classList.remove('hidden');
+  const score=correct?100:60;
+  r.textContent=correct?'Bonne lecture. Score 100/100.':'Cette situation reste en progression. Score 60/100.';
+  if(correct)updateIFI(1);
+  addHistory(type==='free'?'Joueur libre':'Lois du jeu',score+'/100');
+  updateInteractiveDashboard(type,score,true);
+};
+
+function showEvoPanel(id,btn){
+  document.querySelectorAll('.evo-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.evo-tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleSwitch(el){el.classList.toggle('on')}
+function toggleEditProfile(){
+  const card=document.getElementById('editProfileCard');
+  card.style.display=card.style.display==='none'?'block':'none';
+}
+function saveProfile(){
+  const name=document.getElementById('profileNameInput').value.trim();
+  if(!name){alert('Entre un nom.');return}
+  document.getElementById('profileName').textContent=name;
+  document.querySelector('.user-head b').textContent=name.split(' ')[0];
+  document.getElementById('editProfileCard').style.display='none';
+}
+const oldUpdateIFI2=updateIFI;
+updateIFI=function(delta){
+  oldUpdateIFI2(delta);
+  const p=document.getElementById('profileIFI');
+  if(p)p.textContent=ifi;
+};
+
+function savePhysicalResult(type){
+  if(type==='speed'){
+    const value=Number(document.getElementById('speedInput').value);
+    if(!value){alert('Entre ton temps sur 10 m.');return}
+    document.getElementById('speedLast').textContent=value.toFixed(2);
+    const best=document.getElementById('speedBest');
+    if(value<Number(best.textContent)) best.textContent=value.toFixed(2);
+    const msg=document.getElementById('speedMsg');
+    msg.classList.add('active');
+    msg.innerHTML='<strong>Résultat enregistré.</strong><br>Ton meilleur temps sur 10 m est suivi séparément des défis techniques.';
+    document.getElementById('speedState').textContent='Mesuré';
+    document.getElementById('speedState').className='state-dot mastered';
+    addHistory('Vitesse 10 m',value.toFixed(2)+' s');
+  }else{
+    const value=Number(document.getElementById('vmaInput').value);
+    if(!value){alert('Entre ta VMA.');return}
+    document.getElementById('vmaLast').textContent=value.toFixed(1);
+    const best=document.getElementById('vmaBest');
+    if(value>Number(best.textContent)) best.textContent=value.toFixed(1);
+    const msg=document.getElementById('vmaMsg');
+    msg.classList.add('active');
+    msg.innerHTML='<strong>Résultat enregistré.</strong><br>Ta VMA est suivie comme un repère physique indépendant.';
+    document.getElementById('vmaState').textContent='Mesuré';
+    document.getElementById('vmaState').className='state-dot mastered';
+    addHistory('VMA',value.toFixed(1)+' km/h');
+  }
+}
+
+const playerPath='Débutant';
+
+function initPerformanceBook(){
+  const today=new Date().toISOString().slice(0,10);
+  const sd=document.getElementById('speedDate');
+  const vd=document.getElementById('vmaDate');
+  if(sd)sd.value=today;
+  if(vd)vd.value=today;
+
+  const unlocked=['Apprenti','Intermédiaire','Confirmé','Expert'].includes(playerPath);
+  const card=document.getElementById('vmaCard');
+  if(card){
+    card.classList.toggle('vma-locked',!unlocked);
+    document.getElementById('vmaIntro').textContent=unlocked
+      ? 'Suis l’évolution de ta capacité aérobie selon la fréquence recommandée.'
+      : 'La VMA devient disponible à partir du parcours Apprenti.';
+  }
+}
+
+function formatDateFR(value){
+  const d=new Date(value+'T00:00:00');
+  return d.toLocaleDateString('fr-FR');
+}
+
+function addPhysicalMeasure(type){
+  const dateInput=document.getElementById(type+'Date');
+  const valueInput=document.getElementById(type+'Value');
+  const value=Number(valueInput.value);
+  if(!value){alert('Entre une valeur.');return}
+
+  if(type==='vma' && playerPath==='Débutant'){
+    alert('La VMA sera disponible à partir du parcours Apprenti.');
+    return;
+  }
+
+  const history=document.getElementById(type+'History');
+  const row=document.createElement('div');
+  row.className='performance-row';
+  const unit=type==='speed'?' s':' km/h';
+  row.innerHTML='<span>'+formatDateFR(dateInput.value)+'</span><b>'+value.toFixed(type==='speed'?2:1)+unit+'</b><span>Nouvelle mesure</span>';
+  history.prepend(row);
+
+  const current=document.getElementById(type+'Current');
+  const record=document.getElementById(type+'Record');
+  current.textContent=value.toFixed(type==='speed'?2:1)+unit;
+
+  const oldRecord=parseFloat(record.textContent);
+  const isRecord=type==='speed'?(!oldRecord||value<oldRecord):(!oldRecord||value>oldRecord);
+  if(isRecord){
+    record.textContent=value.toFixed(type==='speed'?2:1)+unit;
+    row.lastElementChild.className='record';
+    row.lastElementChild.textContent='⭐ Record';
+  }
+
+  const change=document.getElementById(type+'Change');
+  if(oldRecord){
+    const diff=type==='speed'?(oldRecord-value):(value-oldRecord);
+    change.textContent=(diff>=0?'+':'')+diff.toFixed(type==='speed'?2:1)+(type==='speed'?' s':' km/h');
+  }
+
+  valueInput.value='';
+  addHistory(type==='speed'?'Vitesse 10 m':'VMA',value.toFixed(type==='speed'?2:1)+unit);
+}
+
+initPerformanceBook();
+
+const physicalPlayerPath='Débutant';
+
+function selectMeasureType(type){
+  document.getElementById('speedChoice').classList.toggle('active',type==='speed');
+  document.getElementById('vmaChoice').classList.toggle('active',type==='vma');
+  document.getElementById('speedForm').style.display=type==='speed'?'block':'none';
+  document.getElementById('vmaForm').style.display=type==='vma'?'block':'none';
+}
+
+function initPhysicalEntry(){
+  const today=new Date().toISOString().slice(0,10);
+  const s=document.getElementById('entrySpeedDate');
+  const v=document.getElementById('entryVmaDate');
+  if(s)s.value=today;
+  if(v)v.value=today;
+}
+
+function saveProfilePhysical(type){
+  if(type==='speed'){
+    const value=Number(document.getElementById('entrySpeedValue').value);
+    const date=document.getElementById('entrySpeedDate').value;
+    if(!value){alert('Entre un temps sur 10 m.');return}
+
+    const current=document.getElementById('profileSpeedCurrent');
+    const best=document.getElementById('profileSpeedBest');
+    const change=document.getElementById('profileSpeedChange');
+
+    const oldBest=parseFloat(best.textContent);
+    current.textContent=value.toFixed(2)+' s';
+    if(value<oldBest){
+      best.textContent=value.toFixed(2)+' s';
+      change.textContent='Nouveau record';
+    }else{
+      change.textContent='+'+(value-oldBest).toFixed(2)+' s';
+    }
+
+    const row=document.createElement('div');
+    row.className='measure-row';
+    row.innerHTML='<span>'+new Date(date+'T00:00:00').toLocaleDateString('fr-FR')+'</span><b>10 m · '+value.toFixed(2)+' s</b><span>'+(value<oldBest?'Record':'Mesure')+'</span>';
+    document.getElementById('profilePhysicalHistory').prepend(row);
+    document.getElementById('entrySpeedValue').value='';
+    alert('Mesure de vitesse enregistrée.');
+    show('profile',document.querySelectorAll('.nav-bottom button')[7]);
+  }else{
+    if(physicalPlayerPath==='Débutant'){
+      alert('La VMA sera disponible à partir du parcours Apprenti.');
+      return;
+    }
+    const value=Number(document.getElementById('entryVmaValue').value);
+    if(!value){alert('Entre une VMA.');return}
+    alert('Mesure VMA enregistrée.');
+    show('profile',document.querySelectorAll('.nav-bottom button')[7]);
+  }
+}
+
+initPhysicalEntry();
+
+
+const JUGGLE_LEVELS={"1": {"name": "Débutant Bronze", "phase": "Maîtrise statique", "items": [{"name": "Jonglerie classique — pied fort", "mode": "count", "goal": 10}, {"name": "Jonglerie classique — pied faible", "mode": "count", "goal": 5}, {"name": "Jonglerie alternée", "mode": "count", "goal": 10}, {"name": "Jonglerie de la tête", "mode": "count", "goal": 5}]}, "2": {"name": "Débutant Argent", "phase": "Maîtrise statique", "items": [{"name": "Jonglerie classique — pied fort", "mode": "count", "goal": 30}, {"name": "Jonglerie classique — pied faible", "mode": "count", "goal": 15}, {"name": "Jonglerie alternée", "mode": "count", "goal": 30}, {"name": "Jonglerie de la tête", "mode": "count", "goal": 10}, {"name": "Intérieur du pied fort", "mode": "count", "goal": 10}, {"name": "Intérieur du pied faible", "mode": "count", "goal": 5}]}, "3": {"name": "Débutant Or", "phase": "Maîtrise statique", "items": [{"name": "Jonglerie classique — pied fort", "mode": "count", "goal": 100}, {"name": "Jonglerie classique — pied faible", "mode": "count", "goal": 50}, {"name": "Jonglerie alternée", "mode": "count", "goal": 100}, {"name": "Jonglerie de la tête", "mode": "count", "goal": 30}, {"name": "Intérieur du pied fort", "mode": "count", "goal": 30}, {"name": "Intérieur du pied faible", "mode": "count", "goal": 15}, {"name": "Jonglerie cuisse — côté fort", "mode": "count", "goal": 20}]}, "4": {"name": "Apprenti Bronze", "phase": "Maîtrise en mouvement", "items": [{"name": "Jonglerie en mouvement — pied fort", "mode": "distance", "goal": 50}, {"name": "Jonglerie en mouvement — pied faible", "mode": "distance", "goal": 30}, {"name": "Jonglerie en mouvement — alternée", "mode": "distance", "goal": 30}, {"name": "Jonglerie en mouvement — intérieur pied fort", "mode": "distance", "goal": 30}, {"name": "Jonglerie en mouvement — intérieur pied faible", "mode": "distance", "goal": 10}, {"name": "Jonglerie en mouvement — cuisse pied fort", "mode": "distance", "goal": 30}, {"name": "Jonglerie statique — tête", "mode": "count", "goal": 50}, {"name": "Jonglerie statique — extérieur pied fort", "mode": "count", "goal": 20}, {"name": "Jonglerie statique — extérieur pied faible", "mode": "count", "goal": 10}]}, "5": {"name": "Apprenti Argent", "phase": "Maîtrise en mouvement", "items": [{"name": "Jonglerie en mouvement — pied fort", "mode": "distance", "goal": 100}, {"name": "Jonglerie en mouvement — pied faible", "mode": "distance", "goal": 50}, {"name": "Jonglerie en mouvement — alternée", "mode": "distance", "goal": 50}, {"name": "Jonglerie en mouvement — intérieur pied fort", "mode": "distance", "goal": 50}, {"name": "Jonglerie en mouvement — intérieur pied faible", "mode": "distance", "goal": 30}, {"name": "Jonglerie en mouvement — cuisse pied fort", "mode": "distance", "goal": 50}, {"name": "Jonglerie en mouvement — tête", "mode": "distance", "goal": 30}, {"name": "Jonglerie statique — extérieur pied fort", "mode": "count", "goal": 50}, {"name": "Jonglerie statique — extérieur pied faible", "mode": "count", "goal": 30}]}, "6": {"name": "Apprenti Or", "phase": "Maîtrise rapide", "items": [{"name": "Jonglerie en mouvement — pied fort", "mode": "timed", "distance": 50, "maxTime": 30}, {"name": "Jonglerie en mouvement — pied faible", "mode": "timed", "distance": 30, "maxTime": 30}, {"name": "Jonglerie en mouvement — alternée", "mode": "timed", "distance": 30, "maxTime": 30}, {"name": "Jonglerie en mouvement — intérieur pied fort", "mode": "timed", "distance": 30, "maxTime": 30}, {"name": "Jonglerie en mouvement — intérieur pied faible", "mode": "timed", "distance": 10, "maxTime": 15}, {"name": "Jonglerie en mouvement — cuisse pied fort", "mode": "timed", "distance": 30, "maxTime": 20}, {"name": "Jonglerie statique — tête", "mode": "count", "goal": 50}, {"name": "Jonglerie statique — extérieur pied fort", "mode": "count", "goal": 50}, {"name": "Jonglerie statique — extérieur pied faible", "mode": "count", "goal": 30}]}, "7": {"name": "Intermédiaire Bronze", "phase": "Maîtrise rapide", "items": [{"name": "Jonglerie en mouvement — pied fort", "mode": "timed", "distance": 50, "maxTime": 25}, {"name": "Jonglerie en mouvement — pied faible", "mode": "timed", "distance": 30, "maxTime": 25}, {"name": "Jonglerie en mouvement — alternée", "mode": "timed", "distance": 30, "maxTime": 25}, {"name": "Jonglerie en mouvement — intérieur pied fort", "mode": "timed", "distance": 30, "maxTime": 25}, {"name": "Jonglerie en mouvement — intérieur pied faible", "mode": "timed", "distance": 10, "maxTime": 15}, {"name": "Jonglerie en mouvement — cuisse pied fort", "mode": "timed", "distance": 30, "maxTime": 15}, {"name": "Statique alternée — pied fort / cuisse", "mode": "count", "goal": 50}, {"name": "Statique alternée — pied faible / cuisse", "mode": "count", "goal": 30}, {"name": "Statique alternée — extérieur fort / intérieur", "mode": "count", "goal": 50}, {"name": "Statique alternée — extérieur faible / intérieur", "mode": "count", "goal": 30}]}, "8": {"name": "Intermédiaire Argent", "phase": "Maîtrise rapide", "items": [{"name": "Jonglerie en mouvement — pied fort", "mode": "timed", "distance": 50, "maxTime": 20}, {"name": "Jonglerie en mouvement — pied faible", "mode": "timed", "distance": 30, "maxTime": 20}, {"name": "Jonglerie en mouvement — alternée", "mode": "timed", "distance": 30, "maxTime": 20}, {"name": "Jonglerie en mouvement — intérieur pied fort", "mode": "timed", "distance": 30, "maxTime": 20}, {"name": "Jonglerie en mouvement — intérieur pied faible", "mode": "timed", "distance": 10, "maxTime": 10}, {"name": "Jonglerie en mouvement — cuisse pied fort", "mode": "timed", "distance": 30, "maxTime": 10}, {"name": "Statique alternée — pied fort / cuisse", "mode": "count", "goal": 50}, {"name": "Statique alternée — pied faible / cuisse", "mode": "count", "goal": 30}, {"name": "Statique alternée — extérieur fort / intérieur", "mode": "count", "goal": 50}, {"name": "Statique alternée — extérieur faible / intérieur", "mode": "count", "goal": 30}]}};
+const JUGGLE_POOL=[{"source": 4, "name": "Jonglerie en mouvement — pied fort", "mode": "distance", "goal": 50}, {"source": 4, "name": "Jonglerie en mouvement — pied faible", "mode": "distance", "goal": 30}, {"source": 4, "name": "Jonglerie en mouvement — alternée", "mode": "distance", "goal": 30}, {"source": 4, "name": "Jonglerie en mouvement — intérieur pied fort", "mode": "distance", "goal": 30}, {"source": 4, "name": "Jonglerie en mouvement — intérieur pied faible", "mode": "distance", "goal": 10}, {"source": 4, "name": "Jonglerie en mouvement — cuisse pied fort", "mode": "distance", "goal": 30}, {"source": 4, "name": "Jonglerie statique — tête", "mode": "count", "goal": 50}, {"source": 4, "name": "Jonglerie statique — extérieur pied fort", "mode": "count", "goal": 20}, {"source": 4, "name": "Jonglerie statique — extérieur pied faible", "mode": "count", "goal": 10}, {"source": 5, "name": "Jonglerie en mouvement — pied fort", "mode": "distance", "goal": 100}, {"source": 5, "name": "Jonglerie en mouvement — pied faible", "mode": "distance", "goal": 50}, {"source": 5, "name": "Jonglerie en mouvement — alternée", "mode": "distance", "goal": 50}, {"source": 5, "name": "Jonglerie en mouvement — intérieur pied fort", "mode": "distance", "goal": 50}, {"source": 5, "name": "Jonglerie en mouvement — intérieur pied faible", "mode": "distance", "goal": 30}, {"source": 5, "name": "Jonglerie en mouvement — cuisse pied fort", "mode": "distance", "goal": 50}, {"source": 5, "name": "Jonglerie en mouvement — tête", "mode": "distance", "goal": 30}, {"source": 5, "name": "Jonglerie statique — extérieur pied fort", "mode": "count", "goal": 50}, {"source": 5, "name": "Jonglerie statique — extérieur pied faible", "mode": "count", "goal": 30}, {"source": 6, "name": "Jonglerie en mouvement — pied fort", "mode": "timed", "distance": 50, "maxTime": 30}, {"source": 6, "name": "Jonglerie en mouvement — pied faible", "mode": "timed", "distance": 30, "maxTime": 30}, {"source": 6, "name": "Jonglerie en mouvement — alternée", "mode": "timed", "distance": 30, "maxTime": 30}, {"source": 6, "name": "Jonglerie en mouvement — intérieur pied fort", "mode": "timed", "distance": 30, "maxTime": 30}, {"source": 6, "name": "Jonglerie en mouvement — intérieur pied faible", "mode": "timed", "distance": 10, "maxTime": 15}, {"source": 6, "name": "Jonglerie en mouvement — cuisse pied fort", "mode": "timed", "distance": 30, "maxTime": 20}, {"source": 6, "name": "Jonglerie statique — tête", "mode": "count", "goal": 50}, {"source": 6, "name": "Jonglerie statique — extérieur pied fort", "mode": "count", "goal": 50}, {"source": 6, "name": "Jonglerie statique — extérieur pied faible", "mode": "count", "goal": 30}, {"source": 7, "name": "Jonglerie en mouvement — pied fort", "mode": "timed", "distance": 50, "maxTime": 25}, {"source": 7, "name": "Jonglerie en mouvement — pied faible", "mode": "timed", "distance": 30, "maxTime": 25}, {"source": 7, "name": "Jonglerie en mouvement — alternée", "mode": "timed", "distance": 30, "maxTime": 25}, {"source": 7, "name": "Jonglerie en mouvement — intérieur pied fort", "mode": "timed", "distance": 30, "maxTime": 25}, {"source": 7, "name": "Jonglerie en mouvement — intérieur pied faible", "mode": "timed", "distance": 10, "maxTime": 15}, {"source": 7, "name": "Jonglerie en mouvement — cuisse pied fort", "mode": "timed", "distance": 30, "maxTime": 15}, {"source": 7, "name": "Statique alternée — pied fort / cuisse", "mode": "count", "goal": 50}, {"source": 7, "name": "Statique alternée — pied faible / cuisse", "mode": "count", "goal": 30}, {"source": 7, "name": "Statique alternée — extérieur fort / intérieur", "mode": "count", "goal": 50}, {"source": 7, "name": "Statique alternée — extérieur faible / intérieur", "mode": "count", "goal": 30}, {"source": 8, "name": "Jonglerie en mouvement — pied fort", "mode": "timed", "distance": 50, "maxTime": 20}, {"source": 8, "name": "Jonglerie en mouvement — pied faible", "mode": "timed", "distance": 30, "maxTime": 20}, {"source": 8, "name": "Jonglerie en mouvement — alternée", "mode": "timed", "distance": 30, "maxTime": 20}, {"source": 8, "name": "Jonglerie en mouvement — intérieur pied fort", "mode": "timed", "distance": 30, "maxTime": 20}, {"source": 8, "name": "Jonglerie en mouvement — intérieur pied faible", "mode": "timed", "distance": 10, "maxTime": 10}, {"source": 8, "name": "Jonglerie en mouvement — cuisse pied fort", "mode": "timed", "distance": 30, "maxTime": 10}, {"source": 8, "name": "Statique alternée — pied fort / cuisse", "mode": "count", "goal": 50}, {"source": 8, "name": "Statique alternée — pied faible / cuisse", "mode": "count", "goal": 30}, {"source": 8, "name": "Statique alternée — extérieur fort / intérieur", "mode": "count", "goal": 50}, {"source": 8, "name": "Statique alternée — extérieur faible / intérieur", "mode": "count", "goal": 30}];
+const juggleState=JSON.parse(localStorage.getItem('foot-juggle-backup')||'{}');
+
+function juggleSave(){localStorage.setItem('foot-juggle-backup',JSON.stringify(juggleState))}
+function juggleMedal(n){return [1,4,7,10,13].includes(n)?'🥉':[2,5,8,11,14].includes(n)?'🥈':'🥇'}
+function juggleInstruction(x){
+ if(x.mode==='timed') return `${x.distance} m en ${x.maxTime} secondes maximum`;
+ if(x.mode==='distance') return `${x.goal} m sans chute`;
+ return `${x.goal} jongles consécutifs`;
+}
+function juggleLabel(x){return x.mode==='timed'?'Temps réalisé (secondes)':x.mode==='distance'?'Distance réalisée (mètres)':'Nombre de jongles réalisé'}
+function juggleValid(x,v){return x.mode==='timed'?(v>0&&v<=x.maxTime):v>=x.goal}
+function jugglePoints(x,v){
+ if(!juggleValid(x,v))return 0;
+ if(x.mode!=='timed')return 2;
+ if(v<=x.maxTime*.70)return 6;
+ if(v<=x.maxTime*.85)return 4;
+ return 2;
+}
+function juggleStatus(points){return points===6?'Excellent':points===4?'Très bien':points===2?'Validé':''}
+
+function renderJuggleLevel(n){
+ const l=JUGGLE_LEVELS[n],s=document.createElement('section');s.className='juggle-screen';s.id='juggleLevel'+n;
+ const rows=l.items.map((x,i)=>`<article class="juggle-item" data-level="${n}" data-index="${i}">
+   <h3>${x.name}</h3><div class="juggle-requirement"><b>Défi exact</b><br>${juggleInstruction(x)}</div>
+   <div class="juggle-entry"><input type="number" min="0" step="${x.mode==='timed'?'0.1':'1'}" placeholder="${juggleLabel(x)}"><button class="primary">Valider</button></div>
+   <div class="juggle-feedback">En attente</div></article>`).join('');
+ s.innerHTML=`<div class="juggle-hero"><article class="card"><div class="kicker">${l.phase}</div><h2>${juggleMedal(n)} Niveau ${n} — ${l.name}</h2><div class="juggle-progress"><span id="juggleBar${n}"></span></div><b id="jugglePct${n}">0 %</b></article>
+ <article class="card"><div class="juggle-metrics"><div class="juggle-metric"><small>Validés</small><b id="juggleDone${n}">0/${l.items.length}</b></div><div class="juggle-metric"><small>IFI gagnés</small><b id="juggleIFI${n}">0</b></div><div class="juggle-metric"><small>Phase</small><b>${l.phase}</b></div></div></article></div>
+ <div class="juggle-grid">${rows}</div>`;
+ s.querySelectorAll('.juggle-item').forEach(row=>bindJuggleRow(row,l.items[+row.dataset.index]));
+ return s;
+}
+function bindJuggleRow(row,item){
+ const key='L'+row.dataset.level+'I'+row.dataset.index,input=row.querySelector('input'),fb=row.querySelector('.juggle-feedback');
+ if(juggleState[key]!=null)input.value=juggleState[key];
+ function apply(){
+  const v=+input.value||0,p=jugglePoints(item,v);
+  row.classList.toggle('done',p>0);
+  fb.className='juggle-feedback'+(p>0?' ok':'');
+  fb.innerHTML=p>0?`<span class="juggle-badge">${juggleStatus(p)}</span> · +${p} IFI`:`Objectif non atteint : ${juggleInstruction(item)}`;
+  juggleState[key]=v;juggleState[key+'P']=p;juggleSave();updateJuggleLevel(+row.dataset.level);
+ }
+ row.querySelector('button').onclick=apply;if(input.value)apply();
+}
+function updateJuggleLevel(n){
+ const rows=[...document.querySelectorAll('#juggleLevel'+n+' .juggle-item')],pts=rows.map(r=>juggleState['L'+n+'I'+r.dataset.index+'P']||0);
+ const done=pts.filter(x=>x>0).length,total=pts.reduce((a,b)=>a+b,0),pct=Math.round(done/rows.length*100);
+ document.getElementById('juggleBar'+n).style.width=pct+'%';document.getElementById('jugglePct'+n).textContent=pct+' %';
+ document.getElementById('juggleDone'+n).textContent=done+'/'+rows.length;document.getElementById('juggleIFI'+n).textContent=total;
+}
+function juggleCard(x,id,done){
+ return `<article class="juggle-item ${done?'done':''}" data-id="${id}"><span class="tag">Issu du niveau ${x.source}</span><h3>${x.name}</h3>
+ <div class="juggle-requirement"><b>Défi exact à refaire</b><br>${juggleInstruction(x)}</div>
+ <div class="juggle-entry"><input type="number" min="0" step="${x.mode==='timed'?'0.1':'1'}" placeholder="${juggleLabel(x)}"><button class="primary">Valider</button></div>
+ <div class="juggle-feedback">${done?'<span class="juggle-badge">Validé</span>':'En attente'}</div></article>`;
+}
+function drawCertification(){
+ const groups=[4,5,6,7,8].map(n=>JUGGLE_POOL.filter(x=>x.source===n));
+ juggleState.cert=groups.map(g=>g[Math.floor(Math.random()*g.length)]);juggleState.certDone={};juggleSave();renderCertification();
+}
+function renderCertification(){
+ const grid=document.getElementById('certGrid');if(!juggleState.cert)drawCertification();
+ grid.innerHTML=juggleState.cert.map((x,i)=>juggleCard(x,'cert-'+i,!!juggleState.certDone?.[i])).join('');
+ grid.querySelectorAll('.juggle-item').forEach(card=>{
+  const i=+card.dataset.id.split('-')[1],x=juggleState.cert[i],input=card.querySelector('input');
+  card.querySelector('button').onclick=()=>{const v=+input.value||0,fb=card.querySelector('.juggle-feedback');if(juggleValid(x,v)){juggleState.certDone=juggleState.certDone||{};juggleState.certDone[i]=true;juggleSave();renderCertification()}else fb.textContent='Objectif non atteint : '+juggleInstruction(x)};
+ });
+ const done=Object.values(juggleState.certDone||{}).filter(Boolean).length;
+ document.getElementById('certDone').textContent=done+'/5';document.getElementById('certIFI').textContent=done*4;document.getElementById('certSuccess').classList.toggle('active',done===5);
+}
+function renderCertScreen(){
+ const s=document.createElement('section');s.className='juggle-screen';s.id='juggleLevel9';
+ s.innerHTML=`<div class="juggle-hero"><article class="card"><div class="kicker">Certification</div><h2>🏅 Niveau 9 — Épreuve de maîtrise</h2><p class="muted">Un défi complet est tiré dans chacun des niveaux 4 à 8.</p><div class="juggle-actions"><button class="primary" id="drawCert">🎲 Générer les 5 défis</button></div></article>
+ <article class="card"><div class="juggle-metrics"><div class="juggle-metric"><small>Validés</small><b id="certDone">0/5</b></div><div class="juggle-metric"><small>IFI</small><b id="certIFI">0</b></div><div class="juggle-metric"><small>Statut</small><b>Certification</b></div></div></article></div>
+ <div class="juggle-grid" id="certGrid"></div><div class="juggle-success" id="certSuccess"><h2>🏆 Certification Jonglerie obtenue</h2><p>La jonglerie passe en mode entretien.</p></div>`;
+ s.querySelector('#drawCert').onclick=drawCertification;return s;
+}
+function drawMaintenance(n){
+ const chosen=[];while(chosen.length<3){const x=JUGGLE_POOL[Math.floor(Math.random()*JUGGLE_POOL.length)];if(!chosen.some(y=>y.source===x.source&&y.name===x.name))chosen.push(x)}
+ juggleState['maint'+n]={items:chosen,done:{}};juggleSave();renderMaintenance(n);
+}
+function renderMaintenance(n){
+ const data=juggleState['maint'+n],grid=document.getElementById('maintGrid'+n);
+ if(!data){grid.innerHTML='<p class="muted">Génère tes trois défis d’entretien.</p>';return}
+ grid.innerHTML=data.items.map((x,i)=>juggleCard(x,'m-'+i,!!data.done[i])).join('');
+ grid.querySelectorAll('.juggle-item').forEach(card=>{
+  const i=+card.dataset.id.split('-')[1],x=data.items[i],input=card.querySelector('input');
+  card.querySelector('button').onclick=()=>{const v=+input.value||0,fb=card.querySelector('.juggle-feedback');if(juggleValid(x,v)){data.done[i]=true;juggleSave();renderMaintenance(n)}else fb.textContent='Objectif non atteint : '+juggleInstruction(x)};
+ });
+ const done=Object.values(data.done).filter(Boolean).length;document.getElementById('maintDone'+n).textContent=done+'/3';document.getElementById('maintIFI'+n).textContent=done*2;
+}
+function renderMaintenanceScreen(n){
+ const s=document.createElement('section');s.className='juggle-screen';s.id='juggleLevel'+n;
+ s.innerHTML=`<div class="juggle-hero"><article class="card"><div class="kicker">Entretien technique</div><h2>🔄 Niveau ${n} — Entretien Jonglerie</h2><p class="muted">Trois défis complets issus des niveaux 4 à 8.</p><button class="primary" id="drawMaint${n}">🎲 Générer mes défis</button></article>
+ <article class="card"><div class="juggle-metrics"><div class="juggle-metric"><small>Validés</small><b id="maintDone${n}">0/3</b></div><div class="juggle-metric"><small>IFI</small><b id="maintIFI${n}">0</b></div><div class="juggle-metric"><small>Certification</small><b>Maintenue</b></div></div></article></div><div class="juggle-grid" id="maintGrid${n}"></div>`;
+ s.querySelector('#drawMaint'+n).onclick=()=>drawMaintenance(n);return s;
+}
+function buildJuggleModule(){
+ const tabs=document.getElementById('juggleTabs'),screens=document.getElementById('juggleScreens');
+ for(let n=1;n<=15;n++){const b=document.createElement('button');b.textContent=juggleMedal(n)+' '+n;b.onclick=()=>showJuggle(n,b);tabs.appendChild(b);screens.appendChild(n<=8?renderJuggleLevel(n):n===9?renderCertScreen():renderMaintenanceScreen(n))}
+ showJuggle(1,tabs.firstElementChild);
+}
+function showJuggle(n,b){
+ document.querySelectorAll('.juggle-screen').forEach(s=>s.classList.remove('active'));document.getElementById('juggleLevel'+n).classList.add('active');
+ document.querySelectorAll('.juggle-tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+ if(n<=8)updateJuggleLevel(n);else if(n===9)renderCertification();else renderMaintenance(n);
+}
+
+
+
+
+/* ===== Accès Jonglerie limité au niveau actuel ===== */
+const PLAYER_JUGGLE_LEVEL = 1; // À relier plus tard au niveau réel du joueur.
+
+const PLAYER_JUGGLE_LEVELS = {
+  1:{
+    name:"Débutant Bronze", phase:"Maîtrise statique",
+    items:[
+      {name:"Jonglerie classique — pied fort",mode:"count",goal:10},
+      {name:"Jonglerie classique — pied faible",mode:"count",goal:5},
+      {name:"Jonglerie alternée",mode:"count",goal:10},
+      {name:"Jonglerie de la tête",mode:"count",goal:5}
+    ],
+    acquired:[],
+    next:[
+      {name:"Débutant Argent",medal:"🥈",newSkills:["Intérieur du pied fort","Intérieur du pied faible"]},
+      {name:"Débutant Or",medal:"🥇",newSkills:["Jonglerie avec la cuisse"]}
+    ]
+  },
+  2:{
+    name:"Débutant Argent", phase:"Maîtrise statique",
+    items:[
+      {name:"Jonglerie classique — pied fort",mode:"count",goal:30},
+      {name:"Jonglerie classique — pied faible",mode:"count",goal:15},
+      {name:"Jonglerie alternée",mode:"count",goal:30},
+      {name:"Jonglerie de la tête",mode:"count",goal:10},
+      {name:"Intérieur du pied fort",mode:"count",goal:10},
+      {name:"Intérieur du pied faible",mode:"count",goal:5}
+    ],
+    acquired:["Jonglerie classique — pied fort","Jonglerie classique — pied faible","Jonglerie alternée","Jonglerie de la tête"],
+    next:[
+      {name:"Débutant Or",medal:"🥇",newSkills:["Jonglerie avec la cuisse"]},
+      {name:"Apprenti Bronze",medal:"🥉",newSkills:["Jonglerie en mouvement"]}
+    ]
+  },
+  3:{
+    name:"Débutant Or", phase:"Maîtrise statique",
+    items:[
+      {name:"Jonglerie classique — pied fort",mode:"count",goal:100},
+      {name:"Jonglerie classique — pied faible",mode:"count",goal:50},
+      {name:"Jonglerie alternée",mode:"count",goal:100},
+      {name:"Jonglerie de la tête",mode:"count",goal:30},
+      {name:"Intérieur du pied fort",mode:"count",goal:30},
+      {name:"Intérieur du pied faible",mode:"count",goal:15},
+      {name:"Jonglerie cuisse — côté fort",mode:"count",goal:20}
+    ],
+    acquired:["Jonglerie classique","Jonglerie alternée","Jonglerie de la tête","Intérieur du pied"],
+    next:[
+      {name:"Apprenti Bronze",medal:"🥉",newSkills:["Jonglerie en mouvement"]},
+      {name:"Apprenti Argent",medal:"🥈",newSkills:["Distances plus longues"]}
+    ]
+  }
+};
+
+const currentJuggleState = JSON.parse(localStorage.getItem("current-juggle-level-state") || "{}");
+
+function currentInstruction(item){
+  if(item.mode==="timed") return item.distance+" m en "+item.maxTime+" secondes maximum";
+  if(item.mode==="distance") return item.goal+" m sans chute";
+  return item.goal+" jongles consécutifs";
+}
+
+function currentValid(item,value){
+  if(item.mode==="timed") return value>0 && value<=item.maxTime;
+  return value>=item.goal;
+}
+
+function renderCurrentJuggleLevel(){
+  const level=PLAYER_JUGGLE_LEVEL;
+  const data=PLAYER_JUGGLE_LEVELS[level];
+  document.getElementById("currentJuggleTitle").textContent=(level%3===1?"🥉":level%3===2?"🥈":"🥇")+" "+data.name;
+  document.getElementById("currentJugglePhase").textContent=data.phase;
+
+  const acquired=document.getElementById("currentJuggleAcquired");
+  if(data.acquired.length===0){
+    acquired.innerHTML='<div class="acquired-message"><b>👏 Bienvenue.</b><br>Aucun défi acquis à ce premier niveau. Tu construis ici tes premières bases.</div>';
+  }else{
+    acquired.innerHTML='<div class="acquired-message"><b>👏 Bravo !</b><br>Ces formes ont déjà été découvertes. Les anciens seuils sont reconnus automatiquement.</div>'+
+      data.acquired.map(x=>'<div class="acquired-item"><b>✓ '+x+'</b></div>').join("");
+  }
+
+  const challenges=document.getElementById("currentJuggleChallenges");
+  challenges.innerHTML=data.items.map((item,index)=>`
+    <article class="juggle-item" data-index="${index}">
+      <h3>${item.name}</h3>
+      <div class="juggle-requirement"><b>Défi exact</b><br>${currentInstruction(item)}</div>
+      <div class="juggle-entry">
+        <input type="number" min="0" step="${item.mode==="timed"?"0.1":"1"}" placeholder="${item.mode==="timed"?"Temps réalisé":"Résultat réalisé"}">
+        <button class="primary" type="button">Valider</button>
+      </div>
+      <div class="juggle-feedback">En attente</div>
+    </article>
+  `).join("");
+
+  challenges.querySelectorAll(".juggle-item").forEach(card=>{
+    const index=Number(card.dataset.index);
+    const item=data.items[index];
+    const input=card.querySelector("input");
+    const key="level"+level+"item"+index;
+    if(currentJuggleState[key]!==undefined) input.value=currentJuggleState[key];
+
+    const apply=()=>{
+      const value=Number(input.value||0);
+      const ok=currentValid(item,value);
+      card.classList.toggle("done",ok);
+      const feedback=card.querySelector(".juggle-feedback");
+      feedback.className="juggle-feedback"+(ok?" ok":"");
+      feedback.innerHTML=ok?'<span class="juggle-badge">Validé</span> · +2 IFI':'Objectif non atteint : '+currentInstruction(item);
+      currentJuggleState[key]=value;
+      localStorage.setItem("current-juggle-level-state",JSON.stringify(currentJuggleState));
+      updateCurrentJuggleProgress();
+    };
+
+    card.querySelector("button").addEventListener("click",apply);
+    if(input.value) apply();
+  });
+
+  document.getElementById("currentJuggleNext").innerHTML=data.next.map(x=>`
+    <article class="locked-level-card">
+      <h3>🔒 ${x.medal} ${x.name}</h3>
+      <b>Nouvelles compétences</b>
+      <ul>${x.newSkills.map(s=>"<li>"+s+"</li>").join("")}</ul>
+      <p class="muted">Débloqué après validation du niveau actuel.</p>
+    </article>
+  `).join("");
+
+  updateCurrentJuggleProgress();
+}
+
+function updateCurrentJuggleProgress(){
+  const cards=[...document.querySelectorAll("#currentJuggleChallenges .juggle-item")];
+  const done=cards.filter(c=>c.classList.contains("done")).length;
+  const pct=Math.round(done/cards.length*100);
+  document.getElementById("currentJuggleBar").style.width=pct+"%";
+  document.getElementById("currentJugglePercent").textContent=pct+" %";
+}
+
+renderCurrentJuggleLevel();
+
+
+function resizeEmbeddedFrame(frame){
+  try{
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    if(!doc) return;
+    doc.documentElement.style.overflow = 'hidden';
+    doc.body.style.overflow = 'hidden';
+    const update = () => {
+      const h = Math.max(
+        doc.body ? doc.body.scrollHeight : 0,
+        doc.documentElement ? doc.documentElement.scrollHeight : 0,
+        900
+      );
+      frame.style.height = (h + 24) + 'px';
+    };
+    update();
+    setTimeout(update, 150);
+    setTimeout(update, 500);
+    if(window.ResizeObserver && doc.body){
+      const observer = new ResizeObserver(update);
+      observer.observe(doc.body);
+    }
+    if(window.MutationObserver && doc.body){
+      const mutationObserver = new MutationObserver(update);
+      mutationObserver.observe(doc.body,{subtree:true,childList:true,attributes:true});
+    }
+  }catch(e){
+    frame.style.height = '1400px';
+  }
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('iframe.embedded-module').forEach(frame=>{
+    if(frame.contentDocument && frame.contentDocument.readyState === 'complete'){
+      resizeEmbeddedFrame(frame);
+    }
+  });
+});
+
+/* ===== Moteur Suivi d'objet ===== */
+const TRACKER_LEVELS=[
+ {name:'Débutant · Bronze',targets:2,durations:[10,10,14,14],speed:[1,1.1,1.1,1.1],lure:false,turn:false,space:false,stops:false,order:[false,false,false,false]},
+ {name:'Débutant · Argent',targets:3,durations:[12,12,12,14],speed:[1,1.1,1.1,1.1],lure:false,turn:false,space:false,stops:false,order:[false,false,true,false]},
+ {name:'Débutant · Or',targets:3,durations:[14,14,16,16],speed:[1,1.1,1.1,1.1],lure:true,turn:false,space:false,stops:false,order:[false,false,true,false]},
+ {name:'Apprenti · Bronze',targets:3,durations:[16,16,16,16],speed:[1,1.1,1.1,1.1],lure:true,turn:true,space:false,stops:false,order:[false,true,false,false]},
+ {name:'Apprenti · Argent',targets:3,durations:[20,20,20,20],speed:[1,1.1,1.1,1.1],lure:true,turn:true,space:false,stops:false,order:[false,true,false,false]},
+ {name:'Apprenti · Or',targets:3,durations:[20,20,20,20],speed:[1,1.2,1.2,1.2],lure:true,turn:true,space:true,stops:false,order:[false,true,false,false]},
+ {name:'Intermédiaire · Bronze',targets:3,durations:[20,20,20,20],speed:[1,1.2,1.2,1.2],lure:true,turn:true,space:true,stops:true,order:[false,true,false,false]},
+ {name:'Intermédiaire · Argent',targets:3,durations:[20,20,20,20],speed:[1,1.3,1.3,1.3],lure:true,turn:true,space:true,stops:true,order:[false,true,false,false]},
+ {name:'Intermédiaire · Or',targets:3,durations:[24,24,24,24],speed:[1,1.3,1.3,1.3],lure:true,turn:true,space:true,stops:true,order:[false,true,false,false]},
+ {name:'Avancé · Bronze',targets:4,durations:[20,20,20,20],speed:[1,1.1,1.1,1.1],lure:true,turn:true,space:false,stops:false,order:[false,false,false,false]},
+ {name:'Avancé · Argent',targets:4,durations:[20,20,20,20],speed:[1,1.2,1.2,1.2],lure:true,turn:true,space:true,stops:false,order:[false,false,false,false]},
+ {name:'Avancé · Or',targets:4,durations:[20,20,20,20],speed:[1,1.2,1.2,1.2],lure:true,turn:true,space:true,stops:true,order:[false,false,false,false]},
+ {name:'Expert · Bronze',targets:4,durations:[24,24,20,20],speed:[1,1.3,1.3,1.3],lure:true,turn:true,space:true,stops:true,order:[false,false,false,false]},
+ {name:'Expert · Argent',targets:5,durations:[16,16,16,16],speed:[1,1.1,1.1,1.1],lure:true,turn:true,space:false,stops:false,order:[false,false,false,false]},
+ {name:'Expert · Or',targets:5,durations:[20,20,20,20],speed:[1,1.1,1.1,1.1],lure:true,turn:true,space:false,stops:false,order:[false,true,false,false]}
+];
+const trackerState=JSON.parse(localStorage.getItem('fi-suivi-objet-v1')||'{"unlocked":1,"done":{}}');
+let trackerTestMode=false, trackerSelectedLevel=0, trackerSelectedSequence=0, trackerRun=null;
+function trackerSave(){localStorage.setItem('fi-suivi-objet-v1',JSON.stringify(trackerState))}
+function trackerKey(l,s){return `${l+1}-${s+1}`}
+function trackerMedal(i){return i%3===0?'🥉':i%3===1?'🥈':'🥇'}
+function trackerRender(){
+ const grid=document.getElementById('trackerLevels'), select=document.getElementById('trackerTestLevel'); if(!grid||!select)return;
+ if(!select.options.length)TRACKER_LEVELS.forEach((l,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${i+1}. ${l.name}`;select.appendChild(o)});
+ select.value=trackerSelectedLevel; grid.innerHTML='';
+ TRACKER_LEVELS.forEach((l,i)=>{const available=trackerTestMode||i<trackerState.unlocked;const done=[0,1,2,3].filter(q=>trackerState.done[trackerKey(i,q)]).length;const el=document.createElement('article');el.className='cog-level '+(!available?'locked ':'')+(i===trackerState.unlocked-1?'current':'');
+ el.innerHTML=`<div class="kicker">${trackerMedal(i)} Sous-niveau ${i+1}</div><h3>${l.name}</h3><p class="muted">${l.targets} cibles · 8 ballons · ${l.durations[0]} à ${Math.max(...l.durations)} s</p><div class="progress"><span style="width:${done*25}%"></span></div><div class="cog-seqs">${[0,1,2,3].map(q=>`<button type="button" class="cog-seq ${q===3?'test ':''}${trackerState.done[trackerKey(i,q)]?'done':''}" data-l="${i}" data-s="${q}" ${available?'':'disabled'}>${q===3?'Test':'S'+(q+1)}</button>`).join('')}</div>`;grid.appendChild(el)});
+ grid.querySelectorAll('.cog-seq').forEach(b=>b.addEventListener('click',()=>trackerLaunch(+b.dataset.l,+b.dataset.s)));
+ const current=TRACKER_LEVELS[Math.min(trackerState.unlocked-1,14)];document.getElementById('trackerCurrentLabel').textContent=current.name;const total=Object.keys(trackerState.done).length;document.getElementById('trackerProgressBar').style.width=Math.round(total/60*100)+'%';document.getElementById('trackerProgressText').textContent=`${total} séquence(s) validée(s) sur 60.`;document.getElementById('trackerProfileBadge').textContent=trackerTestMode?'Profil test interne':'Profil joueur';
+}
+function trackerShowMessage(title,text,buttons){const m=document.getElementById('trackerMessage');m.classList.remove('hidden');document.getElementById('trackerMessageTitle').textContent=title;document.getElementById('trackerMessageText').textContent=text;const a=document.getElementById('trackerMessageActions');a.innerHTML='';buttons.forEach(x=>{const b=document.createElement('button');b.className=x.primary?'primary':'secondary';b.type='button';b.textContent=x.label;b.addEventListener('click',x.fn);a.appendChild(b)})}
+function trackerLaunch(l,sq){trackerSelectedLevel=l;trackerSelectedSequence=sq;const cfg=TRACKER_LEVELS[l];const overlay=document.getElementById('trackerOverlay');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';document.getElementById('trackerHudLevel').textContent=cfg.name;document.getElementById('trackerHudSequence').textContent=sq===3?'Séquence 4 · Test':'Séquence '+(sq+1);document.getElementById('trackerHudTargets').textContent=cfg.targets+' cible(s) à retrouver';document.getElementById('trackerTimer').textContent=cfg.durations[sq];document.getElementById('trackerFooter').textContent='Observe les ballons-cibles.';trackerClearStage();trackerShowMessage('Suivi d’objet',`${cfg.targets} cible(s), 8 ballons, ${cfg.durations[sq]} secondes.${sq===3?' Test de passage : cibles aux extrémités.':''}`,[{label:'Commencer',primary:true,fn:()=>trackerStart(l,sq)}])}
+function trackerClearStage(){const stage=document.getElementById('trackerStage');stage.querySelectorAll('.track-ball').forEach(x=>x.remove());if(trackerRun){cancelAnimationFrame(trackerRun.raf);clearInterval(trackerRun.clock);(trackerRun.timeouts||[]).forEach(clearTimeout);trackerRun=null}}
+function trackerStart(l,sq){document.getElementById('trackerMessage').classList.add('hidden');const cfg=TRACKER_LEVELS[l],stage=document.getElementById('trackerStage'),rect=stage.getBoundingClientRect(),size=innerWidth<620?46:54,pad=18;const ids=[0,1,2,3,4,5,6,7].sort(()=>Math.random()-.5),targets=ids.slice(0,cfg.targets),lure=cfg.lure?ids.find(x=>!targets.includes(x)):null;const balls=[];
+ const extreme=[[pad,pad],[rect.width-size-pad,pad],[pad,rect.height-size-pad],[rect.width-size-pad,rect.height-size-pad],[rect.width/2-size/2,pad],[rect.width/2-size/2,rect.height-size-pad]];
+ for(let i=0;i<8;i++){const el=document.createElement('div');el.className='track-ball';el.dataset.id=i;let x,y;if(sq===3&&targets.includes(i)){const p=extreme[targets.indexOf(i)%extreme.length];x=p[0];y=p[1]}else{x=pad+Math.random()*Math.max(1,rect.width-size-pad*2);y=90+Math.random()*Math.max(1,rect.height-size-180)};const angle=Math.random()*Math.PI*2,base=(55+Math.random()*30)*cfg.speed[sq];balls.push({id:i,el,x,y,vx:Math.cos(angle)*base,vy:Math.sin(angle)*base,stoppedUntil:0,nextTurn:performance.now()+700+Math.random()*1500,nextStop:performance.now()+1800+Math.random()*3000});el.style.transform=`translate(${x}px,${y}px)`;stage.appendChild(el)}
+ trackerRun={l,sq,cfg,balls,targets,lure,order:targets.slice().sort(()=>Math.random()-.5),selected:[],phase:'preview',last:performance.now(),timeouts:[]};
+ const lightOrder=cfg.order[sq];if(lightOrder){trackerRun.order.forEach((id,index)=>{trackerRun.timeouts.push(setTimeout(()=>balls[id].el.classList.add('target-lit'),index*700));trackerRun.timeouts.push(setTimeout(()=>balls[id].el.classList.remove('target-lit'),index*700+520))});trackerRun.timeouts.push(setTimeout(()=>trackerMovementStart(cfg.durations[sq]),trackerRun.order.length*700+500))}else{targets.forEach(id=>balls[id].el.classList.add('target-lit'));trackerRun.timeouts.push(setTimeout(()=>{targets.forEach(id=>balls[id].el.classList.remove('target-lit'));trackerMovementStart(cfg.durations[sq])},1700))}
+}
+function trackerMovementStart(duration){if(!trackerRun)return;trackerRun.phase='move';document.getElementById('trackerFooter').textContent='Garde les cibles en mémoire.';let left=duration;document.getElementById('trackerTimer').textContent=left;trackerRun.clock=setInterval(()=>{left--;document.getElementById('trackerTimer').textContent=Math.max(0,left);if(left<=0){clearInterval(trackerRun.clock);trackerSelection()}},1000);trackerRun.raf=requestAnimationFrame(trackerTick);if(trackerRun.lure!==null)trackerLureBlink()}
+function trackerLureBlink(){if(!trackerRun||trackerRun.phase!=='move')return;const b=trackerRun.balls[trackerRun.lure];b.el.classList.add('lure-lit');const visible=300+Math.random()*700;trackerRun.timeouts.push(setTimeout(()=>{if(!trackerRun)return;b.el.style.opacity='0';b.el.classList.remove('lure-lit');const hidden=150+Math.random()*850;trackerRun.timeouts.push(setTimeout(()=>{if(!trackerRun)return;b.x=Math.max(10,Math.min(innerWidth-70,b.x+(Math.random()-.5)*80));b.y=Math.max(90,Math.min(innerHeight-80,b.y+(Math.random()-.5)*80));b.el.style.opacity='1';trackerLureBlink()},hidden))},visible))}
+function trackerTick(now){if(!trackerRun||trackerRun.phase!=='move')return;const dt=Math.min(.035,(now-trackerRun.last)/1000);trackerRun.last=now;const W=innerWidth,H=innerHeight,size=innerWidth<620?46:54;
+ trackerRun.balls.forEach(b=>{if(trackerRun.cfg.turn&&now>b.nextTurn){const a=Math.random()*Math.PI*2,s=Math.hypot(b.vx,b.vy);b.vx=Math.cos(a)*s;b.vy=Math.sin(a)*s;b.nextTurn=now+600+Math.random()*1800}if(trackerRun.cfg.stops&&now>b.nextStop){b.stoppedUntil=now+1000+Math.random()*2000;b.nextStop=now+3000+Math.random()*4500}if(now>=b.stoppedUntil){b.x+=b.vx*dt;b.y+=b.vy*dt}if(b.x<0){b.x=0;b.vx=Math.abs(b.vx)}if(b.x>W-size){b.x=W-size;b.vx=-Math.abs(b.vx)}if(b.y<78){b.y=78;b.vy=Math.abs(b.vy)}if(b.y>H-size){b.y=H-size;b.vy=-Math.abs(b.vy)}b.el.style.transform=`translate(${b.x}px,${b.y}px)`});
+ if(trackerRun.sq!==3){for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){const a=trackerRun.balls[i],b=trackerRun.balls[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);if(d<size*.82&&d>0){const tvx=a.vx,tvy=a.vy;a.vx=b.vx;a.vy=b.vy;b.vx=tvx;b.vy=tvy}}}
+ trackerRun.raf=requestAnimationFrame(trackerTick)}
+function trackerSelection(){if(!trackerRun)return;cancelAnimationFrame(trackerRun.raf);trackerRun.phase='select';document.getElementById('trackerFooter').textContent=trackerRun.cfg.order[trackerRun.sq]?'Sélectionne les cibles dans le bon ordre.':'Sélectionne les ballons-cibles.';trackerRun.balls.forEach(b=>b.el.addEventListener('click',trackerPick))}
+function trackerPick(e){if(!trackerRun||trackerRun.phase!=='select')return;const id=+e.currentTarget.dataset.id;if(trackerRun.selected.includes(id))return;trackerRun.selected.push(id);e.currentTarget.classList.add('selected');if(trackerRun.selected.length===trackerRun.cfg.targets){const expected=trackerRun.cfg.order[trackerRun.sq]?trackerRun.order:trackerRun.targets;const ok=trackerRun.cfg.order[trackerRun.sq]?expected.every((x,i)=>x===trackerRun.selected[i]):trackerRun.selected.every(x=>expected.includes(x));trackerFinish(ok)}}
+function trackerFinish(ok){trackerRun.phase='done';if(!ok)trackerRun.selected.forEach(id=>trackerRun.balls[id].el.classList.add('wrong'));if(ok&&!trackerTestMode){trackerState.done[trackerKey(trackerRun.l,trackerRun.sq)]=true;if(trackerRun.sq===3&&trackerRun.l+1===trackerState.unlocked&&trackerState.unlocked<15)trackerState.unlocked++;trackerSave()}trackerShowMessage(ok?'Séquence réussie':'Séquence à refaire',ok?'Les bonnes cibles ont été retrouvées.':'La sélection ne correspond pas aux cibles attendues.',[{label:'Rejouer',primary:!ok,fn:()=>trackerStart(trackerRun.l,trackerRun.sq)},{label:'Retour aux niveaux',primary:ok,fn:trackerClose}]);trackerRender()}
+function trackerClose(){trackerClearStage();document.getElementById('trackerOverlay').classList.remove('open');document.getElementById('trackerOverlay').setAttribute('aria-hidden','true');document.body.style.overflow='';}
+document.getElementById('trackerCloseBtn')?.addEventListener('click',trackerClose);
+document.getElementById('trackerTestLevel')?.addEventListener('change',e=>trackerSelectedLevel=+e.target.value);
+document.getElementById('trackerTestModeBtn')?.addEventListener('click',e=>{trackerTestMode=!trackerTestMode;e.target.textContent=trackerTestMode?'Désactiver le profil test':'Activer le profil test';trackerRender()});
+document.getElementById('trackerResetBtn')?.addEventListener('click',()=>{trackerState.unlocked=1;trackerState.done={};trackerSave();trackerRender()});
+document.getElementById('trackerPassBtn')?.addEventListener('click',()=>{for(let q=0;q<4;q++)trackerState.done[trackerKey(trackerSelectedLevel,q)]=true;trackerState.unlocked=Math.max(trackerState.unlocked,Math.min(15,trackerSelectedLevel+2));trackerSave();trackerRender()});
+document.getElementById('trackerFailBtn')?.addEventListener('click',()=>{for(let q=0;q<4;q++)delete trackerState.done[trackerKey(trackerSelectedLevel,q)];trackerSave();trackerRender()});
+trackerRender();
+
+</script></body></html>
